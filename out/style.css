@@ -1,0 +1,30 @@
+nav > ul {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   list-style-type: none;
+   flex-wrap: wrap;
+   gap: 0.5rem;
+}
+
+body {
+	  display: grid;
+	  grid-template-columns: 30rem 1fr;
+	  gap: 1rem;
+}
+
+nav {
+	  max-height: 100vh;
+	  overflow-y: scroll;
+}
+
+nav li {
+	  border: 1px solid black;
+	  border-radius: 0.25rem;
+}
+
+nav a {
+	  display: inline-block;
+	  padding: 0.25rem;
+	  min-width: 100%;
+	  min-height: 100%;
+}
