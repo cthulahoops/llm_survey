@@ -338,6 +338,58 @@ print(python_data.orders[0].amount)
 <p>That's it! Now, you have populated the dataclasses with the responses from the JSON.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate the necessary dataclasses using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>First, import the necessary modules:</li>
+</ol>
+<pre><code class="language-python">from typing import List
+from datetime import datetime
+
+from marshmallow import Schema, fields
+</code></pre>
+<ol>
+<li>Create a schema for the JSON object:</li>
+</ol>
+<pre><code class="language-python">class UserSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date()
+    orders = fields.Nested('OrderSchema', required=True)
+</code></pre>
+<p>In this code, we define a <code>UserSchema</code> class which represents the structure of the JSON object.</p>
+<ol>
+<li>Create a schema for the <code>Order</code> object:</li>
+</ol>
+<pre><code class="language-python">class OrderSchema(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Float(required=True)
+</code></pre>
+<p>This code defines an <code>OrderSchema</code> class to represent the structure of the <code>orders</code> list.</p>
+<p>Now, you can use these schemas to validate and deserialize JSON data. For example, using the <code>dump</code> method:</p>
+<pre><code class="language-python">json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+user_schema = UserSchema()
+user_obj = user_schema.dump(json_data)
+</code></pre>
+<p>In this code, we convert the JSON data to a <code>User</code> object, using the previously defined schemas.</p>
+<p>You can also use the <code>load</code> method to convert a <code>User</code> object back to JSON:</p>
+<pre><code class="language-python">user_obj = User(first_name='Jane', last_name='Smith', date_of_birth='03/16/1977', orders=[Order(created='2024-01-25T15:00:04', amount=100.00)])
+user_data = user_schema.dump(user_obj)
+</code></pre>
+<p>Here, we convert the <code>user_obj</code> back to a JSON object.</p>
+<p>Note that this is a simplified example, and you might need to customize the schemas and data types based on your specific use case.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

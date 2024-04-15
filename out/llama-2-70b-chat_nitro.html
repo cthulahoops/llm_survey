@@ -354,6 +354,37 @@ print(person)
 <p>The <code>load</code> method of the <code>PersonSchema</code> class is used to load the JSON data into a <code>Person</code> object.</p></p>
                 <hr/>
             
+                <p>Content: <p>Sure! Here's an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
+<pre><code>import marshmallow as mm
+
+class Person(mm.QLD):
+    first_name: str
+    last_name: str
+    date_of_birth: datetime.date
+    orders: List[Order]
+
+class Order(mm.QLD):
+    created: datetime.datetime
+    amount: decimal.Decimal
+
+# Use the schema to load the JSON data into dataclasses
+data = &quot;{ 'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]}&quot;
+schema = mm.Schema(Person)
+person = schema.load(data)
+
+# Print the dataclass instances
+print(person)
+print(person.orders[0])
+</code></pre>
+<p>This will output:</p>
+<pre><code>Person(first_name='Jane', last_name='Smith', date_of_birth=date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
+Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))
+</code></pre>
+<p>Note that I've assumed that the <code>date_of_birth</code> field in the JSON data is a string in the format <code>MM/DD/YYYY</code>, and that the <code>created</code> field in the <code>orders</code> list is a string in the format <code>YYYY-MM-DDTHH:MM:SS</code>. The <code>datetime</code> and <code>decimal</code> modules are used to convert these strings to the appropriate data types.</p>
+<p>Also, I've used the <code>marshmallow.QLD</code> class to define the dataclasses, which stands for "Quantifiable, Listable, Dictable". This is a convenient way to define dataclasses that can be serialized to and deserialized from JSON.</p>
+<p>I hope this helps! Let me know if you have any questions.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -401,6 +401,63 @@ print(user.orders[0].amount)  # Output: 100.0 as a Decimal object
 <p>Using marshmallow schemas, the JSON is automatically converted into a User object and Order object, conforming to the desired type specifications.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, you can define data classes (also known as schemas in marshmallow) for the needed data structures. Here's a step-by-step guide to help you:</p>
+<p>Firstly, import the required libraries and the necessary classes from the <code>marshmallow</code> package:</p>
+<pre><code class="language-python">import json
+from datetime import datetime
+from dateutil.parser import parse
+from decimal import Decimal
+
+import marshmallow as ma
+from marshmallow import Schema, fields
+</code></pre>
+<p>Next, let's define our schemas:</p>
+<p>1.dates_schema.py:</p>
+<pre><code class="language-python">class DateOfBirthSchema(ma.Schema):
+    date_of_birth = fields.DateTime(data_key='date_of_birth')
+
+    class Meta:
+        strict = True
+</code></pre>
+<p>2.order_schema.py:</p>
+<pre><code class="language-python">class OrderSchema(ma.Schema):
+    created = fields.DateTime(data_key='created')
+    amount = fields.Decimal(data_key='amount', places=2, decimal_places=2, missing=0)
+
+    class Meta:
+        strict = True
+</code></pre>
+<p>3.person_schema.py:</p>
+<pre><code class="language-python">from .dates_schema import DateOfBirthSchema
+from .order_schema import OrderSchema
+
+class PersonSchema(ma.Schema):
+    first_name = fields.Str(data_key='first_name')
+    last_name = fields.Str(data_key='last_name')
+    date_of_birth = fields.Nested(DateOfBirthSchema, data_key='date_of_birth')
+    orders = fields.Nested(OrderSchema, many=True, data_key='orders')
+
+    class Meta:
+        strict = True
+</code></pre>
+<p>Now, let's put all the schemas together, and use them to unmarshal and marshal your JSON data:</p>
+<pre><code class="language-python"># Assuming your JSON is stored in a variable called json_data
+json_data = '{&quot;first_name&quot;: &quot;Jane&quot;, &quot;last_name&quot;: &quot;Smith&quot;, &quot;date_of_birth&quot;: &quot;03/16/1977&quot;, &quot;orders&quot;: [{&quot;created&quot;: &quot;2024-01-25T15:00:04&quot;, &quot;amount&quot;: &quot;100.00&quot;}]}'
+
+# Load the JSON into a Python object
+loaded_object = PersonSchema().load(json.loads(json_data))
+
+# Get the loaded values
+loaded_values = loaded_object.data
+
+# Convert it back to JSON
+json_data_from_schema = PersonSchema().dump(loaded_object)
+
+print(json_data_from_schema)  # Output: {&quot;first_name&quot;: &quot;Jane&quot;, &quot;last_name&quot;: &quot;Smith&quot;, &quot;date_of_birth&quot;: &quot;1977-03-16T00:00:00Z&quot;, &quot;orders&quot;: [{&quot;created&quot;: &quot;2024-01-25T15:00:04Z&quot;, &quot;amount&quot;: 100.0}]}
+</code></pre>
+<p>Make sure you organize the files in your project in a structured way, placing the relevant files in their appropriate directories, keeping your project clean and organized.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

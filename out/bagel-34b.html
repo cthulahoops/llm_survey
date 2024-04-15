@@ -336,6 +336,69 @@ print(user_instance)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the marshmallow library, you can follow these steps:</p>
+<ol>
+<li>Define the schema for the JSON data.</li>
+<li>Use the schema to generate the dataclasses.</li>
+</ol>
+<p>Here's an example implementation:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, validate
+from marshmallow.validate import OneOf, Regexp
+from decimal import Decimal
+from datetime import datetime
+from dateutil.parser import parse
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime(format='%Y-%m-%dT%H:%M:%S')
+    amount = fields.Decimal(as_string=True)
+
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(fields.Nested(OrderSchema))
+
+
+# Load the JSON data
+json_data = '''
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+'''
+
+# Load the JSON data into a dictionary
+data = json.loads(json_data)
+
+# Create an instance of the PersonSchema
+person_schema = PersonSchema()
+
+# Generate the dataclasses
+person = person_schema.load(data)
+
+# Print the generated dataclasses
+print(person)
+</code></pre>
+<p>This will output the following dataclasses:</p>
+<pre><code class="language-python">Person(
+    first_name='Jane',
+    last_name='Smith',
+    date_of_birth=datetime.date(1977, 3, 16),
+    orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))]
+)
+</code></pre>
+<p>In this example, the <code>date_of_birth</code> field is automatically converted to a <code>datetime.date</code> object, the <code>created</code> field is converted to a <code>datetime.datetime</code> object, and the <code>amount</code> field is converted to a <code>decimal.Decimal</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

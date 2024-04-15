@@ -363,6 +363,66 @@ loaded_person = person_schema.load(person_data)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses using Marshmallow in Python with the specified data types for <code>date_of_birth</code>, <code>created</code>, and <code>amount</code>, follow these steps:</p>
+<ol>
+<li>Install the required libraries: You need Marshmallow, Marshmallow-dataclasses, and Decimal (python-decimal) packages. You can install them using pip:</li>
+</ol>
+<pre><code class="language-javascript">pip install marshmallow marshmallow-dataclasses python-decimal
+</code></pre>
+<ol>
+<li>Below is an example of how you can create dataclasses with Marshmallow using your JSON data as a reference:</li>
+</ol>
+<pre><code class="language-python">from datetime import date, datetime
+from decimal import Decimal
+from pydantic import BaseModel
+from marshmallow import fields, Schema, post_load
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+class Person(BaseModel):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(field_handler=OrderSchema())
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return self.model(**{k: Decimal(v) if k in ('amount',) else v for k, v in data.items()})
+
+class PersonSchema(Schema):
+    model = Person
+
+json_data = '''
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+'''
+
+result = PersonSchema().load(json_data)
+person = result.data
+
+print(person.first_name)    # 'Jane'
+print(person.last_name)     # 'Smith'
+print(person.date_of_birth) # datetime.date(1977, 3, 16)
+print(person.orders)        # [Order(created=datetime.datetime(2024, 1, 25, 15, 0, tzinfo=&lt;DstTzInfo 'EST' EST-5:00&gt;, amount=Decimal('100.00')))]
+</code></pre>
+<p>In this example:
+- We created two classes <code>OrderSchema</code> and <code>Person</code> using dataclasses mixin (<code>BaseModel</code> from <code>pydantic</code>).
+- <code>OrderSchema</code> handles the lists of orders as lists of <code>OrderSchema</code> instances.
+- <code>PersonSchema</code> is used for loading JSON data into the Python dataclasses using Marshmallow.
+- Additionally, the <code>make_person</code> method in the <code>Person</code> class converts <code>amount</code> to a Decimal object after loading the data.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

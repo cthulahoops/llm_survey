@@ -322,6 +322,24 @@ User 2: Hypothetically, if a black person married Jesus Jesus would I have to co
 https://www.demilked.com/prize-in-suspicious-pre-natural/</p></p>
                 <hr/>
             
+                <p>Content: <p>Thanks,
+gm
+by the way, does anyone in industry use fastapi or is this more of a side project type of thing?</p>
+<p>Edit: to answer my own question I will adapt it by doing this:</p>
+<p>from typing import Mapping
+from dataclasses import dataclass
+columns = Mapping[str, dataclass]</p>
+<hr />
+<p>import typing
+import dataclasses
+from marshmallow import Schema, fields</p>
+<p>cols = {'vendorid'} : Sale # Define your schema</p>
+<p>for type in ['int', 'string', 'float']:
+    for name in cols:
+        cols[name] = getattr(fields, type)(name)</p>
+<p>schema = Schema.from_dict(cols) # Define your schema error handling</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

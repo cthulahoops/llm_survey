@@ -516,6 +516,79 @@ if __name__ == &quot;__main__&quot;:
 <p>Finally, we use the <code>CustomerSchema</code> and <code>OrderSchema</code> to load the JSON data and print the resulting <code>Customer</code> instance.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you'll need to follow these steps:</p>
+<ol>
+<li>Install the marshmallow library if you haven't already: <code>pip install marshmallow</code>.</li>
+<li>Define the dataclasses and use the <code>Schema</code> class from marshmallow to serialize and deserialize the JSON data.</li>
+</ol>
+<p>Here is a code example that demonstrates how to achieve this:</p>
+<pre><code class="language-python">from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, pre_load
+from dateutil.parser import parse as parse_date
+from dateutil.relativedelta import relativedelta
+
+# Define the dataclasses
+from dataclasses import dataclass
+
+@dataclass
+class Customer:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: list
+
+    def __post_init__(self):
+        self.date_of_birth = datetime.strptime(self.date_of_birth, &quot;%m/%d/%Y&quot;)
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+# Define the Schema classes
+class OrderSchema(Schema):
+    created = fields.DateTime(format='iso')
+    amount = fields.Decimal(as_string=True, precision=2)
+
+class CustomerSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Str(required=True)
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @pre_load
+    def parse_date_of_birth(self, data, **kwargs):
+        return data, datetime.strptime(data[&quot;date_of_birth&quot;], &quot;%m/%d/%Y&quot;)
+
+    @post_dump
+    def format_date_of_birth(self, data, **kwargs):
+        return {&quot;date_of_birth&quot;: data.get(&quot;date_of_birth&quot;).strftime(&quot;%m/%d/%Y&quot;)}
+
+# Load JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Instantiate the schema and convert JSON data to dataclasses
+customer_schema = CustomerSchema()
+parsed_data = customer_schema.load(json_data)
+
+# Create instances of the dataclasses
+customer = Customer(**parsed_data[&quot;data&quot;])
+orders = [Order(**order) for order in parsed_data[&quot;data&quot;][&quot;orders&quot;]]
+</code></pre>
+<p>This code defines the required dataclasses and uses marshmallow schemas to parse the JSON data and convert it into the dataclass instances. Note that the <code>date_of_birth</code> field in the JSON data should be formatted as "mm/dd/yyyy" before parsing, and the <code>process_date</code> function in the <code>OrderSchema</code> class should be adjusted to match your desired output format.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

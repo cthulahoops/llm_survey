@@ -327,6 +327,32 @@ class Customer(mapper.Model):
 <p>Then, you'll tell marshmallow how to parse and serialize the JSON data using mappers. <code>mapper.Model</code> is a base class for all of your models. The `__</p></p>
                 <hr/>
             
+                <p>Content: <p>Sure, here's the code using the marshmallow library to create the desired dataclasses:</p>
+<p>from marshmallow import *
+from marshmallow import fields
+from marshmallow_date</p>
+<p>class Person(Resource):
+    first_name = Schemaweet(str)
+    last_name = Schemaweet(str)
+    date_of_birth = Schemaweet(Date(floating=True))
+    orders = Schemaweet(Order[], required=True)</p>
+<p>class Order(Resource):
+    created = Schemaweet(Date(floating=True))
+    amount = Schemaweet(decimal)</p>
+<p>class PersonDTO(Person):
+    class Meta:
+        strict = True
+        smart_key = True
+        marshal_postprocess = complain</p>
+<pre><code>    dump_postprocess = badger_dumper
+    marshmallow_class_only = True
+</code></pre>
+<p>class OrderDTO(Order):
+    class Meta:
+        marshmallow_class_only = True</p>
+<p>schema = Schema(Person=PersonDTO, Order=OrderDTO, fields_dict=True)</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

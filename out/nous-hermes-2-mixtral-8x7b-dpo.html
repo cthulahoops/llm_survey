@@ -393,6 +393,73 @@ user = user_schema.load(json_data)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To generate the dataclasses using the marshmallow library in python, first, you need to import the necessary classes and library functions. Then, you can define the dataclasses for <code>User</code> and <code>Order</code>. Here's an example:</p>
+<pre><code class="language-python">from typing import List
+from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, pre_load
+
+# Define dataclasses
+class User:
+    def __init__(self, first_name, last_name, date_of_birth):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+
+class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = amount
+
+# Define schemas to serialize and deserialize the dataclasses
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(fields.Nested('OrderSchema'))
+
+    @pre_load
+    def process_orders(self, data):
+        orders = data.pop('orders', [])
+        for order in orders:
+            order['created'] = datetime.fromisoformat(order['created'])
+            order['amount'] = Decimal(order['amount'])
+        return data
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+# Function to convert JSON to dataclass instance(s)
+def from_json(json):
+    user_schema = UserSchema()
+    return user_schema.load(json)
+
+# Example JSON data
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+# Convert JSON to dataclass instance(s)
+user = from_json(json_data)
+
+# Print user and orders
+print(user.first_name)
+print(user.date_of_birth)
+print(user.orders)
+</code></pre>
+<p>In this example, I've defined <code>User</code> and <code>Order</code> as dataclasses. The marshmallow's <code>Schema</code> class is used to define schemas for serializing and deserializing the data. The <code>UserSchema</code> processes the orders in the <code>pre_load</code> hook method. This method converts the date-string to a date object and the amount-string to a decimal object. The <code>OrderSchema</code> is also defined for the <code>Order</code> class, although it does not need any processing.</p>
+<p>You can use the <code>from_json</code> function to convert JSON data to a dataclass instance. In the example, the JSON data is converted to a <code>User</code> instance, and you can access and print the needed information easily.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

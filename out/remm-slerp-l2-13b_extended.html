@@ -390,6 +390,95 @@ for person in schema.load(persons)
 <p>In this example, we define two dataclasses <code>PersonSchema</code> and <code>OrderSchema</code>, where <code>PersonSchema</code> has a nested list of `OrderSchema</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>marshmallow</code> library in Python along with its <code>dataclasses_reland</code> extension to convert the JSON data into Python dataclasses. Here's an example code that does that:</p>
+<pre><code class="language-python">from marshmallow import (
+    Schema,
+    fields,
+    dataclass_relationship
+)
+from marshmallow_dataclasser import dataclass_ así≥f
+
+class PersonSchema(Schema):
+    class Meta:
+        # Add declare fields here
+        fields = ()
+
+
+class OrderSchema(Schema):
+    class Meta:
+        fields = {
+            'created': fields.DateTime(),
+            'amount': fields.Decimal()
+        }
+
+
+@dataclass_relationship(referrer_key=&quot;id&quot;)
+class Order:
+    class Meta:
+        fields = (&quot;id&quot;, &quot;created&quot;, &quot;amount&quot;)
+
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: [Order]
+
+    def __post_init__(self):
+        self.date_of_birth = datetime.strptime(self.date_of_birth, '%m/%d/%Y')
+
+
+def create_person(**data):
+    person = Person(**data)
+    # process person data
+    return person
+
+def create_order(**data):
+    return Order(**data)
+
+</code></pre>
+<p>Now, you can use these schemas to convert the JSON data into Python dataclasses. For example:</p>
+<p>```python</p>
+<h1>JSON data</h1>
+<p>json_data = {
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "date_of_birth":</p></p>
+                <hr/>
+            
+                <p>Content: <p>Sure, here's an example implementation using Marshmallow:</p>
+<pre><code class="language-python">from marshmallow import fields, Schema, post_load
+
+class UserSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(dump_only=True)
+    orders = fields.List(fields.Nested(OrderSchema()))
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(**data)
+
+class OrderSchema(Schema):
+    created = fields.DateTime(format='%m/%d/%Y %H:%M:%S', required=True)
+    amount = fields.Float(required=True)
+
+    @post_load
+    def load(self, data):
+        return Order(**data)
+
+class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = amount
+
+</code></pre>
+<p>In this example, we define two dataclasses: <code>User</code> and <code>Order</code>. The <code>User</code> class has a list of <code>Order</code> objects as an attribute. The <code>Order</code> class has fields for <code>created</code> (a datetime object) and <code>amount</code> (a float).</p>
+<p>The <code>UserSchema</code> is a subclass of <code>Schema</code> and defines the user's name, date of birth, and a list of orders. The interface is quite similar to the original JSON structure. The <code>date_of_birth</code> field is marked as <code>dump_only</code> to indicate that it should not be included in the generated JSON output.</p>
+<p>The <code>OrderSchema</code> defines the fields for an individual order object, including a creation datetime and amount. Like <code>UserSchema</code>, the `Order</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

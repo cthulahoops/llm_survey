@@ -395,6 +395,68 @@ customer = schema.load(json_data)
 <p>This will create and populate a <code>Customer</code> dataclass from the provided JSON data, using the marshmallow library to handle field types and conversions.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this, you can follow these steps:
+1. Install the marshmallow library if you haven't already by running <code>pip install marshmallow</code>.
+2. Import the necessary modules.
+3. Define your data model using Python dataclasses.
+4. Define the corresponding schemas for each of your data classes using marshmallow's dataclass.Schema.
+5. Load the JSON data using the schema.</p>
+<p>Here's an example of how you can do this:</p>
+<pre><code class="language-python">import json
+from datetime import datetime
+from dataclasses import dataclass
+from marshmallow import Schema, fields
+from marshmallow import ValidationError
+
+# Step 3: Define your data model
+@dataclass
+class Order:
+    created: datetime
+    amount: decimal.Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime.date
+    orders: List[Order]
+
+# Step 4: Define schemas for your data classes
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+    class Meta:
+        cls = Order
+
+class PersonSchema(Schema):
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+    class Meta:
+        cls = Person
+
+# Step 5: Load the JSON data using the schema
+json_data = &quot;&quot;&quot;
+{
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}&quot;&quot;&quot;
+
+person_schema = PersonSchema()
+try:
+    person = person_schema.loads(json_data)
+except ValidationError as err:
+    print(f&quot;Validation error: {err}&quot;)
+</code></pre>
+<p>This code will create the <code>Order</code> and <code>Person</code> data classes with <code>marshmallow</code> schemas and load the provided JSON data into a Person object. The <code>date_of_birth</code> and <code>created</code> fields will be converted to <code>datetime.date</code> and <code>datetime</code> objects respectively, while the <code>amount</code> field will be a <code>decimal.Decimal</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

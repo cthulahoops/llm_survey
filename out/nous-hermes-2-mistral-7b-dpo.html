@@ -373,6 +373,58 @@ print(loaded_data.orders[0].status)
 <p>You might have to adjust the code based on your actual data structure and requirements, but this should give you a general idea of how to use Marshmallow for this task.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the Marshmallow library along with Python's built-in <code>datetime</code> and <code>decimal</code> modules to accomplish this. First, install the marshmallow library if you haven't already:</p>
+<pre><code class="language-python">pip install marshmallow
+</code></pre>
+<p>Then, create a data class for the main person object:</p>
+<pre><code class="language-python">from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, post_load
+
+class Person:
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(required=True, error_messages={'missing': 'Date of birth is required'})
+
+    orders = fields.Nested('Order', many=True, exclusive=True)
+
+    class Meta:
+        unknown = EXCLUDE
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)
+</code></pre>
+<p>For the 'Order' data class, you'll need to convert the string timestamp to a datetime object:</p>
+<pre><code class="language-python">class Order:
+    created = fields.DateTime(alias='created', required=True, convert=lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z'))
+    amount = fields.Decimal(alias='amount', required=True, precision=2)
+
+    class Meta:
+        unknown = EXCLUDE necessarily unused
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+</code></pre>
+<p>Now, you can load your JSON:</p>
+<pre><code class="language-python">from marshmallow.exceptions import ValidationError
+
+data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [{
+        'created': '2024-01-25T15:00:04',
+        'amount': '100.00'
+    }]
+}
+
+schema = Person(**data)
+</code></pre>
+<p>If the JSON is valid, <code>schema</code> will be an instance of your <code>Person</code> class. Please be aware that this code assumes your 'date_of_birth' is in the format MM/DD/YYYY, and you may need to adjust the parsing accordingly.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

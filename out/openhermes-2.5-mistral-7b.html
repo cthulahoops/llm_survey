@@ -368,6 +368,62 @@ print(customer_obj)
 <p>Remember to handle exceptions like invalid JSON and validation errors.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate the required data classes from your JSON using marshmallow in Python, you'll need to follow these steps:</p>
+<ol>
+<li>Install marshmallow library: If you don't have marshmallow installed, you can do so by running the following command in your terminal:</li>
+</ol>
+<pre><code>pip install marshmallow
+</code></pre>
+<ol>
+<li>Import necessary modules: Import the required modules from marshmallow.</li>
+</ol>
+<pre><code class="language-python">from marshmallow import Schema, fields, pre_load
+from dateutil.parser import parse
+from decimal import Decimal
+import datetime
+</code></pre>
+<ol>
+<li>Create a data class for the main data:</li>
+</ol>
+<pre><code class="language-python">class DataClass:
+    first_name = fields.Str(dump_only=True)
+    last_name = fields.Str(dump_only=True)
+    date_of_birth = fields.Date(serialize=lambda v: str(parse(v).date()), deserialize=lambda v: str(v))
+    orders = fields.Nested(&quot;OrderClass&quot;, many=True, exclude=(&quot;_id&quot;,))
+</code></pre>
+<ol>
+<li>Create a data class for the orders:</li>
+</ol>
+<pre><code class="language-python">class OrderClass:
+    created = fields.DateTime(serialize='datetime:iso', deserialize=lambda v: parse(str(v)))
+    amount = fields.Decimal(deserialize=Decimal)
+</code></pre>
+<ol>
+<li>Create a root schema:</li>
+</ol>
+<pre><code class="language-python">class RootSchema(Schema):
+    first_name = fields.Str(dump_only=True)
+    last_name = fields.Str(dump_only=True)
+    date_of_birth = fields.Date(serialize=lambda v: str(parse(v).date()), deserialize=lambda v: str(v))
+    orders = fields.Nested(&quot;OrderClass&quot;, many=True, exclude=(&quot;_id&quot;,))
+</code></pre>
+<ol>
+<li>Create an order schema:</li>
+</ol>
+<pre><code class="language-python">class OrderSchema(Schema):
+    created = fields.DateTime(serialize='datetime:iso', deserialize=lambda v: parse(str(v)))
+    amount = fields.Decimal(deserialize=Decimal)
+</code></pre>
+<ol>
+<li>Define a function to load data from the JSON:</li>
+</ol>
+<pre><code class="language-python">def load_json(json_data):
+    data_schema = RootSchema().load(json_data)
+    return data_schema
+</code></pre>
+<p>Now, you can pass your JSON data to the <code>load_json</code> function, and it will convert it into your custom date and decimal data types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

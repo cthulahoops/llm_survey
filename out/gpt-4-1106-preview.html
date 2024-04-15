@@ -408,6 +408,102 @@ except ValidationError as err:
 <p>This will create a <code>Person</code> object with the <code>date_of_birth</code> as a <code>date</code> object, <code>orders</code> as a list of <code>Order</code> objects with <code>datetime</code> and <code>Decimal</code> for <code>created</code> and <code>amount</code>, respectively.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses and use the <code>marshmallow</code> library to serialize and deserialize the given JSON data, you'll first need to define dataclasses that represent your data structure, and then create corresponding marshmallow schemas that will handle the conversion of field types.</p>
+<p>Here's an example of what this might look like:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import datetime, date
+from decimal import Decimal
+from marshmallow import Schema, fields, post_load
+from marshmallow_dataclass import add_schema
+
+@add_schema
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+    class Meta:
+        ordered = True
+
+@Order.Schema()
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+@add_schema
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+    class Meta:
+        ordered = True
+
+@Person.Schema()
+class PersonSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.List(fields.Nested(OrderSchema))
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)
+
+# Usage
+
+input_json = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+schema = PersonSchema()
+result = schema.load(input_json)
+person = result
+print(person)
+</code></pre>
+<p>In this code:</p>
+<ol>
+<li>
+<p>Two dataclasses (<code>Order</code> and <code>Person</code>) are defined to represent the structure of the JSON data.</p>
+</li>
+<li>
+<p>Corresponding marshmallow schemas (<code>OrderSchema</code> and <code>PersonSchema</code>) are defined where we map each JSON field to the desired Python type using marshmallow fields:</p>
+</li>
+<li>
+<p><code>fields.DateTime()</code> for datetime fields.</p>
+</li>
+<li><code>fields.Decimal(as_string=True)</code> for decimal fields. Setting <code>as_string=True</code> ensures amounts are deserialized to <code>Decimal</code> from string.</li>
+<li>
+<p><code>fields.Date()</code> for date fields.</p>
+</li>
+<li>
+<p><code>fields.List(fields.Nested(OrderSchema))</code> is used to define a list of <code>Order</code> objects within the <code>Person</code> schema.</p>
+</li>
+<li>
+<p>The <code>@post_load</code> decorator is used to instantiate the dataclasses after loading the data with the schema.</p>
+</li>
+</ol>
+<p>When you run the code, it will deserialize the JSON into a <code>Person</code> object with the proper types (datetime, decimal, and date). If you want to serialize a <code>Person</code> object back to JSON, you can call the <code>dump</code> method of the schema:</p>
+<pre><code class="language-python">person_json = schema.dump(person)
+print(person_json)
+</code></pre>
+<p>Remember to handle any possible exceptions for invalid input data, such as incorrect date formats or invalid data types. Marshmallow will throw validation errors if the input doesn't match the specified schema.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

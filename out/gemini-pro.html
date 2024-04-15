@@ -340,6 +340,51 @@ if __name__ == &quot;__main__&quot;:
 <p>Additionally, the code includes a validator function <code>validate_date_of_birth</code> to ensure the provided date is in the YYYY-MM-DD format.</p></p>
                 <hr/>
             
+                <p>Content: <pre><code class="language-python">from datetime import date
+from decimal import Decimal
+from marshmallow import Schema, fields, ValidationError
+
+class Order(Schema):
+    created = fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
+    amount = fields.Decimal()
+
+class Person(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date(format=&quot;%m/%d/%Y&quot;)
+    orders = fields.List(fields.Nested(Order))
+
+try:
+    data = {
+        &quot;first_name&quot;: &quot;Jane&quot;,
+        &quot;last_name&quot;: &quot;Smith&quot;,
+        &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+        &quot;orders&quot;: [
+            {
+                &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+                &quot;amount&quot;: &quot;100.00&quot;
+            }
+        ]
+    }
+    person_schema = Person()
+    person = person_schema.load(data)
+    print(person)
+except ValidationError as err:
+    print(err.messages)
+</code></pre>
+<p>This code defines two dataclasses:</p>
+<ul>
+<li><code>Order</code>: Represents a single order with a creation timestamp and amount.</li>
+<li><code>Person</code>: Represents a person with a first name, last name, date of birth, and a list of orders.</li>
+</ul>
+<p>The <code>marshmallow.Schema</code> class is used to define the structure of these dataclasses. The <code>fields</code> attribute specifies the fields that each dataclass should have.</p>
+<p>The <code>fields.DateTime</code>, <code>fields.Date</code>, and <code>fields.Decimal</code> fields are used to specify the data types for the <code>created</code>, <code>date_of_birth</code>, and <code>amount</code> fields, respectively.</p>
+<p>The <code>fields.List</code> field is used to specify that the <code>orders</code> field should be a list of <code>Order</code> dataclasses.</p>
+<p>The <code>person_schema.load(data)</code> method is used to deserialize the JSON data into a <code>Person</code> dataclass.</p>
+<p>The <code>print(person)</code> statement prints the deserialized <code>Person</code> dataclass.</p>
+<p>If there are any validation errors, the <code>ValidationError</code> exception will be raised. The <code>err.messages</code> attribute will contain a dictionary of error messages.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

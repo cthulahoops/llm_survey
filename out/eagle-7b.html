@@ -404,6 +404,74 @@ class Order:
 {"adf_union": {"amount": Decimal('100.')}}{'adf_union': {"amount": Decimal('199.')}}</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>marshmallow-jsonfield</code> library to generate dataclasses for your JSON field.
+Here's an example code for that:
+```python
+from datetime import date
+from marshmallow import Schema, fields, pre_load, ValidationError
+from dateparser.search import parse
+from datetime import datetime as dt
+import pytz
+import json</p>
+<h1>Define a schema for the JSON field</h1>
+<p>class Dated(Schema):
+    created = fields.Date(required=True)
+    amount = fields.Decimal(required=True)</p>
+<h1>Define a schema for the root object</h1>
+<p>class Order(Schema):
+    order_id = fields.Int(required=True)
+    ordered_at = fields.Datetime(required=True)
+    credit_card_number = fields.String(required=True)</p>
+<h1>Define the base class for the root object and its fields, and override the to_dict method to include them in the json field serialization as dataclasses</h1>
+<p>class Root(object):
+    def <strong>init</strong>(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        super().<strong>init</strong>()</p>
+<h1>Define the root object and its fields</h1>
+<p>class RootJSONField(Root):
+    """The root object for the root of the schema."""
+    <strong>root</strong> = True
+    date_of_birth = Dated(required=True)
+    orders = ArrayField(fields=Order(required=True))
+    def <strong>init</strong>(self, <strong>kwargs):
+        super().<strong>init</strong>(</strong>kwargs)
+        self._ordered_at = None
+        self._credit_card_number = None</p>
+<h1>Define a deserializer for the root JSON field of an order to include it as a dataclass in its keys of a dictionary (with their values wrapped in dict() if needed). So, e.g., {'orders': [{...}, {'...}, ...], 'date_of_birth': SomeDateObject() } instead of {'orders': [{..., 'date_of_birth': ..., ...}] } which would cause error when you try to access _ordered_at on Incargo because it won't work without date part.</h1>
+<p>@RootJSONField.register_dataclass()
+class OrderDataclassMixin:</p>
+<pre><code>def _parse(self, raw):
+    self.__root__['_ordered_at'] = parse(raw['orderedAt'], validate='iso8601', strip=False).date()
+    self.__root__['ordered_at'] = self.__root__.checked(_parse)
+    return self.__root__
+</code></pre>
+<p>Msg represents RaiseError or skip if not valid (or tag first argument with Msg()).</p>
+<p>@Field.dataclass() is used to : </p>
+<ul>
+<li>distinguish each field of a schema from each other since Marshmallow usually doesn't have concept of data classes inside any class scope (expecting only tags like @Schema()), but we need dataclasses inside each field scope so we add one more level with "dataclass", indicating that it is really mandatory for required field either we use tag (<strong>name</strong>) or something else (:name:) right before Required Char(20), Birthday etc... Note: this will always raise error on additional name we pass to required(). But Just like OptionField , we can use @optional() overriding other cases by in precedence with just @if options so that you can use additional keyword using Name() and similars within __isDependsOnScopeConfig() i.e., @optional()(either with Name(), IncludeTag(), JsonPath(), Predicate()) ) too..</li>
+</ul>
+<p>from marshmallow import Schema, post, fields, DataType</p>
+<p>@dataclass(eq=False)
+class ReservedItem:
+    name: str = None  # Don't allow accessing other reserved items by name directly since it is created from auto-prefix of other reserved items since all fields has attribute reservedItem iimitions so except name if you do that outside of this class then you will be getting whole list <strong>reservedItems</strong>. Libyans are not drunk yet :)</p>
+<p>ConfirmationCode = 911</p>
+<p>EstimateOptionsBadNumberOrReplacedOrAmountOrTimeoutRequiredDayDelivery = 920</p>
+<p>ApprovePaymentProcessOptionsBadbankOrOwnerAccountIdSlowPaymentReviewOrDepunavateExt requirementForConcept &amp;&amp; Organization || PurchaseConfirmOrderPaymentMoreThanOneMinutesAfterPaymentConfirmedNSAFormet || COmpanyOfferedSaleSmartphoneDatacentersAIPVA || createCompanyNewCustomerAccountTimeShowPricesTransferredQuantity || StatusIsOnHoldService || CreateCompanyNewCustomerAccountByPayment || CreateCompanyNewVendorProductapOrganizerIDEscapeRouteRoute || MyAccountPaymentAccountPayment || CreateOptionRiskyManagementPaymentAccountFulfillerAnycase || CreateCompanyCreatedBankInvoiceLV || CreateCompanyNewVendorAdjustmentsValuedAFischCheckoutDevice || PurchaseCompanyNewGuyBankAccounts || CreateCompanyManagementObjectVenuesBeRecognizedTaxVerifcation || CancelRemotelyPurchaseOrder || CancelSubSetProducts || BuySellingTradeProductsActiveMktStockPlanPartnerAssociatePartnerStatusesPromotedWebsiteId MoxieSearchPresaleLotCommissionAuctionBidWinHalfRandomUpOfferFlowoverallBidsFormatCompleteLatelyEspersProductPurchTrend || BuyCombinedLtaRateGuaranteePlatformsBuyInternationalVisitorNameOnlyPurchRateRomeEducateExclusiveBuyerSession PartnerBelongStyleBuyerSumTrustedD NotifiedEuropeanResellingEventSell &amp;&amp; DeliveryOptions ErrorCreateTotalRates &amp;&amp; Deliver BalanceExpictOpenTransactionTypeBasic  or NorthAmericanOrSouthamericanAcceptableUsageCalculateWithCasesFromSelfieDeliveredGlobal 
+|| CreateCompanyNewRepHandlingAgentsApprenticesAgentContactPersonEquityInvestorsRuralContactsAgentInvestmentsPortfolioMarketingHotPartnerManagerProvidene * or TibetianTraditionOr EastAsiaExchangeDateOf CreationDeathChancellorOfStateLanguageaBigCountryBooksVettori  || CapitalArbitraryProblemsNonprofitOrganizationsOrCorporationslistsOfPeopleTwitterSudanOrSportsMatchInEquitableLocationUpgradeOpenHouseExpiredFieldsAgreements TransactionAuthenticationMerchantCardVisaEventTicketsOrUnlimitedOfTogetherWithOtherPrintStreamSupplierNoteSelectConnectionWithForgerSignedByUserOfferUserProfileMobilePhoneNumberPicoTollClientIntegrationBankingSystemFrontLabelReservedHellRateEtc )  || IndianProgrammationSocialIntroScentrishePricingServerSideTechnologyPlatformBrilliantMarketingStrategyWebBrowserApplicationSoftwareIndexesClientDashAdProductsRevenueAndChtch ChinseFluffyIntentGovTJapanCanhersEpicAlibabaAmazonAmazonOnlinebookstorepingPoupouKeruugetToyRobotExperimentDataStoreCredentialZapPayPeggyRibboninki RyanRocketMailGoogleQrTrackerTorUserBytesheartedUnitedStates CopyrightFreeWallpaperRegisteredMigrationIDwayTodistributeDesignersAndFashionistasAndHaveWorkFestival SendPackagesDeactivatedUserTodayFeedbackDescriptionAndBanner AndNotifyAllPostMarion HitlessManufacturerRibetariageSendMailSurchargePlusWriteRoughdraftsimultaneouslyTranslationToListningViaTechnicalSemticAndConfigurationDisclaimerAndRequireConGeneralistEg Gradstudent 2ndRedOctoberRemoveRootFolderMakeBytecodeRshareableResourceFileLikemp3Mp3SongsMp3audioPlayWindowsAPIWindowsMediaPlayerMidlweldtunCantCamQualityWillStabYouUItestchanges utest 2hrdelay Ferworksharpeenterprisesforfederalgovernmentproblematicuserinteraction UseFullNameOfPersonWhoStartedBuildingNuclearReactorCutOffStronglyEncrypttoutegrityRiskyShippingAddressesSecurelyAllegrettoNextStaticallyProceduralUnionSealingDecomposingCarcierFamilyBusinessDirectorDigestWithNoHtmlRetireCV PrepistyleviewanyoneWhoWantroundtrippingAccessManagementtypeaheadSearchlocalizationAsyncRegistration . DocumentsRepresentationReadyFormalDocument|Apaq|AgreementAddition|ComposePassword|CompromisedEmployeeLemmaman|ConditionalRequest|Contractor|ConstructionWatchJobPointOfSaleHelper|ContractedCallCenter|ContractorSubcontractor|Dsts|DocumentsWhatIsDocumentEngineverifyContractorContractorRetailMagistrate|PrintCertificateLevelScanner|DBMSUploadFileAnalysis|DriveTheftPreventionSolutionXMLFileArchiveRetrieveResultsExpertProvider|FileSenderLicenseClientSignedBySignature|FerryFileUploadRemoteOfficeHelpAnonymousUser|FetchDataPartlicalFileDataFilesAttachmentsFromSingleBucketFileContentReaderProcessorDownloadExporterZipNagyFileStorageAlternateCoolerSourceStringCailocationServiceNotificationDoubleAmandaShangnEmailClientClawbackRetractingIncidentProtectionServiceGeneralManagerEmailClientReminderNotificationBeneficiariedFirmCreditCardPrimaryUserLinuxInitiatedPreComputedPrecomputeingComputerMistakeComputerSchtzdorfDrugInformationBoardCyberPlexTechnologyVirusTeleologicalTransferenceInadvertenuousUserRegistrationUserAssuranceSymmetricMessageHashAcceleratingAuthenticatedFunctionRetrieveNonDecodeReactManyLectureUsersIdentifyInfoEncryptMichaelTetwananSinha |UsedIteratorvectorizedstreamsrootslesswidthBCwitnessesMiscellaneousBillingSerializeSearchingStuffingbeateganSuccinctnessBroadReachIncreasingWordIndexAutomatedAssessmentTriangularMatrixValuesMadeEasyConsistentMultiplexHardwareAcceleratedAntiDerivativesPropertyDeclarationOfRoleRegistryLockupKeyValueShellExecutableApplicationProgramDeclaredRestoredStateoversEarlierRotationVersioLogicGateSystemVentingCommentarySequencingSwitchesInterdictionMarriedpairhumanDensityPromptedSquiggleTrendAnalytesInTypeScriptTransportProtocolFormalLanguage涵 collisionDetectionMertensfactorialFunctionNrosNaturalnumbersnaturMathematicCalculatorFunArgs ArgumentAggregatesSolarSystemStochasticJobsFeedVastnessviewstatementofRespondingFocationVariableValueOptimizeWarningQmconvergentSeriesVolueDistributio completesetModuleImportConflictInstallationAutomotographyStrategiesAlgorithmBlowOutFunctionGraphAlgebraGenderLimitationsRejectionReasonLinkageSubstitutionSubnormalDistributionDefineIdentifierTypedeclarationAtomizeFunctionComplementGeneratrixEaseMeasureQuiescentDigitalUnitsFiniteDifferenceParsePlanrssfeederWebAudioHttpRequestLessStatisticalModel MemoryRemessageQueueTensorLoadBalance ClassimizerMax ЛюхайпрограммаСерийныйКонтрольСортировкаShapeOctagonPolygonRectangleSquareDiamondCrossCircle SquareRootTriangle Нецелы ееУравнения swoopHerzugsVersuchВис<jupyter_text>So finally using Typescript's Options API we are able to do this process it seems:<jupyter_code>IMAGES="m1m2"</p>
+<p>IMAGES[0] = "ImgInfo{firstName='Crimson', lastName='Crawford', dateOfBirth='Mar 27 1998', image='Cmmn/cargonimated/400/scr04.jpg'}" # This doesn't support ttl yet ! (Wrong precision or something similar tho...)</p>
+<p>IMAGES[1] = "ImgInfo{firstName='Harry', lastName='Potter', dateOfBirth='Jan 02 1997', image='Cmmn/cursedcomrades/415/img01sdfMovieCharacterInfo.webp'}"  <br />
+IMAGES[2] = "ImgInfo{firstName='cum', lastName='cuncheltoad', dateOfBirth='Jan 01 2012', image='''cp/img0355 chars/bgm051.png' ''}"</p>
+<p>imgBookImage : CargoInfo? {
+  bookinfo: CargoBookInfo</p>
+<p>For each flightInfoIndex {"genbookFrir": true} in IMAGES {
+      cargoBookImage :! CargoBookInfo? {
+          image :!UploadedGenreImage FrirBook
+          FIGMDataGuideline :!FlightInfo Book["pge"] GuideLine
+              or!(
+                  gen</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

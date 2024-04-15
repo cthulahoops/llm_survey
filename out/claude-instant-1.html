@@ -344,6 +344,57 @@ person = data.data
 <p>This defines the Order and Person dataclasses, along with marshmallow Schemas to handle serializing/deserializing between the JSON and the dataclass models.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here is how you can generate dataclasses from that JSON using Marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, post_load
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class Person:
+    first_name: str 
+    last_name: str
+    date_of_birth: date
+    orders: list
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @post_load
+    def make_object(self, data):
+        return Order(**data)
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_object(self, data):
+        return Person(**data)
+
+schema = PersonSchema()
+result = schema.load({
+  'first_name': 'Jane',
+  'last_name': 'Smith', 
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {'created': '2024-01-25T15:00:04', 'amount': '100.00'}
+  ]
+})
+
+print(result)
+</code></pre>
+<p>This will deserialize the JSON into dataclass instances with the correct types for date/datetime/decimal fields.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

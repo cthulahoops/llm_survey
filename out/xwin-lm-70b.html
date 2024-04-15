@@ -329,6 +329,57 @@ def post_process_data(self, data):
 <h1>Usage Example</h1></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already:</p>
+<pre><code>pip install marshmallow
+</code></pre>
+<p>Next, create dataclasses and define the models for the JSON data:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, pydantic, post_load, pre_load
+from datetime import datetime, date
+from decimal import Decimal
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime(data_key=&quot;created&quot;)
+    amount = fields.Decimal(data_key=&quot;amount&quot;)
+
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date(data_key=&quot;date_of_birth&quot;)
+    orders = fields.Nested(OrderSchema, many=True)
+
+
+
+@post_load
+def post_load_order(data):
+    return data[&quot;orders&quot;]
+
+
+
+@pre_load
+def pre_load_order(data):
+    if isinstance(data, dict):
+        return [{&quot;created&quot;: data[&quot;created&quot;], &quot;amount&quot;: data[&quot;amount&quot;]}
+
+
+
+data = {
+    &quot;first_name&quot;: &quot;Jane&quot;,
+    &quot;last_name&quot;: &quot;Smith&quot;,
+    &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+    &quot;orders&quot;: [
+        {&quot;created&quot;: &quot;2024-01-25T15:000:04&quot;, &quot;amount&quot;: &quot;10.00&quot;
+    ]
+}
+
+
+result = UserSchema().load(data, many=True)
+print(result)
+</code></pre>
+<p>In this example, we import the</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -347,6 +347,57 @@ print(json_data)
 <p>This will output the JSON data with the <code>created</code> and <code>date_of_birth</code> fields as strings, and the <code>amount</code> field as a decimal number. To convert these fields back to their respective types, we can use the <code>load</code> method of the <code>Schema</code> class, as shown above.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create the required dataclasses using the marshmallow library in Python, you would first need to import the necessary classes and define the schema. Here is an example of how the schema and the corresponding Python classes can be created for your JSON:</p>
+<pre><code class="language-python">import json
+from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, pprint
+
+class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = Decimal(amount)
+
+class User:
+    def __init__(self, first_name, last_name, date_of_birth, orders):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = datetime.strptime(date_of_birth, '%m/%d/%Y')
+        self.orders = [Order(order['created'], order['amount']) for order in orders]
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(lambda: OrderSchema(), many=True)
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+
+if __name__ == '__main__':
+    data = json.loads('''
+    {
+      &quot;first_name&quot;: &quot;Jane&quot;,
+      &quot;last_name&quot;: &quot;Smith&quot;,
+      &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+      &quot;orders&quot;: [
+        {
+          &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+          &quot;amount&quot;: &quot;100.00&quot;
+        }
+      ]
+    }
+    ''')
+    user_schema = UserSchema()
+    user = User(**data)
+    result = user_schema.dump(user)
+    pprint(result)
+</code></pre>
+<p>This example demonstrates the creation of the <code>User</code> and <code>Order</code> classes, as well as the corresponding <code>UserSchema</code> and <code>OrderSchema</code>. The <code>User</code> class has an <code>__init__</code> method that initializes the object with the required attributes. The <code>UserSchema</code> class has the <code>fields</code> keys that map to the attributes of the <code>User</code> class. The <code>datetime.strptime</code> function is used to convert the <code>date_of_birth</code> string to a <code>datetime</code> object. The <code>Order</code> class has an <code>__init__</code> method that initializes the object with the required attributes. The <code>OrderSchema</code> class has the <code>fields</code> keys that map to the attributes of the <code>Order</code> class. The <code>Order</code> class is wrapped in the <code>lambda</code> function and passed to the <code>Nested</code> field in the <code>OrderSchema</code> class to make it a nested schema. The <code>as_string=True</code> argument is used for the <code>Decimal</code> field to convert it to a string.</p>
+<p>In the main block, the <code>json.loads</code> function is used to convert the JSON string to a Python dictionary. The <code>UserSchema</code> is used to deserialize the data, and the <code>User</code> object is created. The <code>User</code> object is then serialized back to a JSON string using the <code>UserSchema.dump</code> method. The <code>pprint</code> function is used for pretty printing the serialized output.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

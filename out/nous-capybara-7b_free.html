@@ -438,6 +438,56 @@ marshmallow_dataclasses.Customer.Schema().validate(customer)
 <p>You can easily create a customer instance using the <code>Customer</code> dataclass and load data into it using the <code>Customer.load()</code> method. The JSON data in the example is then converted back into the dataclass without any issues.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the marshmallow library, you will first need to install it using pip:</p>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<p>Once you have marshmallow installed, you can proceed to create the dataclasses. Here's an example using marshmallow:</p>
+<pre><code class="language-python">import datetime
+import marshmallow as mm
+
+class Order(mm.Schema):
+    created = mm.datetime(format='iso8601')
+    amount = mm.decimal(precision=2)
+
+    class Meta:
+        unknown = mm.ignore()
+</code></pre>
+<pre><code class="language-python">class Customer(mm.Schema):
+    first_name = mm.str()
+    last_name = mm.str()
+    date_of_birth = mm.datetime(format='iso8601')
+    orders = mm.List(order=Order())
+
+    class Meta:
+        unknown = mm.ignore()
+</code></pre>
+<p>Here's how to use the generated dataclasses:</p>
+<pre><code class="language-python">from customer import Customer
+
+json_string = '''
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;2023-03-16&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+'''
+
+customer_data = Customer(**Customer.Meta.unknown)
+customer_data.load(json_string)
+
+print(customer_data.date_of_birth)  # Outputs: datetime.datetime(2023, 3, 16, 0, 0)
+print(customer_data.orders[0].created)  # Outputs: datetime.datetime(2024, 1, 25, 15, 0, 4)
+print(customer_data.orders[0].amount)  # Outputs: Decimal('100.00')
+</code></pre>
+<p>As you can see, the marshmallow library allows you to easily create dataclasses from JSON data and use them in your code.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

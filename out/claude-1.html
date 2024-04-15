@@ -358,6 +358,64 @@ assert person == Person(
 <p>So this allows you to easily translate untyped JSON into a typed dataclass object using marshmallow. Let me know if you have any other questions!</p></p>
                 <hr/>
             
+                <p>Content: <p>Here's how you can do this using marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+
+from marshmallow import Schema, fields
+
+# Dataclasses
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+# Schemas
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+class PersonSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+# Deserialization
+person_schema = PersonSchema()
+person = person_schema.loads(json_data)
+
+# person will be:
+Person(
+    first_name='Jane', 
+    last_name='Smith', 
+    date_of_birth=date(1977, 3, 16),
+    orders=[
+        Order(
+            created=datetime(2024, 1, 25, 15, 0, 4), 
+            amount=Decimal('100.00')
+        )
+    ]
+)
+</code></pre>
+<p>This defines:</p>
+<ul>
+<li>Dataclasses to represent the Person and Order</li>
+<li>Schemas to describe the data</li>
+<li>The <code>person_schema.loads(json_data)</code> call deserializes the JSON into the dataclasses</li>
+</ul>
+<p>So the <code>person</code> variable will end up with the correct types - <code>date</code> for <code>date_of_birth</code>, <code>datetime</code> for <code>created</code>, and <code>Decimal</code> for <code>amount</code>.</p>
+<p>Let me know if you have any other questions!</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

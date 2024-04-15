@@ -329,6 +329,48 @@ Jane
 <p>So you'll end up with strongly typed Python objects from your JSON.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can define it like this:
+from datetime import date 
+from decimal import Decimal 
+from marshmallow import Schema, fields </p>
+<p>class DateSchema(fields.Date): 
+    def <strong>init</strong>(self): 
+        pass </p>
+<pre><code>def __call__(self, value): 
+    return date.fromisoformat(value)
+</code></pre>
+<p>class DecimalSchema(fields.Decimal): 
+    def <strong>init</strong>(self): 
+        pass </p>
+<pre><code>def __call__(self, value): 
+    return Decimal(value)
+</code></pre>
+<p>class UserSchema(Schema): 
+    first_name = fields.Str() 
+    last_name = fields.Str() 
+    date_of_birth = DateSchema() 
+    orders = fields.List(fields.Nested(OrderSchema)) </p>
+<p>class OrderSchema(Schema): 
+    created = fields.DateTime() 
+    amount = DecimalSchema() </p>
+<p>user = { 
+  'first_name': 'Jane', 
+  'last_name': 'Smith', 
+  'date_of_birth': '03/16/1977', 
+  orders: [
+    { 
+      'created': '2024-01-25T15:00:04', 
+      'amount': '100.00' 
+    }
+  ] 
+} </p>
+<p>data = UserSchema().load(user) 
+print(data.date_of_birth)  # Prints 03/16/1977
+print(data.orders[0].created)  # Prints 2024-01-25 15:00:04 
+print(data.orders[0].amount)  # Prints 100.0</p>
+<p>This will serialize the date_of_birth to a date, created to datetime, and amount to Decimal.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

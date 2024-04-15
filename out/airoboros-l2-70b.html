@@ -372,6 +372,67 @@ print(user)
 <p>The <code>User</code> class takes four arguments in its constructor and configures its schema. The <code>if __name__ == '__main__'</code> block creates a user object from the provided dictionary, dumps it to a dictionary using <code>user.schema().dump(user)</code>, and then unmarshals it back into an object using <code>user.schema().load(user_dict_from_schema)</code>. Finally, both the marshaled and unmarshaled objects are printed.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here's a basic example of how you could use the marshmallow library to deserialize the provided JSON into dataclasses:</p>
+<pre><code class="language-python">from datetime import datetime
+from dataclasses import dataclass
+from marshmallow import Schema, fields, post_load
+import dateutil.parser
+
+@dataclass
+class Order:
+    created: datetime
+    amount: decimal
+
+class OrderSchema(Schema):
+    created = fields.Field(load=dateutil.parser.parse)
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data):
+        return Order(**data)
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: list[Order]
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Field(load=dateutil.parser.parse)
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_user(self, data):
+        return User(**data)
+
+user_dict = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+]}
+
+user_schema = UserSchema()
+user = user_schema.load(user_dict)
+
+print(user.first_name) # Jane
+print(user.last_name) # Smith
+print(user.date_of_birth) # &lt;datetime obj&gt;
+print(user.orders[0].created) # &lt;datetime obj&gt;
+print(user.orders[0].amount) # 100.0
+</code></pre>
+<p>In this example, I've defined the <code>User</code> and <code>Order</code> dataclasses, as well as their respective schemas (using the Marshmallow library). Then, I've used the <code>load()</code> method of the <code>UserSchema</code> class to deserialize the provided JSON into a <code>User</code> object.</p>
+<p>The <code>post_load</code> decorator is used to convert the raw data from the JSON into the actual dataclass objects.</p>
+<p>Note that you'll need to import <code>dateutil</code> for the date parsing to work.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -344,6 +344,30 @@ print(person_data)
 <p>The output shows the resulting Python object, which contains the expected values for the <code>Person</code> and <code>Order</code> fields, as defined in the JSON data.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the Marshmallow library to define dataclasses based on the given JSON schema. Here's an example code snippet that defines the dataclasses:</p>
+<pre><code class="language-python">from marshmallow import fields, validate, Shape
+
+class Person:
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(format='%m/%d/%Y')
+    orders = fields.Nested(Order, many=True)
+
+class Order:
+    created = fields.DateTime(format='%Y-%m-%dT%H:%M:%S')
+    amount = fields.Float(required=True, validate=validate.Range(min=0))
+
+schema = Shape(map_rin=Person)
+</code></pre>
+<p>You can then use Marshmallow's <code>make_autodict()</code> function to convert the JSON data into a Python dictionary:</p>
+<pre><code class="language-python">import json
+data = json.loads('{&quot;first_name&quot;: &quot;Jane&quot;, &quot;last_name&quot;: &quot;Smith&quot;, &quot;date_of_birth&quot;: &quot;03/16/1977&quot;, &quot;orders&quot;: [{&quot;created&quot;: &quot;2024-01-25T15:00:04&quot;, &quot;amount&quot;: &quot;100.00&quot;}]}')
+person = schema.load(data)
+person_dict = schema.make_autodict(person)
+</code></pre>
+<p>This will create a <code>Person</code> object and convert it to a Python dictionary using the <code>make_autodict()</code> function. The <code>date_of_birth</code> field is automatically converted to a Python date object, <code>created</code> field is converted to a Python datetime object, and <code>amount</code> field is converted to a decimal.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

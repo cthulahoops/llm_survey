@@ -347,6 +347,47 @@ print(customer.orders[0].amount)  # Decimal('100.00')
 <p>Note that the <code>date_of_birth</code> field is now a <code>datetime</code> object, and the <code>orders</code> field is now a list of <code>Order</code> objects.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here's an example of how you can use the marshmallow library to define dataclasses with the specified fields and types:</p>
+<pre><code>from dataclasses import dataclass
+from marshmallow_dataclass import dataclass
+import datetime
+from decimal import Decimal
+
+@dataclass
+class Customer:
+    first_name: str
+    last_name:  str
+    date_of_birth: datetime.date
+    orders: List[Order]
+
+@dataclass
+class Order:
+    created: datetime.datetime
+    amount: Decimal
+</code></pre>
+<p>In this example, we define two dataclasses: <code>Customer</code> and <code>Order</code>. The <code>Customer</code> dataclass has four fields: <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and <code>orders</code>. The <code>orders</code> field is a list of <code>Order</code> dataclasses.</p>
+<p>The <code>Order</code> dataclass has two fields: <code>created</code> and <code>amount</code>. The <code>created</code> field is a datetime.datetime object, and the <code>amount</code> field is a Decimal object.</p>
+<p>To generate these dataclasses from JSON, you will need to use the <code>marshmallow_dataclass</code> library. This library allows you to define dataclasses using decorators and then serialize and deserialize them using JSON.</p>
+<p>Here's an example of how you can use it:</p>
+<pre><code>from marshmallow_dataclass import Datana
+
+# Create a Datana object that maps the JSON data to the dataclasses
+datana = Datana(Customer)
+
+# Load the JSON data from a file
+with open('data.json') as f:
+    data = json.load(f)
+
+# Deserialize the JSON data to a Python object
+customer = datana.loads(data)
+
+# Serialize the Python object to JSON
+json_data = datana.dumps(customer)
+</code></pre>
+<p>In this example, we first create a <code>Datana</code> object that maps the JSON data to the <code>Customer</code> dataclass. We then load the JSON data from a file using the <code>json</code> module, and deserialize it to a Python object using the <code>loads</code> method of the <code>Datana</code> object. Finally, we serialize the Python object back to JSON using the <code>dumps</code> method of the <code>Datana</code> object.</p>
+<p>Note that the <code>Datana</code> class also allows you to specify the field renaming scheme, which you can use to modify the names of the fields in the JSON data before they are deserialized to Python objects.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -366,6 +366,78 @@ for order in user.orders:
 <p>In this code sample, we defined schemas for <code>Order</code> and <code>User</code> classes using marshmallow. We also defined how to convert the incoming data into instances of these classes using the <code>@post_load</code> decorator. Finally, we loaded and deserialized the JSON data, creating the appropriate data classes with the correct data types for date, datetime, and decimal fields.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, you can define the structure of the JSON data and then create dataclasses with appropriate field types using Marshmallow Schema.</p>
+<p>Here's an example code snippet demonstrating how to do this:</p>
+<pre><code class="language-python">from datetime import date, datetime
+from decimal import Decimal
+from dataclasses import dataclass, field
+from marshmallow import Schema, fields, post_load
+
+@dataclass
+class Order:
+    created: datetime = field(metadata={&quot;format&quot;: &quot;%Y-%m-%dT%H:%M:%S&quot;})
+    amount: Decimal
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+class OrderSchema(Schema):
+    created = fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+class UserSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_user(self, data, **kwargs):
+        return User(**data)
+
+# Load JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Create schemas and load JSON data
+order_schema = OrderSchema()
+user_schema = UserSchema()
+
+order_data = order_schema.load(json_data['orders'], many=True)
+user_data = user_schema.load(json_data)
+
+# Create dataclasses from the loaded data
+user = User(**user_data)
+order_items = [Order(**order) for order in order_data]
+user.orders = order_items
+
+print(user)
+</code></pre>
+<p>In this code snippet:
+- We define dataclasses <code>Order</code> and <code>User</code> that correspond to the structure of the JSON data.
+- We create Marshmallow schemas <code>OrderSchema</code> and <code>UserSchema</code> to define how the JSON data should be deserialized into the dataclasses.
+- We load the JSON data using the schemas and construct instances of the dataclasses with the loaded data.
+- Finally, we print the <code>User</code> instance for demonstration purposes.</p>
+<p>You can further enhance this code to include error handling, validation, or additional data manipulation as needed for your application.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -343,6 +343,39 @@ user_dict = {
 </ul></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from a JSON using marshmallow in Python, you can create a class and define dataclass fields for each key in the JSON along with their respective types. Here's an example:</p>
+<pre><code class="language-python">import datetime
+from marshmallow import Schema, fields
+
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date(data_key='date_of_birth')
+    orders = fields.Nested('OrderSchema', many=True)
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime(data_key='created')
+    amount = fields.Decimal()
+</code></pre>
+<p>You can then specify the encoding and decoding of your JSON using the schema to get the dataclasses:</p>
+<p>```python</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>from pymongo import MongoClient
+import pprint
+user = {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': datetime.datetime(2024, 1, 25, 15, 0, 4), 'amount': 100.00}]}
+user_schema = UserSchema()
+pprint(user_schema.loads(user)
+pprint(PrettyPrinter(dict)(person))
+{'date_of_birth': datetime.date(2024, 1, 25), 'first_name': 'Jane', 'last_name': 'Smith', 'orders': [{'created': datetime.datetime(2024, 1, 25, 1</p>
+</blockquote>
+</blockquote>
+</blockquote></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

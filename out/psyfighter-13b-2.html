@@ -321,6 +321,44 @@ schema = Schema(User)
 <p>Marshmallow automatically generates a schema for each of these classes based on their fields. The <code>schema</code> variable at the bottom is a shared instance of the <code>User</code> schema that can be used for validation and serialization.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the Marshmallow library to create dataclasses from the JSON input. Here's an example:</p>
+<p>```python
+from marshmallow import fields, Schema, validates_date</p>
+<p>class PersonSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(required=True)</p>
+<pre><code>class Meta:
+    ordering = ['last_name', 'first_name']
+</code></pre>
+<p>class Order(Schema):
+    created = fields.Date(required=True)
+    amount = fields.Decimal(required=True)</p>
+<pre><code>class Meta:
+    ordering = ['created']
+</code></pre>
+<p>class OrderInvoilceSchema(Schema):
+    person = fields.Nested(PersonSchema)
+    order = fields.Nested(Order)</p>
+<pre><code>class Meta:
+    ordering = ['person__last_name', 'person__first_name', 'order__created']
+</code></pre>
+<p>order = OrderInvoilceSchema().load(json_data['orders'][0])
+person = PersonSchema().load(json_data)
+full_data = OrderInvoilceSchema().load(json_data)</p>
+<p>print(person)
+print(order)
+print(full_data)
+ ```</p>
+<p>This code defines three schemas: <code>PersonSchema</code>, <code>OrderSchema</code>, and <code>OrderInvoilceSchema</code>. The <code>OrderInvoilceSchema</code> inherits from <code>OrderSchema</code> and <code>PersonSchema</code> to represent the data in nested key-value pairs.</p>
+<p>The <code>OrderSchema</code> contains fields for <code>created</code> (a date) and <code>amount</code> (a decimal).
+The <code>PersonSchema</code> contains fields for <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code> (a date).</p>
+<p>The <code>OrderInvoilceSchema</code> contains both person and order data. The person data and order data are loaded separately using the <code>PersonSchema</code> and <code>OrderSchema</code> instances. The <code>order</code> field on the <code>OrderInvoilceSchema</code> is of type <code>fields.Nested(OrderSchema)</code>, so we can load the order data into it like this:</p>
+<pre><code class="language-python">order = OrderSchema().load(item)
+</code></pre>
+<p>Finally, we load the entire JSON data into the <code>OrderInvoilceSchema</code> instance and print it out.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

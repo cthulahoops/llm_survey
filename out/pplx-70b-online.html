@@ -371,6 +371,59 @@ print(serialized_person)
 <p>For reference on using Marshmallow with dataclasses, you might find this tutorial helpful: <a href="https://www.coursereport.com/blog/marshmallow-dataclasses">Marshmallow DataClass - Course Report</a>. Additionally, official Marshmallow resources like <a href="https://marshmallow.readthedocs.io/en/stable/quickstart.html#">their quickstart documentation</a> and <a href="https://marshmallow.readthedocs.io/en/stable/api_reference.html#fields">the fields section</a> will help you get acquainted with the library.</p></p>
                 <hr/>
             
+                <p>Content: <p>To define dataclasses based on the given JSON structure using the <code>marshmallow</code> library in Python, you can follow these steps:</p>
+<p>First, you'll need to import the necessary modules:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, pydantic
+import datetime
+from dateutil.parser import parse
+from decimal import Decimal
+</code></pre>
+<p>Then, you can define a base schema to handle the common fields:</p>
+<pre><code class="language-python">class BaseSchema(pydantic.BaseModel):
+    first_name: str
+    last_name: str
+    date_of_birth: datetime.datetime
+    amount: Decimal
+</code></pre>
+<p>Now, define a schema for the <code>orders</code> nested array:</p>
+<pre><code class="language-python">class OrderSchema(pydantic.BaseModel):
+    created: datetime.datetime
+    amount: Decimal
+
+class OrderSchemaOmarshmallow(Schema):
+    created = fields.DateTime(data_key='created')
+    amount = fields.Decimal(data_key='amount', as_decimal=Decimal)
+
+OrderSchemaOmarshmallow.model = OrderSchema
+</code></pre>
+<p>Lastly, define the main schema that encapsulates the JSON structure:</p>
+<pre><code class="language-python">class MainSchemaOmarshmallow(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.DateTime(data_key='date_of_birth', deserialize_from='date_of_birth',
+                                    validate=lambda value: parse(value) if value else None)  # Converts from string to datetime
+    orders = fields.Nested(OrderSchemaOmarshmallow, many=True)
+
+MainSchemaOmarshmallow.model = BaseSchema
+</code></pre>
+<p>To see it in action, you can deserialize the JSON into <code>MainSchemaOmarshmallow.model</code>:</p>
+<pre><code class="language-python">input_json = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+MainSchemaOmarshmallow().load(input_json)  # Deserialize JSON into the data classes
+</code></pre>
+<p>This will yield an instance of <code>BaseSchema</code> with the fields converted to <code>datetime.datetime</code> and <code>Decimal</code> as specified in your question. Remember to install the required dependencies such as <code>marshmallow</code> and <code>pydantic</code>.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -336,6 +336,40 @@ print(person)
 <p>This means that the JSON data was successfully serialized to the Person dataclass. The <code>load</code> method was used to convert the JSON data to the PersonSchema, and the <code>serialize</code> method was used to convert the PersonSchema instance to JSON.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from the given JSON, you can use the marshmallow library in Python. Here's an example of how you can do this:</p>
+<p>First, define the dataclasses:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields
+from datetime import datetime
+
+class Order(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Decimal(required=True, places=2)
+
+class User(Schema):
+    first_name = fields.String(required=True)
+    last_name = fields.String(required=True)
+    date_of_birth = fields.Date(required=True)
+    orders = fields.Nested(Order, many=True)
+</code></pre>
+<p>Next, create a function to deserialize the JSON into dataclasses:</p>
+<pre><code class="language-python">from marshmallow import deserialize
+
+def deserialize_json(json_string):
+    user_schema = User()
+    user = user_schema.load(json_string)
+    return user
+</code></pre>
+<p>Now, you can use the <code>deserialize_json</code> function to convert the given JSON into dataclasses:</p>
+<pre><code class="language-python">json_string = '{ &quot;first_name&quot;: &quot;Jane&quot;, &quot;last_name&quot;: &quot;Smith&quot;, &quot;date_of_birth&quot;: &quot;03/16/1977&quot;, &quot;orders&quot;: [ { &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;, &quot;amount&quot;: &quot;100.00&quot; } ] }'
+user = deserialize_json(json_string)
+print(user)
+</code></pre>
+<p>This will output the following:</p>
+<pre><code class="language-python">User(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
+</code></pre>
+<p>Note that the <code>date_of_birth</code> field is converted to a <code>datetime.date</code> object, and the <code>created</code> field is converted to a <code>datetime.datetime</code> object. The <code>amount</code> field is converted to a <code>decimal.Decimal</code> object with two decimal places.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

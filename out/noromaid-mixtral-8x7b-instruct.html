@@ -401,6 +401,69 @@ print(PersonShema().dump(person))
 <p>The code creates the Order and Person classes to represent the data, as well as the OrderShema and PersonShema classes to validate and serialize/ deserialize the data. The code initializes the data in the person_dict variable, deserializes the data into a Person object using the PersonShema.load() method, and then serializes the data into a dictionary using the PersonShema.dump() method. The code also demonstrates how to parse the date and datetime strings, and how to validate the Decimal amount.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the Marshmallow library in Python to create data classes from JSON data and also specify the data types for each field. Here's an example of how you can do this for your JSON data:</p>
+<p>First, install the Marshmallow library if you haven't already:</p>
+<p>pip install marshmallow</p>
+<p>Then, you can use the following code to define the data classes and their fields types:</p>
+<p>from datetime import datetime
+from dateutil importparser
+import marshmallow as mm</p>
+<h1>Define the data classes</h1>
+<p>class Order:
+    def <strong>init</strong>(self, created, amount):
+        self.created = created
+        self.amount = amount</p>
+<p>class Person:
+    def <strong>init</strong>(self, first_name, last_name, date_of_birth, orders):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+        self.orders = orders</p>
+<h1>Define the marshmallow schemas</h1>
+<p>class OrderSchema(mm.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Order
+        load_instance = True
+        include_fk = True</p>
+<pre><code>    # Define the data types for the fields
+    created = mm.fields.DateTime(format='%Y-%m-%dT%H:%M:%S')
+    amount = mm.fields.Decimal()
+</code></pre>
+<p>class PersonSchema(mm.SQLAlchemy AutoShadowSchema):
+    class Meta:
+        model = Person
+        load_instance = True
+        include_fk = True</p>
+<pre><code>    # Define the data types for the field
+    first_name = mm.fields.Str()
+    last_name = mm.fields.Str()
+    date_of_birth = mm.fields.Date(format='%m-%d-%Y')
+
+    orders = mm.fields.Nested(OrderSchema, many=True)
+</code></pre>
+<h1>Load the JSON data</h1>
+<p>data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}</p>
+<p>person_schema = PersonSchema()
+person = person_schema.load(data)</p>
+<p>print(person.date_of_birth)
+print(person.orders[0].created)
+print(person.orders[0].amount)</p>
+<p>The Person and Order classes define the data classes for your JSON data. The OrderSchema and PersonSchema classes define the Marshmallow schemas for these classes, and in the Meta class, you can specify the model, whether to load the instance, include foreign keys, and most important, define the data types for each field.</p>
+<p>After that, you can use the load method on the PersonSchema instance to parse the JSON data and convert it into the Person and Order objects.</p>
+<p>The date_of_birth field is a date, so it's formatted as a string in the Ryan's Calendar format. The created field is a datetime, so it's formatted as an ISO-8601 string. The amount field is a decimal.</p>
+<p>To parse the date and datetime strings, I used the dateutil.parser.parse method to convert them into the correct data types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

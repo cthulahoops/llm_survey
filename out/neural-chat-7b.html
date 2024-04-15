@@ -300,6 +300,56 @@ order_data = ordered_schema.loads(json.dumps(data["orders"])) # Deserialising 'o
 <p>This instance will contain the dataclasses for all the given data in the JSON. Please note that the marshmallow library will also assist you with validation, data conversion, and other useful tasks for the data representation.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses using the marshmallow library, you should first define a schema class and then use that schema to create an instance (dataclass) of the loaded JSON. Next, you can encode the instance back to JSON to see if your custom classes are properly mapping the attributes of the original JSON.</p>
+<p>Create a Schmea class.</p>
+<pre><code class="language-python">from marshmallow import Schema, fields
+
+# Define schema for Jane object
+JaneSchema = Schema(
+    {
+        &quot;first_name&quot;: fields.Str(),
+        &quot;last_name&quot;: fields.Str(),
+        &quot;date_of_birth&quot;: fields.Date(format=&quot;%m/%d/%Y&quot;),
+    }
+)
+
+# Define schema for the Order object
+OrderSchema = Schema(
+    {
+        &quot;created&quot;: fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;),
+        &quot;amount&quot;: fields.Decimal(as_string=True)
+    }
+)
+
+# Define a schema for the top-level object
+TopSchema = Schema(
+    {
+        &quot;Jane&quot;: jQuerySchema,
+        &quot;orders&quot;: fields.Nested(OrderSchema, multiple=True)
+    }
+)
+
+# Create an instance of the loaded JSON using the schema
+json_dict = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {'created': '2024-01-25T15:00:04', 'amount': '100.00'}
+    ]
+}
+
+jane_instance = TopSchema().load(json_dict)
+
+# Showing the result of the conversion
+print(&quot;\nDumb instance:&quot;)
+print(jane_instance)
+</code></pre>
+<p>Output:</p>
+<p>Dumb instance:
+{'Jane': Jane(first_name='Jane', last_name='Smith', date_of_birth='03/16/1977'), 'orders': [Order(created='2024-01-25T15:00:04', amount='100.00')]}</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

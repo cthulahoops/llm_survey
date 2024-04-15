@@ -321,6 +321,56 @@ user = schema.load(json_data).data</p>
 <p>```</p></p>
                 <hr/>
             
+                <p>Content: <p>```python
+from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+import marshmallow_dataclass
+import marshmallow
+from marshmallow import fields
+import json</p>
+<p>json_data = json.loads("""
+{
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  orders: [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+]}
+""")</p>
+<p>@dataclass
+class Order:
+  created: datetime
+  amount: Decimal</p>
+<p>@dataclass
+class User:
+  first_name: str
+  last_name: str
+  date_of_birth: date
+  orders: list[Order]</p>
+<p>class DateField(fields.Field):
+  def _deserialize(self, value, **kwargs):
+    return datetime.strptime(value, '%m/%d/%Y').date()</p>
+<p>class DateTimeField(fields.Field):
+  def _deserialize(self, value, **kwargs):
+    return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')</p>
+<p>class DecimalField(fields.Field):
+  def _deserialize(self, value, **kwargs):
+    return Decimal(value)</p>
+<p>UserSchema = marshmallow_dataclass.class_schema(User)
+UserSchema.Meta.datefields = ['date_of_birth']
+UserSchema.Meta.fields['date_of_birth'] = DateField()
+UserSchema.Meta.fields['created'] = DateTimeField()
+UserSchema.Meta.fields['amount'] = DecimalField()</p>
+<p>user_schema = UserSchema()
+user = user_schema.load(json_data)
+print(user)
+```</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

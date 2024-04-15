@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>openrouter/gryphe/mythomax-l2-13b:nitro</title>
+        <title>LLM Survey</title>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
@@ -247,132 +247,7 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/gryphe/mythomax-l2-13b:nitro</h1>
-            <p>Model: openrouter/gryphe/mythomax-l2-13b:nitro</p>
-
-            
-                <p>Content: <p>Using the marshmallow library in Python, you can define your dataclasses as follows:</p>
-<pre><code class="language-python">from marshmallow import Schema, fields, validates_datetime
-
-class CustomerInformation(Schema):
-    first_name = fields.Str(required=True)
-    last_name = fields.Str(required=True)
-    date_of_birth = fields.Date(format=&quot;%m/%d/%Y&quot;, validate=validates_datetime)
-    orders = fields.List(fields.Nested(OrderInfo))
-
-class OrderInfo(Schema):
-    created = fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
-    amount = fields.Float(only_numbers=True)
-
-</code></pre>
-<p>You can then load the JSON data into a <code>CustomerInformation</code> object using marshmallow's <code>load_instance</code> method:</p>
-<pre><code class="language-python">data = {
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  orders: [
-    {
-      'created': '2024-01-25T15:00:04',
-      'amount': '100.00'
-    }
-  ]
-}
-customer_info = CustomerInformation().load_instance(data)
-</code></pre>
-<p>This will create a <code>CustomerInformation</code> object with the loaded values.</p></p>
-                <hr/>
-            
-                <p>Content: <p>To generate dataclasses from the given JSON data, we can use the <code>marshmallow</code> library in Python. Here's an example:</p>
-<pre><code class="language-python">from marshmallow import fields, Schema, validate
-
-class NameSchema(Schema):
-    first_name = fields.Str(required=True)
-    last_name = fields.Str(required=True)
-
-class OrderSchema(Schema):
-    created = fields.DateTime(required=True)
-    amount = fields.Float(required=True)
-
-class PersonSchema(Schema):
-    name = NameSchema()
-    orders = fields.List(fields.Nested(OrderSchema()))
-
-validator = validate.SchemaValidator(PersonSchema())
-data = {
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  orders: [
-    {
-      'created': '2024-01-25T15:00:04',
-      'amount': '100.00'
-    }
-  ]
-}
-
-person_data = person_schema.load(data)
-print(person_data)
-</code></pre>
-<p>This code defines three dataclasses: <code>NameSchema</code>, <code>OrderSchema</code>, and <code>PersonSchema</code>. The <code>PersonSchema</code> class includes both the <code>name</code> and <code>orders</code> fields, which are populated with the values from the JSON data.</p>
-<p>The <code>validate</code> function is used to validate the JSON data against the <code>PersonSchema</code>. The <code>data</code> variable contains the JSON data as a dictionary. The <code>load</code> method of the <code>PersonSchema</code> is used to load the JSON data into the <code>PersonSchema</code> object.</p>
-<p>Finally, the <code>person_data</code> variable is printed to demonstrate that the dataclasses have been successfully generated from the JSON data.</p></p>
-                <hr/>
-            
-                <p>Content: <p>Here's an example of how you can define your dataclasses using Marshmallow:</p>
-<pre><code class="language-python">from marshmallow import (
-    fields,
-    Schema,
-    dataclass,
-    post_dump,
-    post_load
-)
-
-class PersonSchema(Schema):
-    first_name = fields.Str(required=True)
-    last_name = fields.Str(required=True)
-    date_of_birth = fields.Date(required=True)
-    orders = fields.List(fields.Nested(OrderSchema()))
-
-class OrderSchema(Schema):
-    created = fields.DateTime(required=True)
-    amount = fields.Decimal(required=True, allow_nan=True, attr_type=float)
-
-@dataclass
-class Person:
-    first_name: str
-    last_name: str
-    date_of_birth: date
-    orders: list[Order]
-
-    def to_dict(self):
-        return {k: getattr(self, k) for k in PersonSchema().json_fields()}
-
-    @classmethod
-    def from_dict(cls, d):
-        pers = cls(**d)
-        return pers
-</code></pre>
-<p>This code defines two dataclasses: <code>Person</code> and <code>Order</code>. The <code>Person</code> class has a list of <code>Order</code> objects. The <code>Order</code> class contains a <code>created</code> datetime and an amount decimal. The <code>PersonSchema</code> is a Marshmallow schema that defines the JSON structure for a single person, including their name, date of birth, and a list of orders.</p>
-<p>You can use this code like so:</p>
-<pre><code class="language-python">person = Person(
-    first_name='Jane',
-    last_name='Smith',
-    date_of_birth='1977-03-16',
-    orders=[
-        Order(
-            created='2024-01-25T15:00:04',
-            amount=100.00
-        )
-    ]
-)
-
-json_person = person.to_dict()
-
-person2 = Person.from_dict(json_person)
-</code></pre>
-<p>This creates a <code>Person</code> object with the given data, then serializes it to JSON and deserializes it back again. The resulting <code>Person</code> object will have the same attributes as the original.</p></p>
-                <hr/>
-            
+            Select a model!
         </main>
     </body>
 </html>

@@ -426,6 +426,96 @@ print(person)
 <p>The resulting <code>person</code> object will be an instance of the <code>Person</code> dataclass with the deserialized data, including the <code>date_of_birth</code> as a <code>date</code> object, <code>created</code> as a <code>datetime</code> object, and <code>amount</code> as a <code>Decimal</code> object.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the marshmallow library in Python based on the given JSON, you can follow these steps:</p>
+<ol>
+<li>Define the dataclasses:</li>
+</ol>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+</code></pre>
+<ol>
+<li>Create marshmallow schemas for the dataclasses:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date(format='%m/%d/%Y')
+    orders = fields.List(fields.Nested(OrderSchema))
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)
+</code></pre>
+<ol>
+<li>Use the schemas to deserialize the JSON data:</li>
+</ol>
+<pre><code class="language-python">import json
+
+json_data = '''
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+'''
+
+person_schema = PersonSchema()
+person = person_schema.loads(json_data)
+print(person)
+</code></pre>
+<p>In this code:</p>
+<ul>
+<li>
+<p>We define the <code>Order</code> and <code>Person</code> dataclasses with their respective fields and types.</p>
+</li>
+<li>
+<p>We create the <code>OrderSchema</code> and <code>PersonSchema</code> classes using marshmallow. These schemas define how the JSON data should be deserialized into the dataclasses.</p>
+</li>
+<li>
+<p>The <code>OrderSchema</code> uses <code>fields.DateTime()</code> for the <code>created</code> field and <code>fields.Decimal(as_string=True)</code> for the <code>amount</code> field. The <code>as_string=True</code> parameter ensures that the amount is deserialized as a string to maintain precision.</p>
+</li>
+<li>
+<p>The <code>PersonSchema</code> uses <code>fields.Str()</code> for the <code>first_name</code> and <code>last_name</code> fields, <code>fields.Date(format='%m/%d/%Y')</code> for the <code>date_of_birth</code> field with the specified date format, and <code>fields.List(fields.Nested(OrderSchema))</code> for the <code>orders</code> field, indicating that it is a list of nested <code>Order</code> objects.</p>
+</li>
+<li>
+<p>The <code>@post_load</code> decorators on the <code>make_order</code> and <code>make_person</code> methods specify how to create the corresponding dataclass instances after deserialization.</p>
+</li>
+<li>
+<p>Finally, we use the <code>PersonSchema</code> to deserialize the JSON data using <code>person_schema.loads(json_data)</code>, which returns a <code>Person</code> dataclass instance.</p>
+</li>
+</ul>
+<p>When you run this code, it will deserialize the JSON data into a <code>Person</code> dataclass instance, with the <code>date_of_birth</code> field as a <code>date</code> object, the <code>created</code> field as a <code>datetime</code> object, and the <code>amount</code> field as a <code>Decimal</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

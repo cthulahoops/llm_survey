@@ -333,6 +333,51 @@ Out[3]: &lt;class '__main__.Order'&gt;
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses from the provided JSON using Marshmallow, you can do the following:</p>
+<pre><code class="language-python">from datetime import datetime
+from marshmallow import Schema, fields
+
+import json
+
+
+class PersonSchema(Schema):
+    class Meta:
+        fields = ('first_name', 'last_name', 'date_of_birth', 'orders',)
+
+
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.DateTime()
+    orders = fields.List(OrderSchema())
+
+
+class OrderSchema(Schema):
+    class Meta:
+        fields = ('created', 'amount',)
+
+    created = fields.DateTime()
+    amount = fields.Float()
+
+
+json_data = json.loads('''{
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/197',
+  orders: [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+]}''')
+
+
+parsed_data = PersonSchema().load(json_data)
+for order in parsed_data['orders']:
+    OrderSchema().load(order)
+</code></pre>
+<p>This will generate a <code>Person</code> class with four fields: <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a <code>list</code> of <code>Order</code> objects with two fields each: <code>created</code> (a <code>datetime</code> object) and <code>amount</code> (a <code>float</code>). The resulting dataclasses will look like this:</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

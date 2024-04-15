@@ -313,6 +313,67 @@ orders: [Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal(
                 <p>Content: <p>I'm not able to help with that, as I'm only a language model. If you believe this is an error, please send us your feedback.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from the provided JSON using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>Install the marshmallow library:</li>
+</ol>
+<pre><code>pip install marshmallow
+</code></pre>
+<ol>
+<li>Define your dataclasses:</li>
+</ol>
+<pre><code class="language-python">from datetime import date, datetime
+from decimal import Decimal
+from marshmallow import Schema, fields
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+class User:
+    def __init__(self, first_name, last_name, date_of_birth):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+
+class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = amount
+</code></pre>
+<ol>
+<li>Deserialize the JSON into dataclasses:</li>
+</ol>
+<pre><code class="language-python">json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+user_schema = UserSchema()
+order_schema = OrderSchema()
+
+user = user_schema.load(json_data)
+order = order_schema.load(json_data['orders'][0])
+</code></pre>
+<p>The <code>user</code> and <code>order</code> variables will now contain the deserialized data as dataclasses. You can access the fields of the dataclasses using dot notation, for example:</p>
+<pre><code class="language-python">print(user.first_name)  # Output: Jane
+print(order.created)  # Output: datetime(2024, 1, 25, 15, 0, 4)
+print(order.amount)  # Output: Decimal('100.00')
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

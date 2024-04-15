@@ -362,6 +362,54 @@ print(user)
 <p>Let me know if any part needs more explanation!</p></p>
                 <hr/>
             
+                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+import datetime
+from decimal import Decimal
+import marshmallow_dataclass
+
+@dataclass
+class Order:
+    created: datetime.datetime
+    amount: Decimal
+
+@dataclass    
+class User:
+    first_name: str 
+    last_name: str
+    date_of_birth: datetime.date
+    orders: list[Order]
+
+class UserSchema(marshmallow_dataclass.Schema):
+    date_of_birth = marshmallow.fields.Date()
+    created = marshmallow.fields.DateTime()
+    amount = marshmallow.fields.Decimal()
+
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+schema = UserSchema()
+user = schema.load(json_data)
+print(user)
+</code></pre>
+<p>The key things here:</p>
+<ul>
+<li>Use the marshmallow_dataclass library to auto generate a Schema</li>
+<li>Override the field types to get correct Python types</li>
+<li>Deserialize the JSON into a User dataclass</li>
+</ul>
+<p>Let me know if you have any other questions!</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

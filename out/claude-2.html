@@ -353,6 +353,58 @@ print(deserialized)
 <p>Let me know if you have any other questions!</p></p>
                 <hr/>
             
+                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+import decimal
+from datetime import date, datetime
+import marshmallow_dataclass
+
+@dataclass
+class Order:
+    created: datetime
+    amount: decimal.Decimal
+
+@dataclass
+class Person:
+    first_name: str 
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+class PersonSchema(marshmallow_dataclass.Schema):
+    date_of_birth = marshmallow.fields.Date()
+    orders = marshmallow_dataclass.Nested(OrderSchema, many=True)
+
+class OrderSchema(marshmallow_dataclass.Schema):
+    created = marshmallow.fields.DateTime()  
+    amount = marshmallow.fields.Decimal()
+
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith', 
+  'date_of_birth': '1977-03-16',  
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+schema = PersonSchema()
+person = schema.load(json_data)
+print(person)
+</code></pre>
+<p>The key things:</p>
+<ul>
+<li>Use @dataclass decorator to define dataclasses</li>
+<li>Specify custom field types in Schema like Date(), DateTime() </li>
+<li>Use Nested() for nesting dataclasses</li>
+<li>Load the JSON using the Schema to deserialize into dataclasses</li>
+</ul>
+<p>This will properly parse the JSON into a Person dataclass with typed fields.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

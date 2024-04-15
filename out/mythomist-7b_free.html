@@ -431,6 +431,41 @@ print([{element: field for element, field in ObjectSchema().fields.items()} for 
 <h1>Note that both 'created' will be of type datetime.datetime and 'amount' will be of type decimal.py's Decimal type after unmarshaling the data.</h1></p>
                 <hr/>
             
+                <p>Content: <p>It seems like we're aiming to manipulate a JSON string into Python dataclasses while considering the provided data types for specific fields. Using the marshmallow library will make this task quite efficient. First, let's import the necessary libraries and create a schema for each class we want to build.</p>
+<pre><code class="language-python">from datetime import datetime
+from dateutil.parser import isoparse,parser
+from decimal import Decimal
+
+from marshmallow_dataclass import ClassMeta, Dataclass, field
+import marshmallow
+
+class DateClassMeta(ClassMeta):
+    def impl_field(self, attr, field_name, required=None, missing=None):
+        if field_name == 'date_of_birth':
+            return field(type=datetime.date, load_default=lambda: datetime.today().date().isoformat(), dump_default=lambda x: x.isoformat(), required=required)
+        elif field_name in {'created', 'amount'}:
+            return field(type=str, load_only=True, required=required)
+        else:
+            return field(required=required, missing=missing)
+
+# First define the classes with their corresponding datatypes
+class Person(Dataclass, metaclass=DateClassMeta):
+    first_name: str = field(required=True, min_length=3, max_length=25)
+    last_name: str = field(required=True, min_length=3, max_length=25)
+    date_of_birth: datetime.date = field(load_default=lambda: datetime.today().date().isoformat())
+    orders: list[OrderClass] = field(default_factory=list, required=True)
+
+class Order(Dataclass, metaclass=DateClassMeta):
+    created: str = field(load_only=True)
+    amount: Decimal = field(load_only=True)
+
+# Now instantiate the classes
+person = Person(first_name=&quot;Jane&quot;, last_name=&quot;Smith&quot;, date_of_birth=&quot;03/16/1977&quot;, orders=[{'created': &quot;2024-01-25T15:00:04&quot;, 'amount': &quot;100.00&quot;}])
+# Marshmallow validations will already handle possible transformations for data visualization based on the required field format
+</code></pre>
+<p>This is a brief guide to convert JSON data into Python dataclasses, taking into account the given specific data types. By using the marshmallow library, this can significantly simplify the process and ensures accurate data conversions for our use cases.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

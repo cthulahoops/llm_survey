@@ -317,6 +317,39 @@ print(schema)  # Output: {'firstName': 'Jane', 'lastName': 'Smith', 'dateOfBirth
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.
+Here's an example of how you can do this:</p>
+<pre><code class="language-python">from datetime import datetime, timedelta
+from decimal import Decimal
+import marshmallow
+
+class Order(marshmallow.Schema):
+    date_of_birth = marshmallow.fields.Date(required=True)
+    amount = marshmallow.fields.Decimal(required=True)
+
+class OrderData(marshmallow.Schema):
+    first_name = marshmallow.fields.String()
+    last_name = marshmallow.fields.String()
+    date_of_birth = marshmallow.fields.Date(required=True)
+    orders = marshmallow.fields.Nested(Order, many=True)
+
+data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+      {
+          'created': '2024-01-25T15:00:04',
+          'amount': 100
+      }
+  ]
+}
+schema = OrderData(**data)
+print(schema)  # Output: {'firstName': 'Jane', 'lastName': 'Smith', 'dateOfBirth': datetime(...), ...}
+
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

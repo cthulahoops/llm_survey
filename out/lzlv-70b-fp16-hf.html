@@ -437,6 +437,76 @@ print(person)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>Install marshmallow:</li>
+</ol>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<ol>
+<li>Create a Python file called <code>dataclasses.py</code> and define your dataclasses as follows:</li>
+</ol>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import datetime
+from dateutil.parser import parse
+from decimal import Decimal
+import marshmallow
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: list[Order]
+
+class OrderSchema(marshmallow.Schema):
+    class Meta:
+        model = Order
+
+class UserSchema(marshmallow.Schema):
+    class Meta:
+        model = User
+
+    orders = marshmallow.Nested(OrderSchema, many=True)
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        date_of_birth_str = data.pop('date_of_birth')
+        date_of_birth = parse(date_of_birth_str).date()
+        orders = [Order(created=parse(order['created']), amount=Decimal(order['amount'])) for order in data['orders']]
+        return User(**data, date_of_birth=date_of_birth, orders=orders)
+</code></pre>
+<ol>
+<li>Use the <code>UserSchema</code> to load the JSON data into a <code>User</code> dataclass object:</li>
+</ol>
+<pre><code class="language-python">json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+user_schema = UserSchema()
+user = user_schema.load(json_data)
+
+print(user)
+</code></pre>
+<p>This should output:</p>
+<pre><code class="language-python">User(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
+</code></pre>
+<p>Note: The <code>post_load</code> method is necessary to convert the <code>date_of_birth</code> and <code>created</code> strings to <code>datetime</code> and <code>date</code> objects, respectively, and to convert the <code>amount</code> string to a <code>Decimal</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

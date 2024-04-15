@@ -380,6 +380,70 @@ person_json = person_schema.dump(person)
 <p>This code will take care of the required conversions for <code>date_of_birth</code>, <code>created</code>, and <code>amount</code> fields as specified in the question.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses and handle the desired data types using the marshmallow library in Python, you'll first need to install marshmallow and marshmallow-dataclass libraries.</p>
+<pre><code class="language-bash">pip install marshmallow marshmallow-dataclass
+</code></pre>
+<p>Then, you can define your dataclasses and corresponding marshmallow schemas like this:</p>
+<pre><code class="language-python">from datetime import date, datetime
+from decimal import Decimal
+from dataclasses import dataclass
+from marshmallow import Schema, fields, post_load
+from marshmallow_dataclass import class_schema
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_user(self, data, **kwargs):
+        return User(**data)
+
+# define your JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# create the schema and load data
+schema = UserSchema()
+result = schema.load(json_data)
+
+# result will be an instance of User dataclass
+assert isinstance(result, User)
+print(result)
+</code></pre>
+<p>This code will create the dataclasses <code>User</code> and <code>Order</code> and the corresponding marshmallow schemas <code>UserSchema</code> and <code>OrderSchema</code>. The schemas have fields with the correct data types and use the <code>post_load</code> method to create the dataclasses instances.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

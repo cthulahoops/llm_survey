@@ -394,6 +394,70 @@ print(person)
 <p>You can further customize the schemas, such as adding validation rules, default values, or other transformations, as needed for your specific use case.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the Marshmallow library, you can follow these steps:</p>
+<ol>
+<li>Define the schema for the nested <code>Order</code> object.</li>
+<li>Define the schema for the main <code>Person</code> object.</li>
+<li>Create instances of the schemas and use them to deserialize the JSON data.</li>
+</ol>
+<p>Here's an example implementation:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+from typing import List
+from marshmallow_dataclass import class_schema
+from marshmallow import fields
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+OrderSchema = class_schema(Order)
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: List[Order]
+
+PersonSchema = class_schema(Person)
+
+# Example JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Deserialize the JSON data using the PersonSchema
+person = PersonSchema().load(json_data)
+
+# Access the deserialized data
+print(person.first_name)  # Output: 'Jane'
+print(person.last_name)   # Output: 'Smith'
+print(person.date_of_birth)  # Output: datetime.date(1977, 3, 16)
+print(person.orders[0].created)  # Output: datetime.datetime(2024, 1, 25, 15, 0, 4)
+print(person.orders[0].amount)  # Output: Decimal('100.00')
+</code></pre>
+<p>Here's how it works:</p>
+<ol>
+<li>We define the <code>Order</code> dataclass and its corresponding <code>OrderSchema</code> using <code>marshmallow_dataclass.class_schema()</code>.</li>
+<li>We define the <code>Person</code> dataclass and its corresponding <code>PersonSchema</code> using <code>marshmallow_dataclass.class_schema()</code>.</li>
+<li>In the <code>PersonSchema</code>, we use the <code>fields.Date()</code> and <code>fields.DateTime()</code> fields to handle the <code>date_of_birth</code> and <code>created</code> fields, respectively.</li>
+<li>We use the <code>PersonSchema().load()</code> method to deserialize the JSON data into a <code>Person</code> object.</li>
+<li>We can then access the deserialized data through the <code>person</code> object, which now has the correct data types for the fields.</li>
+</ol>
+<p>The Marshmallow library, combined with the <code>marshmallow_dataclass</code> extension, makes it easy to define schemas and deserialize JSON data into dataclasses with the appropriate data types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

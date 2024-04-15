@@ -341,6 +341,22 @@ print(result)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields
+
+
+class Order(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+
+class User(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(Order())
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

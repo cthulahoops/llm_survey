@@ -394,6 +394,79 @@ print(user)
 <p>Once you run the script, it will deserialize the JSON string into a <code>User</code> object with the specified attributes.</p></p>
                 <hr/>
             
+                <p>Content: <p>To use the Marshmallow library, you should first install it using pip:</p>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<p>Then, you can create dataclasses and use Marshmallow schemas to deserialize the JSON string and validate the data types. Here's an example:</p>
+<pre><code class="language-python">import datetime as dt
+from decimal import Decimal
+from dataclasses import dataclass
+from typing import List
+from marshmallow import Schema, fields, post_load
+
+
+# Dataclasses
+@dataclass
+class Order:
+    created: dt.datetime
+    amount: Decimal
+
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: dt.date
+    orders: List[Order]
+
+
+# Schemas
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(fields.Nested(OrderSchema))
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)
+
+
+# Deserialize JSON
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Load data into dataclasses
+person_schema = PersonSchema()
+person = person_schema.load(json_data)
+print(person)
+
+# Deserialize JSON to a dictionary with validated data types
+validated_data = person_schema.load(json_data)
+print(validated_data)
+</code></pre>
+<p>In this example, we first define the dataclasses <code>Order</code> and <code>Person</code>. Then, we create Marshmallow schemas <code>OrderSchema</code> and <code>PersonSchema</code> to specify the validation rules and deserialization methods (<code>post_load</code> methods used to create dataclasses).</p>
+<p>Finally, we load the JSON data into the <code>PersonSchema</code> using the <code>load</code> method, which generates the <code>Person</code> and <code>Order</code> dataclass instances with the correct data types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

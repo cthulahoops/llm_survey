@@ -321,6 +321,50 @@ from marshmallow_dataclass import dataclass_schematype
 from marimba_dataclassschema import (field_get</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the Marshmallow library in Python, you can define the following dataclasses:</p>
+<ol>
+<li><code>Order</code>:</li>
+</ol>
+<pre><code class="language-python">import datetime
+from marshmallow import Schema, fields, post_load,.
+from typing import Tuple
+from typing_extensions import TypedDict
+from dateutil.parser import parse
+from decimal import Decimal
+
+
+class Order(Schema):
+    created: datetime.datetime = fields.DateTime(input_format='%Y-%m-%dT%H:%M:%S')
+    amount: Decimal = fields.Decimal(decimal_places=2)
+
+
+    @post_load
+    def post_load(self, data: TypedDict, many: bool, **kwargs):
+        if many:
+            return [Order(**o) for o in data]
+        return Order(**data)
+</code></pre>
+<ol>
+<li><code>Person</code>:
+```python
+from marshmallow import Schema, fields, post_load, pre_dump, pre_load
+from typing_extensions import TypedDict
+from datetime import date
+from typing import Dict, Union
+from dateutil.parser import parse
+from decimal import Decimal</li>
+</ol>
+<p>class Person(Schema):
+    class Order(Schema):
+        created: datetime.datetime = fields.DateTime(input_format='%Y-%m-%dT%H:%M:%S')
+        amount: Decimal = fields.Decimal(decimal_places=2)</p>
+<pre><code>first_name: str = fields.Str()
+last_name: str = fields.Str()
+date_of_birth: date = fields.Date(input_format='%m/%d/%Y')
+orders: Union[list[Order], Order, dict, dict] =
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

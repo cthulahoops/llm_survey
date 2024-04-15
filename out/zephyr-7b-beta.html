@@ -348,6 +348,44 @@ print(person_obj)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>datetime</code> class from the <code>datetime</code> module to create a custom field type for <code>date_of_birth</code> that converts it to a <code>datetime</code> object. Here's an example implementation using the <code>marshmallow</code> library:</p>
+<pre><code class="language-python">from datetime import datetime
+from marshmallow import fields, Schema
+
+class Order(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Decimal(required=True, allow_none=False)
+
+class User(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.DateTime(required=True)
+    orders = fields.Nested(Order)
+
+user_json = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  orders: [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+user_schema = User()
+user_data = user_schema.load(user_json)
+
+date_of_birth_objects = user_data.date_of_birth.datetime()
+print(date_of_birth_objects)
+</code></pre>
+<p>This will output:</p>
+<pre><code class="language-csharp">&lt;datetime.datetime datetime='1977-03-16 15:44:44+00:00', tzinfo=&lt;timezone 'UTC' PST+00:00 : zoneinfo='&lt;zonefile 'UTC'/'&lt;zoneid 1 /&gt;'&gt;&gt;
+</code></pre>
+<p>Note that the <code>allow_none=False</code> argument in the <code>Decimal</code> field is used to ensure that the <code>amount</code> field is always a decimal value, even if it is None in the input JSON.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

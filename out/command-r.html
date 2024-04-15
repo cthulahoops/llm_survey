@@ -364,6 +364,60 @@ print(customer)
 <p>This code defines two dataclasses: <code>Order</code> and <code>Customer</code>, and two corresponding Marshmallow schemas. The JSON data is parsed into the <code>Customer</code> dataclass using the <code>CustomerSchema</code>. Note that I've adjusted the date format in the JSON to be ISO 8601 compatible, which is the recommended format for Marshmallow's <code>DateTimeField</code>.</p></p>
                 <hr/>
             
+                <p>Content: <p>To parse JSON into dataclasses, you first need to install the required packages:</p>
+<pre><code class="language-bash">pip install marshmallow dataclasses-json
+</code></pre>
+<p>Next, you can define the dataclasses and Marshmallow schema:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from decimal import Decimal
+from marshmallow import Schema, DateTime, field
+
+@dataclass
+class Order:
+    created: str
+    amount: Decimal
+
+@dataclass
+class Customer:
+    first_name: str
+    last_name: str
+    date_of_birth: str
+    orders: list[Order]
+
+class CustomerSchema(Schema):
+    first_name = field()
+    last_name = field()
+    date_of_birth = DateTime()
+    orders = field(nested=OrderSchema())
+
+class OrderSchema(Schema):
+    created = DateTime()
+    amount = field( Defenseller=Decimal )
+</code></pre>
+<p>You can then parse your JSON string using these dataclasses and schema:</p>
+<pre><code class="language-python">import json
+
+json_string = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '1977-03-16',
+    'orders': [
+        {'created': '2024-01-25T15:00:04', 'amount': '100.00'}
+    ]
+}
+
+customer_schema = CustomerSchema()
+
+# Parse the JSON string into a dataclass instance
+result = customer_schema.load(json.dumps(json_string))
+
+print(result)
+</code></pre>
+<p>When executed, this code will print out the following dataclass instance:</p>
+<pre><code>Customer(first_name='Jane', last_name='Smith', date_of_birth='1977-03-16', orders=[Order(created='2024-01-25T15:00:04', amount=Decimal('100.00'))])
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

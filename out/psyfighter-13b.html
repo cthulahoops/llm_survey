@@ -338,6 +338,52 @@ test_users()
 <p>In this example, we define two schemas: <code>UserSchema</code> for the outer JSON object and <code>OrderSchema</code> for the inner list of orders. The <code>post_load</code> method on the UserSchema is used to tell Marshmallow to handle the nested <code>OrderSchema</code> field using the <code>Order</code> dataclass. When you load the JSON data with the UserSchema, it will automatically handle the nested requests and create the <code>Order</code> objects.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+
+class UserSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(required=True)
+    orders = fields.List(fields.Nested(OrderSchema()))
+
+class OrderSchema(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Decimal(required=True)
+
+class Order(object):
+    @staticmethod
+    def load(data, **kwargs):
+        return OrderSchema().load(data, **kwargs)
+
+def test_users():
+    json_data = {
+        'first_name': 'Jane',
+        'last_name': 'Smith',
+        'date_of_birth': '03/16/1977',
+        'orders': [
+            {
+                'created': '2024-01-25T15:00:04',
+                'amount': '100.00'
+            }
+        ]
+    }
+
+    user = UserSchema(data=json_data).load()
+    assert user.first_name == 'Jane'
+    assert user.last_name == 'Smith'
+    assert user.date_of_birth.year == 1977
+    assert user.orders[0].created.year == 2024
+    assert user.orders[0].amount == Decimal('100.00')
+
+test_users()
+</code></pre>
+<p>This code defines two dataclasses, <code>UserSchema</code> and <code>OrderSchema</code>, which are derived from a common <code>Schema</code> class provided by Marshmallow. The <code>orders</code> field in <code>UserSchema</code> is a list of <code>OrderSchema</code> instances.</p>
+<p>The <code>post_load</code> method of <code>UserSchema</code> defines a helper method <code>load</code> that delegates to <code>OrderSchema.load</code> to handle loading of nested objects. The <code>@staticmethod</code> decorator ensures that <code>load</code> can be called on the class itself.</p>
+<p>The <code>OrderSchema.load</code> method uses the <code>Order</code> class as a postprocessor, allowing us to create instance of <code>Order</code> from the JSON data.</p>
+<p>Running the <code>test_users</code> function will demonstrate that the JSON data can be deserialized into instances of the dataclasses as expected.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

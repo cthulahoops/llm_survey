@@ -420,6 +420,49 @@ class Order:
 <p>This will import the <code>datetime</code> and <code>Decimal</code> classes from the standard library, rather than relying on the <code>datetime</code> and <code>decimal</code> modules provided by the Marshmallow library.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here's an example of how you could use the Marshmallow library to generate data classes for the JSON data you provided:</p>
+<pre><code>from marshmallow import Schema, fields
+from marshmallow.dateadratetime import Date, Timestamp
+from marshmallow.decimal import Decimal
+
+class Order(Schema):
+    created = Timestamp()
+    amount = Decimal()
+
+class Person(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = Date()
+    orders = fields.List(Order)
+</code></pre>
+<p>In this example, we define two data classes: <code>Person</code> and <code>Order</code>. The <code>Person</code> class has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>, which are all trivially deserialized from the JSON data. The <code>orders</code> field is a list of <code>Order</code> objects, which are deserialized from the JSON data using the <code>Order</code> class.</p>
+<p>The <code>Order</code> class has two fields: <code>created</code> and <code>amount</code>. The <code>created</code> field is deserialized from the JSON data using the <code>Timestamp</code> field from the Marshmallow library, which parses the ISO 8601-compliant timestamp string into a Python datetime object. The <code>amount</code> field is deserialized using the <code>Decimal</code> field from the Marshmallow library, which parses the JSON number string into a Python decimal object.</p>
+<p>To use these data classes to deserialize the JSON data, you can create an instance of the <code>Person</code> class and call its <code>.deserialize()</code> method, passing in the JSON data as a dict:</p>
+<pre><code>json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+person = Person()
+person.deserialize(json_data)
+</code></pre>
+<p>This will create an instance of the <code>Person</code> class with the deserialized data. You can access the deserialized data using the attributes of the <code>Person</code> class:</p>
+<pre><code>print(person.first_name)  # prints &quot;Jane&quot;
+print(person.last_name)  # prints &quot;Smith&quot;
+print(person.date_of_birth)  # prints a Python datetime object representing March 16, 1977
+print(person.orders[0].created)  # prints a Python datetime object representing January 25, 2024, 15:00:04
+print(person.orders[0].amount)  # prints a Python decimal object representing 100.00
+</code></pre>
+<p>I hope this helps! Let me know if you have any questions.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

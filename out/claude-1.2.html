@@ -308,6 +308,40 @@ print(result)</p>
 <p>So this will deserialize the JSON into native Python datatypes, with the types you specified.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use marshmallow.Schema to define schemas for your data, and marshmallow.post_load to deserialize into dataclasses.
+For example:
+from dataclasses import dataclass
+from datetime import date, datetime 
+from decimal import Decimal
+import marshmallow</p>
+<p>@dataclass
+class Order:
+    created: datetime 
+    amount: Decimal </p>
+<p>class OrderSchema(marshmallow.Schema):
+    created = marshmallow.fields.DateTime() 
+    amount = marshmallow.fields.Decimal() </p>
+<p>@dataclass
+class Person:
+    first_name: str 
+    last_name: str 
+    date_of_birth: date 
+    orders: list[Order] </p>
+<p>class PersonSchema(marshmallow.Schema):
+    first_name = marshmallow.fields.Str() 
+    last_name = marshmallow.fields.Str() 
+    date_of_birth = marshmallow.fields.Date() 
+    orders = marshmallow.fields.Nested(OrderSchema, many=True) </p>
+<pre><code>@marshmallow.post_load
+def make_person(self, data, **kwargs):
+    return Person(**data)
+</code></pre>
+<p>data = {...}  # Your JSON example</p>
+<p>person = PersonSchema().load(data) 
+print(person)</p>
+<p>This will give you a Person dataclass instance with the data parsed accordingly.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

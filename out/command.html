@@ -314,6 +314,52 @@ print(employee_dict)
 <p>Note that this assumes that the JSON string is a valid representation of the schema you've defined in <code>EmployeeSchema</code>. If there are additional fields in the original JSON that are not in your schema, they will be excluded from the resulting dictionary.  If the original JSON is not a valid JSON (e.g., if it's missing a closing brace or quotes), this will raise a <code>json.JSONDecodeError</code> exception.  Also note that the <code>Marshmallow</code> library itself is not used in this direct conversion of JSON to dictionary, but it's a powerful tool for handling complex data schemas and validating data against those schemas.</p></p>
                 <hr/>
             
+                <p>Content: <p>In order to modify the JSON file using the <code>marshmallow</code> library, you need to have a basic understanding of what Marshmallow is and how it operates.</p>
+<p>First, ensure you have installed the Marshmallow library by running the command below:</p>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<p>Marshmallow is a lightweight library that allows you to interact with JSON data in a streamlined manner. It provides a drop-in capability to convert complex Python data structures to and from JSON, which allows for seamless data validation and serialization.</p>
+<p>Here's the required code to do the edit using <code>marshmallow</code>:</p>
+<pre><code class="language-python"># Import the necessary libraries
+import json
+from marshmallow import ValidationError, Schema, fields
+from marshmallow.dispenser import Dispenser
+
+# Define the Schema for the JSON data
+class UserSchema(Schema):
+    first_name = fields.String(required=True)
+
+# Load the JSON data
+with open('user.json', 'r') as f:
+    user_data = json.load(f)
+
+# Convert the JSON data into a UserSchema instance
+try:
+    user = UserSchema().load(user_data)
+except ValidationError as e:
+    print(e)
+
+# Update the value
+user.first_name = &quot;Jane&quot;
+
+# Convert the UserSchema instance back to JSON dictionary
+updated_data = UserSchema().dump(user)
+
+# Save the updated data back to the file
+with open('user.json', 'w') as f:
+    json.dump(updated_data, f, indent=4)
+</code></pre>
+<p>In the code provided above, you'll need to follow these main steps:
+1. Define a <code>UserSchema</code> class using <code>marshmallow</code>, defining the structure with <code>first_name</code> as a string and marked as <code>required=True</code>.
+2. Use <code>marshmallow.dispenser.Dispenser</code> to load the JSON data and create a schema instance. 
+3. Update the <code>first_name</code> value to your desired value, in this case to "Jane".
+4. Convert the updated schema instance back to a JSON dictionary using <code>dump</code>.
+5. Save the updated data back to the file using the <code>json.dump</code> method. </p>
+<p>By executing these steps, you can successfully update the JSON file using <code>marshmallow</code> in Python, ensuring the data is validated and converted correctly. 
+Note that you will need to replace <code>'user.json'</code> with the path to your actual file in your directory. </p>
+<p>Let me know if you need further assistance with this!</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

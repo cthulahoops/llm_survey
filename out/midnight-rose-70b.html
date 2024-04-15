@@ -395,6 +395,104 @@ loaded_data = PersonSchema().load(json_data)
 <p>Also, note that the <code>post_load</code> method is used to convert the <code>date_of_birth</code> string to a <code>date</code> object after the data has been loaded. This step is necessary because the <code>date</code> type is not directly supported by the marshmallow library. The <code>make_datetime</code> function is defined within the <code>PersonSchema</code> class and is called automatically by the <code>post_load</code> decorator.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already. You can do this by running:</p>
+<pre><code>pip install marshmallow
+</code></pre>
+<p>Now, let's create the necessary dataclasses and schema classes for the JSON data you provided.</p>
+<ol>
+<li>Create a <code>utils.py</code> file to define the custom types for date, datetime, and decimal:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import fields
+from datetime import datetime
+from dateutil.parser import parse
+import decimal
+
+class DateField(fields.Field):
+    def _deserialize(self, value, attr, data):
+        return parse(value).date()
+
+class DateTimeField(fields.Field):
+    def _deserialize(self, value, attr, data):
+        return datetime.fromisoformat(value)
+
+class DecimalField(fields.Field):
+    def _deserialize(self, value, attr, data):
+        return decimal.Decimal(value)
+</code></pre>
+<ol>
+<li>Create a <code>models.py</code> file to define the dataclasses:</li>
+</ol>
+<pre><code class="language-python">from dataclasses import dataclass
+from typing import List
+from .utils import DateField, DateTimeField, DecimalField
+
+@dataclass
+class Order:
+    created: datetime
+    amount: decimal.Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: List[Order]
+</code></pre>
+<ol>
+<li>Create a <code>schemas.py</code> file to define the schema classes using the marshmallow library:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+from .models import Person, Order
+from .utils import DateField, DateTimeField, DecimalField
+
+class OrderSchema(Schema):
+    class Meta:
+        model = Order
+
+    created = DateTimeField()
+    amount = DecimalField()
+
+class PersonSchema(Schema):
+    class Meta:
+        model = Person
+
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = DateField()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def build_person(self, data):
+        return Person(**data)
+</code></pre>
+<p>Now, you can use the <code>PersonSchema</code> to serialize and deserialize JSON data. Here's an example:</p>
+<pre><code class="language-python">import json
+from .schemas import PersonSchema
+
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+schema = PersonSchema()
+person = schema.load(json_data)
+
+print(person)
+
+# To serialize the Person object back to JSON:
+serialized_json = schema.dump(person)
+print(json.dumps(serialized_json))
+</code></pre>
+<p>This will correctly handle the date, datetime, and decimal types in your JSON data using the marshmallow library.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

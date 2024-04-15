@@ -424,6 +424,68 @@ loaded_data.orders[0].amount.data  # Accessing the amount field of the first ord
 <p>By following these steps, you can generate dataclasses from JSON data using the marshmallow library in Python.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>First, install the marshmallow library using pip:</li>
+</ol>
+<pre><code>pip install marshmallow
+</code></pre>
+<ol>
+<li>Next, define your schema for the JSON data using a Marshmallow class:</li>
+</ol>
+<pre><code class="language-python">from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, datetime as marshmallow_datetime
+
+class OrderSchema(Schema):
+    created = marshmallow_datetime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
+    amount = fields.Decimal(places=2)
+
+class PersonSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.List(OrderSchema(), required=False)
+</code></pre>
+<ol>
+<li>Then, you can create instances of these schemas to validate incoming JSON data and to generate Python objects (dataclasses) from it:</li>
+</ol>
+<pre><code class="language-python"># Validate JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {'created': '2024-01-25T15:00:04', 'amount': '100.00'}
+    ]
+}
+person_schema = PersonSchema()
+validated_data = person_schema.load(json_data)
+
+# Generate dataclasses from the validated data
+from dataclasses import dataclass
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order] = field(default_factory=list)
+
+person = Person(
+    first_name=validated_data['first_name'],
+    last_name=validated_data['last_name'],
+    date_of_birth=validated_data['date_of_birth'].date(),
+    orders=[Order(marshmallow_datetime.from_timestamp(order['created'] // 1000), Decimal(order['amount'])), order['created'] // 1000])
+</code></pre>
+<p>Now, you have successfully generated dataclasses from the given JSON data using the marshmallow library in Python. The <code>Person</code> dataclass has a <code>date_of_birth</code> attribute of type <code>date</code>, and the <code>Order</code> dataclass has a <code>created</code> attribute of type <code>datetime</code>. The <code>amount</code> field is a <code>Decimal</code> in both dataclasses.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

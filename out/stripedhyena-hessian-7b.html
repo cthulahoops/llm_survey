@@ -275,6 +275,64 @@ class OrderCreateSchema(Schema):
     amount = fields.Decimal()</p></p>
                 <hr/>
             
+                <p>Content: <p>So far I've gotten as far as the below code from:
+http://www.vulinux.com/python-35/marshmallow-intro/</p>
+<p>From this I already get the json client code I want to use:
+with open('user_data.json') as f:
+    data = json.loads(f.read())</p>
+<p>I don't know how I would expose the date and decimals properties.
+class UserSchema(schema.Schema):
+    first_name = schema.Field(str)
+    last_name = schema.Field(str)
+    date_of_birth = schema.DateTime()
+...</p>
+<p>A: What you want to do is to specify how each of the field needs to be deserialized using fields. One way of doing is this:
+class UserSchema(ma.Schema):
+    first_name = sa.fields.String()
+    last_name = sa.fields.String()
+    orders = explicit.Explicit.make_schema(
+        sa.fields.FromString(sa.fields.Integer()))</p>
+<pre><code>date_of_birth = sa.fields.Date()
+</code></pre>
+<p>To deserialize, after json.loads(), we need to customize the to_py method of the schema.
+Orders will be in an array that you should deserialize yourself. Because deserialize is used to automatically map json arrays to python lists, it is likely you will need to do something like this:
+def to_py(self, declaration, root, *_...):
+    orders_py = root['orders'] if declaration in root else []
+    ordering = [order for order in declaration if order in root]
+    for ord in ordering:
+        ord['date_of_birth'] = sa.fields.Date.load(ord['date_of_birth'])</p>
+<p>while this may work, exercising caution on using string-casting.
+Please read these other SO responses I found while researching for my answer.
+I hope this works for you.
+From voulux's link
+The amount field is an Explicit and it do not have to be 'float' or string:
+amount = fields.Explicit(required=True, load_from="string", dump_to="str")
+However, as stated by @swadesi, that doesnt sound good.
+So I instead read data and loaded the data into a python dictionary that i will directly read from:</p>
+<h1>loaded data</h1>
+<p>data = json.loads(data)</p>
+<h1>extract orders</h1>
+<p>orders_footer = {key:val for (order, val) in zip(data['orders'], data['orders'])
+                  if order in data}</p>
+<p>So that is instead of looking at the clean entry, only the specific attributes are returned; which is what is needed in most cases (?).</p>
+<p>[...] This yields the following set of validations and schemas for sale:
+Product code: 81234, name: New Widget, price: 10.50, quantity: 4999, price in base units: 2.0, shipping cost: 7.00 (shipping cost will be calculated b
+ased on product code later).
+To be created, not shared in JavaScript:
+mutations{"/SellProduct"": { "method": "post", "body": { 
+  "product": { 
+    "code": "81234", 
+    "name": "New Widget", 
+    "price": "10.50", 
+    "quantity": "4999", 
+    "price in base units": "2.0", 
+    "shipping cost": "7.00" 
+  } 
+}}
+  variables: 
+fix. I have been looking for a solution to this. Volodymyr Zholud serves your purpose.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

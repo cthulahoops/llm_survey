@@ -390,6 +390,185 @@ person = PersonSchema().load(data)
 <p>The code above will generate a <code>Person</code> instance with the desired dataclasses and their associated values from the provided JSON schema. Additionally, it'll ensure that the values are properly converted to the correct data types (date, datetime, decimal).</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate classes for your JSON data you can use <code>attrs</code> package along with <code>jsonschema</code> package which can infer classes from data, then <code>attrs</code> can be used to add attributes to each class.</p>
+<p>Here's how you can use the packages:</p>
+<ol>
+<li>First, install the necessary packages using pip:</li>
+</ol>
+<pre><code class="language-shell">pip install attrs jsonschema
+</code></pre>
+<ol>
+<li>Then, define your JSON schema:</li>
+</ol>
+<pre><code class="language-python">from jsonschema import Draft7Validator, RefResolver, Draft7ValidatorError
+
+json_schema = {
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+        &quot;first_name&quot;: {&quot;type&quot;: &quot;string&quot;},
+        &quot;last_name&quot;: {&quot;type&quot;: &quot;string&quot;},
+        &quot;date_of_birth&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;format&quot;: &quot;date&quot;},
+        &quot;orders&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;created&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;format&quot;: &quot;date-time&quot;},
+                    &quot;amount&quot;: {&quot;type&quot;: &quot;string&quot;, &quot;pattern&quot;: &quot;^\\d+(\\.\\d+)?$&quot;}
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<ol>
+<li>Next, infer the dataclasses from schema, convert strings to Python types and replace datetime strings with <code>datetime.datetime()</code>:</li>
+</ol>
+<pre><code class="language-python">import datetime
+from jsonschema import Draft7Validator, RefResolver, Draft7ValidatorError
+import attr
+
+def infer_types(obj):
+    if isinstance(obj, dict):
+        return {attr.asdict(k): infer_types(v)
+                for k, v in obj.items()
+                if not k.startswith('_')}
+    elif isinstance(obj, list):
+        return [infer_types(v) for v in obj]
+    elif isinstance(obj, str):
+        return datetime.datetime.strptime(obj, '%Y-%m-%d %H:%M:%S')
+    elif isinstance(obj, (int, float, complex)):
+        return obj
+    else:
+        return obj
+
+
+def infer_python_types_from_schema(schema):
+    dataclass_map = {}
+
+    def generate_dataclass(key, value):
+        attr_kwargs = {}
+        if isinstance(value, dict):
+            attr_kwargs['kw_only'] = True
+        return SchemaKeyDataclass(key, **value, **attr_kwargs)
+
+    # Define recursive function to loop through the second level of the schema
+    def loop_recursive(schema, cls):
+        # Loop through properties of the schema
+        for property_name, property_schema in schema.get('properties', {}).items():
+            # Define prop class
+            if property_name not in dataclass_map:
+                prop_type = (property_name, property_schema.get('type'))
+                prop_class = property.fget if property_schema.get('additionalItems') else property
+                dataclass_prop = generate_dataclass(prop_type, {'type': property_schema.get('type')})
+                dataclass_prop = prop_class(f&quot;{key}.{property_name}&quot;,
+                                            schema=dataclass_prop.schema,
+                                            default=dataclass_prop.default,
+                                            metadata=dataclass_prop.metadata,
+                                            type=prop_type[1], buttack=prop_class, **dataclass_prop.kwargs)
+
+                dataclass_map[property_name] = cls(prop_type, cls=prop_class, **dataclass_prop.kwargs)
+                # print(f&quot;Property: {property_name}&quot;)
+            else:
+                cls = dataclass_map[property_name]
+
+            cls.schema = property(lambda i: cls(schema=i.schema, **infer_types(infer_python_types_from_schema(i))), metadata=i.metadata)
+            cls.default = property(lambda i: i.schema(instance))
+            # print(f&quot;Property: {cls.__name__}&quot;)
+
+            # Set default value for properties
+            base_schema = SchemaKeyDataclass(f&quot;{key}.{property_name}&quot;, **infer_types(infer_python_types_from_schema(property_schema)))
+            slots_schema = SchemaKeySlot(property(lambda i: base_schema, **cls.argv), **cls.argv)
+
+            cls = UnionDataclass(
+                UnionBaseClass(slots_schema, metadata=i.metadata), [cls], **cls.argv)
+
+        return cls
+
+    def make_base_class(schema):
+        if not schema.get('anyOf'):
+            import re
+            skeme = {'type': schema.get('type')}
+            values = schema.get('enum')
+            pattern = re.compile(schema.get('pattern'))
+            default = schema.get('default')
+            return Dataclass(
+                default=default,
+                enum=values,
+                pattern=pattern,
+                type=schema.get('type'),
+                namespace='',
+                **skeme,
+            )
+        return SchemaKeyDataclass(
+            'type', type=str, **skeme
+        )
+
+    base_schema = make_base_class(convert_items(schema.get(&quot;type&quot;)))
+    dataclass = SchemaKeyDataclass(
+        'root',
+        schema=base_schema,
+        **infer_types(infer_python_types_from_schema(schema)),
+    )
+
+    dataclass_map = infer_dataclass_from_schema(dataclass)
+
+    dataclass = loop_recursive(schema, dataclass)
+    return dataclass
+</code></pre>
+<ol>
+<li>Finally, you can validate and convert the data using:</li>
+</ol>
+<p>```python
+from metadata.SchemaKeyDataclass import SchemaKeyDataclass
+from metadata.UnionDataclass import UnionDataclass
+from attributes.AttributeFieldClass import AttributeFieldClass
+from attributes.UnionBaseClass import UnionBaseClass
+from metadata.JSONinfo import JSONinfo
+from metadata import info</p>
+<h1>Example JSON data you would like to convert</h1>
+<p>data = {
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "date_of_birth": "1977-03-16T15:00:04",
+    "orders": [
+        {
+            "created": "2024-01-25T15:00:04",
+            "amount": "100.00"
+        }
+    ]
+}</p>
+<h1>Get JSON schema from JSON data</h1>
+<p>info = JSONinfo(data)
+schema = info.create_schema()</p>
+<h1>Get Python dataclass</h1>
+<p>class PythonDataclass(SchemaKeyDataclass):
+    def <strong>init</strong>(self) -&gt; None:
+        super().<strong>init</strong>()</p>
+<pre><code>@property
+def schema(self):
+    return Draft7Validator(schema, resolver).Meta.schema
+</code></pre>
+<p>jsonclass = PythonDataclass('root', metadata=SchemaKeyDataclass(
+    'root', **infer_types(infer_python_types_from_schema(info.schema))
+))</p>
+<h1>Validate and convert data</h1>
+<p>data = jsonclass.default()
+for attribute in reversed(tuple(jsonclass.<strong>init</strong>.<strong>code</strong>.co_varnames[:1] +
+                                  (key for key in jsonclass.<strong>dict</strong>.keys()
+                                   if key.startswith('_')))) + tuple(
+                                   param.name
+                                   for param in jsonclass.<strong>init</strong>.<strong>code</strong>
+                                   .co_varnames[1:]):
+    if attribute not in jsonclass.<strong>dict</strong> and attribute not in ('<strong>module</strong>',
+                                                                 '<strong>dict</strong>') and attribute not in ('<strong>weakref</strong>',):
+        info = JSONinfo(data[attribute])
+        derive_schema(jsonclass.<strong>dict</strong>[attribute], info)
+        data[attribute] = _info.create_schema()</p>
+<h1>Final data</h1>
+<p>converted_data = PythonDataclass(schema, **data)</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

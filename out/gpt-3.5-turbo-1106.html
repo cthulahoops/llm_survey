@@ -341,6 +341,63 @@ except ValidationError as err:
 <p>This code uses the <code>marshmallow_dataclass</code> library to automatically generate the schemas for the dataclasses and then uses the generated schemas to load the JSON data, handling the date, datetime, and decimal types as specified.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here's an example of how you could use the marshmallow library to define dataclasses for the given JSON structure:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+from datetime import datetime, date
+from dataclasses import dataclass
+
+@dataclass
+class Order:
+    created: datetime
+    amount: float
+
+@dataclass
+class Customer:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+
+class CustomerSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_customer(self, data, **kwargs):
+        return Customer(**data)
+
+# Load JSON data
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+# Deserialize JSON data into dataclasses
+customer_schema = CustomerSchema()
+customer = customer_schema.load(json_data)
+
+print(customer)
+</code></pre>
+<p>In this example, we defined the <code>Customer</code> and <code>Order</code> dataclasses, and then created <code>CustomerSchema</code> and <code>OrderSchema</code> to specify how the JSON data should be deserialized into the dataclasses. We then used the <code>load</code> method of the <code>CustomerSchema</code> to deserialize the JSON data into a <code>Customer</code> dataclass instance.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

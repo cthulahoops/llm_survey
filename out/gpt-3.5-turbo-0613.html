@@ -377,6 +377,59 @@ print(result)
 <p>This way, you can use the marshmallow library to define schemas and generate dataclasses with the desired types for the given JSON structure.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate data classes using the <code>marshmallow</code> library in Python, you can define schemas using the <code>marshmallow.Schema</code> class. Here's an example of how you can do it for your provided JSON:</p>
+<p>First, you will need to install the <code>marshmallow</code> library if you haven't already done so:</p>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<p>Then, you can create a schema for each nested structure in the JSON:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, validate
+from datetime import date, datetime
+from decimal import Decimal
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+
+
+class UserSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date(format='%m/%d/%Y')
+    orders = fields.Nested(OrderSchema, many=True)
+
+
+# JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Load JSON data into the UserSchema
+user_schema = UserSchema()
+user_data = user_schema.load(json_data)
+
+# Access the generated data classes
+user = user_data  # This will be an instance of the generated User class
+order = user.orders[0]  # This will be an instance of the generated Order class
+
+# Access individual fields in the data classes
+print(user.first_name)  # Output: Jane
+print(order.created)  # Output: 2024-01-25 15:00:04
+print(order.amount)  # Output: 100.00 (as Decimal type)
+</code></pre>
+<p>In the above code, we create two schemas, <code>OrderSchema</code> and <code>UserSchema</code>, which define how the JSON should be parsed and validated. The nested schema <code>OrderSchema</code> is used to handle the <code>orders</code> list, and the <code>UserSchema</code> represents the main structure.</p>
+<p>To load the JSON data into the schema, we call the <code>load()</code> method of the <code>UserSchema</code>. The resulting data classes can then be accessed and used as needed.</p>
+<p>Note: Make sure to import the necessary classes and modules (<code>Schema</code>, <code>fields</code>, <code>validate</code>, <code>date</code>, <code>datetime</code>, <code>Decimal</code>) before running the code.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

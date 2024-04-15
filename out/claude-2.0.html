@@ -349,6 +349,60 @@ user = schema.load(json_data)
 <p>This will parse the JSON into typed dataclasses with the appropriate datetime, date, and decimal conversions applied.</p></p>
                 <hr/>
             
+                <p>Content: <p>Here is how you can generate dataclasses from the given JSON using marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from decimal import Decimal
+from datetime import date, datetime
+import marshmallow_dataclass
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str 
+    date_of_birth: date
+    orders: List[Order]
+
+class PersonSchema(marshmallow_dataclass.Schema):
+    date_of_birth = marshmallow.fields.Date()
+    created = marshmallow.fields.DateTime()
+    amount = marshmallow.fields.Decimal()
+
+json_data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+
+schema = PersonSchema()
+person = schema.load(json_data)
+print(person)
+</code></pre>
+<p>The key steps are:</p>
+<ol>
+<li>
+<p>Use <code>@dataclass</code> to define dataclasses for Person and Order</p>
+</li>
+<li>
+<p>Specify the field types in PersonSchema for the date, datetime, and decimal fields</p>
+</li>
+<li>
+<p>Load the JSON data using the PersonSchema to parse the data into a Person dataclass</p>
+</li>
+</ol>
+<p>This will convert the JSON into a Person instance with the correct types for date_of_birth, created, and amount fields.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

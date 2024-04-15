@@ -352,6 +352,59 @@ pprint(result)
 <p>Keep in mind that this data transformation is happening from JSON to data classes, if you need to convert data classes back to JSON, you can use <code>Schema.dump()</code> method.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can achieve this by creating data classes using the <code>marshmallow-dataclass</code> library and defining fields with appropriate types for each value. Here's an example:</p>
+<ol>
+<li>First, install the required libraries:</li>
+</ol>
+<pre><code class="language-bash">pip install marshmallow marshmallow-dataclass
+</code></pre>
+<ol>
+<li>Create a Python script with the following content:</li>
+</ol>
+<pre><code class="language-python">from datetime import datetime
+from decimal import Decimal
+from marshmallow_dataclass import class_schema
+from marshmallow import fields
+
+# Dataclasses
+class Order:
+    created: datetime = fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
+    amount: Decimal = fields.Decimal()
+
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime = fields.Date(format=&quot;%m/%d/%Y&quot;)
+    orders: list[Order]
+
+# Generate dataclass schemas
+OrderSchema = class_schema(Order)
+PersonSchema = class_schema(Person)
+
+# Your JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        },
+    ]
+}
+
+# Load data using the generated schemas
+order_data = OrderSchema().load(json_data[&quot;orders&quot;][0])
+person_data = PersonSchema().load(json_data)
+
+# Print the loaded data
+print(order_data)
+print(person_data)
+</code></pre>
+<p>This script will create the data classes and generate the corresponding schemas using the <code>class_schema()</code>. The <code>fields</code> decorators are used to specify the expected data types and formats. Finally, the script loads the JSON data using the generated schemas, and you can access the parsed data from the <code>order_data</code> and <code>person_data</code> variables.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

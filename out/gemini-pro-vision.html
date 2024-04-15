@@ -339,6 +339,51 @@ class DecimalField(fields.Field):
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <pre><code class="language-python">import decimal
+from datetime import datetime
+from marshmallow import Schema, fields, post_load
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(as_string=True)
+
+
+class CustomerSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_customer(self, data, **kwargs):
+        return Customer(**data)
+
+
+class Customer:
+    def __init__(self, first_name, last_name, date_of_birth, orders):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+        self.orders = orders
+
+
+customer = CustomerSchema().load(
+    {
+        &quot;first_name&quot;: &quot;Jane&quot;,
+        &quot;last_name&quot;: &quot;Smith&quot;,
+        &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+        &quot;orders&quot;: [
+            {
+                &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+                &quot;amount&quot;: &quot;100.00&quot;,
+            }
+        ],
+    }
+)
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

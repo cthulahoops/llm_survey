@@ -317,6 +317,39 @@ user = UserSchema().load({
 <p>I hope this example helps!</p></p>
                 <hr/>
             
+                <p>Content: <p>Sure, here's an example of how you would generate dataclasses for the provided JSON using Marshmallow:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+import marshmallow
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order] = marshmallow.fields.Nested(Order, many=True)
+
+user = UserSchema().load({
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+})
+</code></pre>
+<p>I hope this example helps!</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

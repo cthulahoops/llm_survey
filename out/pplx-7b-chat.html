@@ -353,6 +353,67 @@ turning_gates.load(data)
 <p>Make sure to replace <code>data</code> with the JSON input you want to convert to the <code>ConvertDisableJsonClass</code> object.</p></p>
                 <hr/>
             
+                <p>Content: <p>In Python, you can use the Marshmallow library to convert JSON to specific types or dataclasses. First, you need to install Marshmallow in your project. You can do this using pip:</p>
+<pre><code class="language-python">pip install marshmallow
+</code></pre>
+<p>Next, you can define your dataclasses using the <code>@dataclass</code> decorator from the <code>dataclasses</code> library. Here's the code to define the dataclasses:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from marshmallow import fields, post_load
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+
+    @post_load
+    def date_of_birth(self, data, **kwargs):
+        &quot;&quot;&quot;
+        Convert json string to date object
+        &quot;&quot;&quot;
+        d = data['date_of_birth']
+        return date(*d.split('/')[-1]), d[:-1].split('/')
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+
+class OrderSchema(ma.Schema):
+    created = fields.Function(lambda order: order.created)
+    # put Order in ma.fields.Nested of Person
+</code></pre>
+<p>Now, when you have a list of orders that you want to convert to <code>Order</code> instances, you can use the <code>marshmallow.loads</code> function and the <code>OrderSchema</code> class to convert it:</p>
+<pre><code class="language-python">import json
+from marshmallow import loads
+
+# your JSON here
+json_string = '{&quot;orders&quot;: [{&quot;created&quot;: 111,' + \
+                '&quot;amount&quot;: 222}]}'  # your JSON here
+
+# load your JSON as a dict()
+json_Dict = json.loads(json_string)
+
+# get your schema
+schema = OrderSchema()
+
+# use your schema to convert the json to a marshmallow object
+marsh_obgj = schema.load(json_Dict)
+
+# now you can get the raw data
+todict = marsh_obgj.data
+
+# and from under 'data'
+json_dict_out = dec_schema.load(todict)
+
+# get the Order list
+orders = dec_schema.load(todict)
+</code></pre>
+<p>In the above example, we first load the JSON string into a dictionary. Then, we create an instance of the <code>OrderSchema</code> class, which represents the schema for the <code>Order</code> dataclass. By calling <code>schema.load(json_Dict)</code>, we execute the deserialization process. Finally, we can access the deserialized object by calling <code>marsh_obgj.data</code>.</p>
+<p>You can refer to the <a href="http://marshmallow.readthedocs.org/">Marshmallow documentation</a> for more information on using Marshmallow with dataclasses.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

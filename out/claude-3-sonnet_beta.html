@@ -386,6 +386,70 @@ print(main_instance)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>marshmallow</code> library to define schemas and create dataclasses from the JSON data. Here's an example of how you can do it:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+from typing import List
+
+from marshmallow import fields, post_load
+from marshmallow_dataclass import dataclass as marshmallow_dataclass
+
+# Define nested dataclass for orders
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+# Define schema for Order dataclass
+class OrderSchema(marshmallow_dataclass):
+    created = fields.DateTime(data_key=&quot;created&quot;)
+    amount = fields.Decimal(as_number=True, data_key=&quot;amount&quot;)
+
+# Define main dataclass
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: List[Order]
+
+# Define schema for Person dataclass
+class PersonSchema(marshmallow_dataclass):
+    first_name = fields.Str(data_key=&quot;first_name&quot;)
+    last_name = fields.Str(data_key=&quot;last_name&quot;)
+    date_of_birth = fields.Date(data_key=&quot;date_of_birth&quot;)
+    orders = fields.Nested(OrderSchema, many=True, data_key=&quot;orders&quot;)
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)
+
+# Example JSON data
+json_data = {
+    &quot;first_name&quot;: &quot;Jane&quot;,
+    &quot;last_name&quot;: &quot;Smith&quot;,
+    &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+    &quot;orders&quot;: [
+        {
+            &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+            &quot;amount&quot;: &quot;100.00&quot;
+        }
+    ]
+}
+
+# Load JSON data into dataclass
+schema = PersonSchema()
+person = schema.load(json_data)
+
+print(person)
+</code></pre>
+<p>In this example, we define two dataclasses: <code>Order</code> and <code>Person</code>. The <code>Order</code> dataclass has <code>created</code> (a <code>datetime</code>) and <code>amount</code> (a <code>Decimal</code>) fields.</p>
+<p>We then define two schemas: <code>OrderSchema</code> and <code>PersonSchema</code>. The <code>OrderSchema</code> maps the <code>created</code> and <code>amount</code> fields from the JSON data to the corresponding fields in the <code>Order</code> dataclass. The <code>PersonSchema</code> maps the <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and <code>orders</code> fields from the JSON data to the corresponding fields in the <code>Person</code> dataclass. We use the <code>fields.Nested</code> field to handle the nested <code>orders</code> list.</p>
+<p>Finally, we load the JSON data into the <code>Person</code> dataclass instance using the <code>PersonSchema</code>.</p>
+<p>Note that we're using the <code>marshmallow_dataclass</code> decorator from the <code>marshmallow_dataclass</code> package, which provides convenient integration between <code>marshmallow</code> and dataclasses.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -456,6 +456,41 @@ print(json_data_serialized)
 </code></pre></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses with Marshmallow in Python, you first need to define your SQLAlchemy models or Pydantic data classes and then use Marshmallow to define the serializers. Here's an example of how you can accomplish this with your provided JSON structure:</p>
+<p>First, let's create the required classes for the given JSON:</p>
+<pre><code class="language-python">from datetime import date
+from marshmallow import fields, Schema, post_load
+from decimal import Decimal
+
+class OrderSchema(Schema):
+    created = fields.DateTime('created')
+    amount = fields.Decimal('amount')
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date('date_of_birth')
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_date_of_birth(self, data, **kwargs):
+        data['date_of_birth'] = date(*map(int, data['date_of_birth'].split('/')))
+        return data
+
+    @post_load
+    def make_amount(self, data, **kwargs):
+        data['amount'] = Decimal(data['amount'])
+        return data
+
+class MyData:
+    data = None
+
+    def __init__(self, json_data):
+        self.data = PersonSchema().load(json_data)
+</code></pre>
+<p>Now you can call <code>MyData().load(json_data)</code> to deserialize the JSON data. The <code>PersonSchema</code> class will handle the deserialization and conversion of the 'date_of_birth' and 'amount' fields according to your requirements.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

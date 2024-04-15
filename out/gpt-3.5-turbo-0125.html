@@ -352,6 +352,65 @@ print(customer_data)
 <p>Finally, we load the JSON data using the <code>CustomerSchema</code> and print the deserialized data.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this using the marshmallow library in Python, you can create dataclasses for the JSON data and use marshmallow schema to define the data structure and data types. Here's an example code snippet to demonstrate this:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, validate
+
+# Define dataclass for orders
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+# Define dataclass for user
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: [Order]
+
+# Define schema for Order dataclass
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal(places=2)
+
+# Define schema for User dataclass
+class UserSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+# Load JSON data
+data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '1977-03-16',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Initialize UserSchema
+user_schema = UserSchema()
+
+# Deserialize JSON data to User dataclass object
+user_object = user_schema.load(data)
+
+# Print User dataclass object
+print(user_object)
+</code></pre>
+<p>In this code snippet, we first define the dataclasses for Order and User, where Order contains information about the order, and User contains information about the user along with a list of orders. We then define schemas for Order and User using marshmallow, specifying the data types for each attribute.</p>
+<p>We load the JSON data into the UserSchema and use the <code>load</code> method to deserialize the JSON data into a User dataclass object. Finally, we print the User dataclass object to verify the deserialization process.</p>
+<p>Make sure to have the marshmallow library installed in your Python environment by running <code>pip install marshmallow</code>.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

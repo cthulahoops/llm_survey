@@ -336,6 +336,51 @@ UserSchema.load_json({
 <p>This will automatically convert the JSON into your dataclasses, with the appropriate types for each field.</p></p>
                 <hr/>
             
+                <p>Content: <p>Great question! Marshmallow is a popular open source library in Python used for serialization, deserialization, and validation of complex objects.
+To generate dataclasses from this JSON using Marshmallow, you can define respective schemas for each type of data.
+First, install the marshmallow library if you haven't done so:</p>
+<pre><code>pip install marshmallow
+</code></pre>
+<p>Here's an example use:</p>
+<pre><code class="language-python">from datetime import date
+from datetime import datetime
+from decimal import Decimal
+from marshmallow import Schema, fields, pprint
+# Define the schemas
+
+class MyOrderSchema(Schema):
+    created = fields.DateTime(format='%Y/%m/%d')
+    amount = fields.Decimal(as_string=True)
+
+class MyUserSchema(Schema):
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(required=True)
+    orders = fields.Nested(MyOrderSchema, many=True)
+
+# Serialize the JSON
+data = {
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+]}
+
+user_schema = MyUserSchema()
+output = user_schema.dump(data)
+
+# Print the output
+pprint(output)
+</code></pre>
+<p>In the above code, we have defined two schemas. The <code>MyOrderSchema</code> handles the <code>orders</code> key, which represents the orders of a user. The <code>MyUserSchema</code> handles the main data of a user.
+The actual data is defined in the 'data' dictionary, and using the <code>.dump()</code> method we can serialize the data into a Python dictionary of objects.
+Remember to adjust the field types and validations according to your needs.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

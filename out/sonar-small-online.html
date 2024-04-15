@@ -314,6 +314,49 @@ class PersonSchema(Schema):
 <p>The <code>struct</code> package is no longer included in Python 3.9 onwards. Instead, <code>typing.Any</code> should be used as it has the same meaning.</p></p>
                 <hr/>
             
+                <p>Content: <p>Using the <code>marshmallow-dataclass</code> library, you can generate dataclasses for your JSON data. Here's how you can do it:</p>
+<p>First, install the necessary libraries:</p>
+<pre><code class="language-bash">pip install marshmallow-dataclass[enum,union]
+</code></pre>
+<p>Then, you can use the <code>class_schema</code> function from <code>marshmallow_dataclass</code> to create the desired dataclasses. Here's an example:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from marshmallow import fields, post_load, pre_load, pre_dump, pre_load, fields
+from marshmallow_dataclass import class_schema
+from enum import Enum
+from decimal import Decimal as MarshmallowDecimal
+from typing import PredefinedDict
+import typing
+
+
+class DataclassSchema:
+    # ... (your custom schema classes)
+
+    class PersonSchema_without_datetime(DatacassSchema):
+        class Meta:
+            class_schema = class_schema(Person)
+
+    # ... (the rest of your code)
+
+    # Load the JSON data into Python objects
+    json_data = &quot;&quot;&quot;
+    {
+        &quot;first_name&quot;: &quot;Jane&quot;,
+        &quot;last_name&quot;: &quot;Smith&quot;,
+        &quot;date_of_birth&quot;: &quot;03-16-1977&quot;,
+        &quot;orders&quot;: [
+            {
+                &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+                &quot;amount&quot;: 100.00&quot;
+            }
+        ]
+    }
+    &quot;&quot;&quot;
+    python_data = Schema.load(json_data)
+</code></pre>
+<p>In this code snippet, we import the necessary imports at the beginning, define a <code>DataclassSchema</code> class, and provide an example of how you can load your JSON data into the <code>python_data</code> variable. To load complex types like <code>Decimal</code> or <code>Enum</code> in your JSON data, you can use the <code>post_load</code> method to handle these conversions.</p>
+<p>Make sure to replace your class definitions and other necessary code within the <code>DataclassSchema</code> class.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

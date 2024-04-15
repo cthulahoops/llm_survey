@@ -351,6 +351,42 @@ for person in persons:
 <p>Note that this code also formats the <code>date_of_birth</code> field as a date object using the <code>marshmallow_datetime</code> module. The <code>date_format</code> argument is used to specify the format of the date string in the JSON data.</p></p>
                 <hr/>
             
+                <p>Content: <p>You can use the <code>marshmallow</code> library in Python to create dataclasses from the given JSON data. Here's an example code:</p>
+<pre><code class="language-python">from marshmallow import Shape, fields, validate, EXCLUDE, Schema, dataclass
+
+class PersonSchema(Shape):
+    class Meta:
+        unknown = EXCLUDE
+
+    first_name = fields.Str(required=True)
+    last_name = fields.Str(required=True)
+    date_of_birth = fields.Date(validate=validate.Length(min=10, max=10), resolve=lambda x: datetime.strptime(x, '%m/%d/%Y'))
+    orders = fields.List(fields.Nested(OrderSchema()))
+
+
+@dataclass
+class Person(PersonSchema):
+    pass
+
+class OrderSchema(Shape):
+    class Meta:
+        unknown = EXCLUDE
+
+    created = fields.DateTime(validate=validate.Length(min=19, max=25), resolve=lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S'))
+    amount = fields.Float()
+
+
+@dataclass
+class Order(OrderSchema):
+    pass
+
+person = Person(**json_data)
+print(person)
+</code></pre>
+<p>In the above code, we have created two schemas: <code>PersonSchema</code> and <code>OrderSchema</code>. The <code>PersonSchema</code> defines the structure of a person object, including their <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a list of <code>orders</code>. The <code>OrderSchema</code> defines the structure of an order object, including its <code>created</code> date and time, and the <code>amount</code> spent.</p>
+<p>We then define a <code>Person</code> dataclass that inherits from the <code>PersonSchema</code>, and a <code>Order</code> dataclass that inherits from the <code>OrderSchema</code>. Finally, we create a <code>person</code> object using the given JSON data and print it out.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

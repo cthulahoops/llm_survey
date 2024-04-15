@@ -397,6 +397,58 @@ except ValidationError as e:
 <p>This is just a basic example, but you can customize the dataclasses and Marshmallow schema to fit your specific use case.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>First, install Marshmallow using pip:</li>
+</ol>
+<pre><code>pip install marshmallow
+</code></pre>
+<ol>
+<li>Create a new Python file, for example, <code>dataclasses.py</code>, and define your dataclasses using Marshmallow's <code>Schema</code> class. Here's an example:</li>
+</ol>
+<pre><code class="language-python">from datetime import date, datetime
+from decimal import Decimal
+from marshmallow import fields, Schema
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime(format=&quot;%Y-%m-%dT%H:%M:%S&quot;)
+    amount = fields.Decimal(as_string=True, places=2)
+
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date(format=&quot;%m/%d/%Y&quot;)
+    orders = fields.List(OrderSchema())
+
+
+# Load JSON data and convert it to a dictionary
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {'created': '2024-01-25T15:00:04', 'amount': '100.00'},
+    ],
+}
+
+# Convert JSON data to dataclasses using Marshmallow's `load` method
+person = PersonSchema().load(json_data)
+
+# Access dataclasses attributes
+print(person.first_name)
+print(person.last_name)
+print(person.date_of_birth)
+print(person.orders[0].created)
+print(person.orders[0].amount)
+</code></pre>
+<p>In this example, we define two schemas: <code>OrderSchema</code> and <code>PersonSchema</code>. The <code>OrderSchema</code> has two fields: <code>created</code> (a datetime) and <code>amount</code> (a decimal). The <code>PersonSchema</code> has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code> (a date), and a nested list of <code>OrderSchema</code> objects.</p>
+<p>We then load the JSON data using Marshmallow's <code>load</code> method, which returns a dictionary of dataclasses. We can access the attributes of the dataclasses using Python's dot notation.</p>
+<p>Note that we've set the <code>as_string</code> parameter of the <code>Decimal</code> field to <code>True</code>, which converts the decimal value to a string with two decimal places. This is necessary because Marshmallow's <code>Decimal</code> field doesn't support decimal values by default.</p>
+<p>This approach allows us to easily convert JSON data to Python dataclasses using Marshmallow's schema-based approach, which provides type checking, validation, and serialization capabilities.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

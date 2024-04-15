@@ -367,6 +367,72 @@ user = schema.load(data)`</p>
 </ol></p>
                 <hr/>
             
+                <p>Content: <p>First, you will need to install the marshmallow library by running the command "pip install marshmallow" in your terminal.</p>
+<p>Next, you will need to create a dataclass for the order with the fields 'created' as datetime and 'amount' as decimal. This can be done with the help of the marshmallow library's @dataclass decorator. The code for this would look like this:</p>
+<pre><code>from dataclasses import dataclass
+from marshmallow import fields
+
+@dataclass
+class Order:
+    created: fields.DateTime
+    amount: fields.Decimal
+
+</code></pre>
+<p>Then, for the main dataclass, you will need to import the Order class and use the @dataclass decorator to define the fields and their types. The code for this would look like this:</p>
+<pre><code>from dataclasses import dataclass
+from marshmallow import fields, Schema
+
+from dataclasses import dataclass
+from marshmallow import fields
+
+@dataclass
+class Order:
+    created: fields.DateTime
+    amount: fields.Decimal
+
+@dataclass
+class User(Schema):
+    first_name: fields.Str
+    last_name: fields.Str
+    date_of_birth: fields.Date
+    orders: fields.List(fields.Nested(Order))
+
+</code></pre>
+<p>Notice that the 'orders' field is defined as a list of nested dataclasses using the fields.Nested() method. This will allow us to deserialize the nested order data.</p>
+<p>Next, we can use the load() method from the User schema to deserialize the given json into our defined dataclass. This will automatically convert the string values into the desired data types. The code for this would look like this:</p>
+<pre><code>import json
+
+# Sample json data
+user_json = '''
+{
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  orders: [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+]}
+
+# Load the json into the User schema
+user = User().load(json.loads(user_json))
+
+# Print the values to check
+print(user.first_name)
+print(user.date_of_birth)
+print(user.orders[0].created)
+print(user.orders[0].amount)
+</code></pre>
+<p>The output of this code would be:</p>
+<pre><code>Jane
+1977-03-16
+2024-01-25 15:00:04
+100.00
+</code></pre>
+<p>This shows that the json data has been successfully deserialized into our defined dataclasses with the correct data types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

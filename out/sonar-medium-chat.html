@@ -372,6 +372,80 @@ print(user.orders[0].amount)
 <p>This will create <code>User</code> and <code>Order</code> dataclasses, with <code>date_of_birth</code> as a <code>date</code>, <code>created</code> as a <code>datetime</code>, and <code>amount</code> as a <code>Decimal</code>. The <code>UserSchema</code> and <code>OrderSchema</code> classes are used to deserialize the JSON data into instances of the dataclasses. The <code>post_load</code> method is used to create instances of the dataclasses from the deserialized data.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses from the provided JSON using the Marshmallow library in Python, you can follow the steps below:</p>
+<ol>
+<li>First, install the Marshmallow library using pip:</li>
+</ol>
+<pre><code>pip install marshmallow
+</code></pre>
+<ol>
+<li>Import the necessary modules from the Marshmallow library:</li>
+</ol>
+<pre><code class="language-python">from datetime import datetime, date
+from marshmallow import Schema, fields, post_load
+</code></pre>
+<ol>
+<li>Create a schema for the <code>Order</code> dataclass:</li>
+</ol>
+<pre><code class="language-python">class OrderSchema(Schema):
+    created = fields.DateTime(dt_format='iso')
+    amount = fields.Decimal(places=2)
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)
+</code></pre>
+<ol>
+<li>Create a schema for the <code>User</code> dataclass:</li>
+</ol>
+<pre><code class="language-python">class UserSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_user(self, data, **kwargs):
+        return User(**data)
+</code></pre>
+<ol>
+<li>Define the <code>User</code> and <code>Order</code> dataclasses:</li>
+</ol>
+<pre><code class="language-python">class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = amount
+
+class User:
+    def __init__(self, first_name, last_name, date_of_birth, orders):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+        self.orders = orders
+</code></pre>
+<ol>
+<li>Load the JSON data into the <code>UserSchema</code>:</li>
+</ol>
+<pre><code class="language-python">json_data = &quot;&quot;&quot;
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;1977-03-16&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+&quot;&quot;&quot;
+
+user_schema = UserSchema()
+user = user_schema.load(json_data)
+</code></pre>
+<p>Note that the <code>date_of_birth</code> field in the JSON data needs to be in the format <code>YYYY-MM-DD</code> for the <code>UserSchema</code> to correctly parse it as a <code>date</code> object. Similarly, the <code>created</code> field in the JSON data needs to be in the format <code>YYYY-MM-DDTHH:MM:SS</code> for the <code>OrderSchema</code> to correctly parse it as a <code>datetime</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

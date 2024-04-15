@@ -369,6 +369,57 @@ orders: [
 <p>I hope this helps! Let me know if you have any other questions.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from the given JSON using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>
+<p>Import the required libraries: Make sure to import the <code>marshmallow</code> library and the <code>marshmallow_dataclass</code> library, which enables using dataclasses with marshmallow.</p>
+</li>
+<li>
+<p>Define the dataclass: Create a dataclass called <code>User</code> that represents the JSON structure. It should have fields for <code>first_name</code>, <code>last</code>_name<code>, and the typed fields such as</code>date_of_birth<code>,</code>created<code>, and</code>amount`.</p>
+</li>
+<li>
+<p>Define a schema for the dataclass: Create a marshmallow schema called <code>UserSchema</code> that inherits from <code>marshmallow_dataclass.class_schema</code> and takes the <code>User</code> dataclass as an argument. This will automatically generate the fields from the <code>User</code> dataclass.</p>
+</li>
+</ol>
+<p>Example code:</p>
+<pre><code class="language-python">import datetime
+import decimal
+import marshmallow
+import marshmallow_dataclass
+
+class User:
+    first_name = marshmallow_dataclass.field(type=str)
+    last_name = marshmallow_dataclass.field(type=str)
+    date_of_birth = marshmallow_dataclass.field(type=datetime.date)
+    orders = marshmallow_dataclass.field([Order])
+
+class Order:
+    created = marshmallow_dataclass.field(type=datetime.datetime)
+    amount = marshmallow_dataclass.field(type=decimal.Decimal)
+
+class UserSchema(marshmallow_dataclass.class_schema):
+    User
+
+# Load the JSON data
+user_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+user_schema = UserSchema()
+user = user_schema.load(user_data)
+
+print(user.date_of_birth)
+</code></pre>
+<p>By following these steps, you can use the marshmallow library to generate dataclasses from the given JSON, ensuring that the typed fields are correctly handled.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

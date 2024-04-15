@@ -471,6 +471,116 @@ except ValidationError as err:
 <p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+<p>Here's how you can define a schema for your JSON data:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
+from datetime import date, datetime
+from decimal import Decimal
+
+class UserSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date(required=True)
+    orders = fields.List(fields.Nested('OrderSchema'), required=True)
+
+class OrderSchema(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Decimal(required=True)
+
+# Sample JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Initialize the schemas
+user_schema = UserSchema()
+order_schema = OrderSchema()
+
+# Deserialize the JSON data
+try:
+    # Use the load method to deserialize the JSON into a dictionary
+    data = user_schema.load(json_data)
+
+    # Convert the dictionary to a dataclass instance
+    user_dataclass = user_schema.dump(data)
+    print(user_dataclass)
+
+    # Access the orders dataclass instances
+    orders_dataclass = order_schema.dump(data['orders'])
+    print(orders_dataclass)
+
+except ValidationError as err:
+    print(&quot;Validation error:&quot;, err)
+</code></pre>
+<p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
+<p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
+<p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
+                <hr/>
+            
+                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+<p>Here's how you can define a schema for your JSON data:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
+from datetime import date, datetime
+from decimal import Decimal
+
+class UserSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date(required=True)
+    orders = fields.List(fields.Nested('OrderSchema'), required=True)
+
+class OrderSchema(Schema):
+    created = fields.DateTime(required=True)
+    amount = fields.Decimal(required=True)
+
+# Sample JSON data
+json_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+
+# Initialize the schemas
+user_schema = UserSchema()
+order_schema = OrderSchema()
+
+# Deserialize the JSON data
+try:
+    # Use the load method to deserialize the JSON into a dictionary
+    data = user_schema.load(json_data)
+
+    # Convert the dictionary to a dataclass instance
+    user_dataclass = user_schema.dump(data)
+    print(user_dataclass)
+
+    # Access the orders dataclass instances
+    orders_dataclass = order_schema.dump(data['orders'])
+    print(orders_dataclass)
+
+except ValidationError as err:
+    print(&quot;Validation error:&quot;, err)
+</code></pre>
+<p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
+<p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
+<p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

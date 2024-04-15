@@ -363,6 +363,15 @@ else:
 <p>I hope this helps! 🤩 You can tweak this example according to your specific needs. 🤓</p></p>
                 <hr/>
             
+                <p>Content: <ol>
+<li>Save the dataclasses and using the marshmallow-dataclass library.</li>
+<li>Add the validation for date_of_birth and the created fields using <code>fields.Date</code> and <code>fields.DateTime</code> respectively.</li>
+<li>Define the order class with the amount attribute.</li>
+<li>Create the User class with the first_name, last_name, date_of_birth, and order attributes.</li>
+<li>Use the <code>load</code> method of the User schema to deserialize the provided json data into a <code>User</code> object.</li>
+</ol></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

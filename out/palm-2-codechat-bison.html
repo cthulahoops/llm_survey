@@ -394,6 +394,88 @@ print(person.orders[0].amount) # Outputs a decimal object representing &quot;100
 <p>This approach utilizes the marshmallow library's schemas and automatic dataclass generation capabilities, providing type enforcement and validation for the JSON data.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from the provided JSON using the marshmallow library in Python, you can follow these steps:</p>
+<ol>
+<li>Define a dataclass for the main object using the <code>dataclasses</code> module:</li>
+</ol>
+<pre><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date  # Note that the type is `date`.
+</code></pre>
+<ol>
+<li>Define a dataclass for the nested <code>Order</code> objects:</li>
+</ol>
+<pre><code class="language-python">import datetime
+
+@dataclass
+class Order:
+    created: datetime.datetime  # Note that the type is `datetime`.
+    amount: decimal.Decimal # Note that the type is `decimal.Decimal`.
+</code></pre>
+<ol>
+<li>Define a marshmallow schema for the main <code>Person</code> object:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+
+class PersonSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()  # Use the Date() field for this field.
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        return Person(**data)  # The post_load function converts the parsed JSON data into an instance of the Person dataclass.
+</code></pre>
+<ol>
+<li>Define a marshmallow schema for the nested <code>Order</code> objects:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import Schema, fields, post_load
+
+class OrderSchema(Schema):
+    created = fields.DateTime()  # Use the DateTime() field for this field.
+    amount = fields.Decimal()  # Use the Decimal() field for this field.
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return Order(**data)  # The post_load function converts the parsed JSON data into an instance of the Order dataclass.
+</code></pre>
+<ol>
+<li>Use the marshmallow schemas to load the JSON data and generate the dataclass objects:</li>
+</ol>
+<pre><code class="language-python">import json
+
+# Load the JSON data
+data = json.loads('{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}')
+
+# Create the PersonSchema object
+person_schema = PersonSchema()
+
+# Load the JSON data into the schema
+person = person_schema.load(data)
+
+# Access the dataclass attributes
+print(person.first_name) # Outputs &quot;Jane&quot;
+print(person.date_of_birth) # Outputs a date object representing &quot;03/16/1977&quot;
+print(person.orders[0].created) # Outputs a datetime object representing &quot;2024-01-25T15:00:04&quot;
+print(person.orders[0].amount) # Outputs a decimal object representing &quot;100.00&quot;
+</code></pre></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

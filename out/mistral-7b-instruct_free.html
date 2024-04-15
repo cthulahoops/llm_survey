@@ -400,6 +400,52 @@ order = JsonData.from_dict(orders)
 <p>You can then access the fields in the dataclass and build new dictionaries or objects as needed.</p></p>
                 <hr/>
             
+                <p>Content: <p>First, you'll have to install the marshmallow library. You can do this by running the following command in your terminal:</p>
+<pre><code class="language-ruby">pip install marshmallow
+</code></pre>
+<p>Then, you can define your dataclass using the <code>dataclass</code> decorator from <code>dataclasses</code> library and map your json keys to fields.
+Here is an example:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import datetime
+import marshmallow
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime
+    orders: Order
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+class Order(dataclass):
+    created: datetime
+    amount: float
+
+    def __str__(self):
+        return f'Order{self.created}:${self.amount}'
+
+def person_to_dict(person):
+    return person.__dict__
+
+def dict_to_person(dict):
+    return Person(**dict)
+
+def order_to_dict(order):
+    return Order.from_fields(order.__dict__)
+
+def dict_to_orders(dict):
+    return [Order.from_fields(order) for order in dict['orders']]
+
+def dict_to_person_and_orders(dict):
+    person = dict_to_person(dict)
+    orders = dict_to_orders(dict) 
+    return person, orders
+</code></pre>
+<p>This will allow you to convert your json dictionary to python dataclasses and vice versa. Also, this will ensure that your <code>date_of_birth</code> is of type <code>datetime</code>, <code>created</code> of type <code>datetime</code> and <code>amount</code> of type <code>float</code> according to your data.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -331,6 +331,41 @@ print(person_data['orders'])
 <p>Lastly, the <code>main</code> function creates a sample JSON object and demonstrates the conversion process. The result is printed using <code>print(person_data['orders'])</code>.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create Python data classes using the marshmallow library, you can use the following code:</p>
+<pre><code class="language-python">allow_none = True
+
+data = {
+    &quot;first_name&quot;: &quot;Jane&quot;,
+    &quot;last_name&quot;: &quot;Smith&quot;,
+    &quot;date_of_birth&quot;: None,
+    &quot;orders&quot;: [{
+        &quot;created&quot;: None,
+        &quot;amount&quot;: None
+    }]
+}
+
+class CustomerSchema(marshmallow.Schema):
+    class Meta:
+        unknown = allow_none
+
+    first_name = marshmallow.fields.Str()
+    last_name = marshmallow.fields.Str()
+    date_of_birth = marshmallow.fields.Date(format=&quot;%Y/%m/%d&quot;)
+    orders = marshmallow.fields.Nested('OrderSchema', many=True)
+
+class OrderSchema(marshmallow.Schema):
+    class Meta:
+        unknown = allow_none
+
+    created = marshmallow.fields.DateTime(format=&quot;%Y-%m-%d %H:%M:%S&quot;)
+    amount = marshmallow.fields.Decimal(load_default=0.00)
+
+CustomerSchema().load(data)
+print(CustomerSchema().data)
+</code></pre>
+<p>This code defines two classes: <code>CustomerSchema</code> and <code>OrderSchema</code>, which use marshmallow to create Python data classes. The <code>OrderSchema</code> class also uses the <code>Decimal</code> field for the <code>amount</code> parameter. Both classes have a <code>Meta</code> class attribute that sets the unknown field to <code>allow_none</code>, which allows <code>None</code> values in fields where specific types are defined.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

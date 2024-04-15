@@ -335,6 +335,47 @@ orders = user['orders'][0]
 <p>The dataclasses are now populated with the data from the json.</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate dataclasses from the given JSON data using Marshmallow, you can use the <code>marshmallow_dataclass</code> package. Here's an example of how you can define the dataclasses for the given JSON data:</p>
+<pre><code class="language-python">from marshmallow_dataclass import dataclass
+import datetime
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: datetime.date
+    orders: Order
+
+@dataclass
+class Order:
+    created: datetime.datetime
+    amount: float
+
+#Load the JSON data
+import json
+json_data = '''
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Smith&quot;,
+  &quot;date_of_birth&quot;: &quot;03/16/1977&quot;,
+  &quot;orders&quot;: [
+    {
+      &quot;created&quot;: &quot;2024-01-25T15:00:04&quot;,
+      &quot;amount&quot;: &quot;100.00&quot;
+    }
+  ]
+}
+'''
+data = json.loads(json_data)
+
+#Initialize the dataclasses
+person = Person(**data)
+</code></pre>
+<p>In this example, we defined two dataclasses - <code>Person</code> and <code>Order</code>. The <code>Person</code> class has properties for <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a single <code>Order</code> instance. The <code>Order</code> class has properties for <code>created</code>, which is a <code>datetime.datetime</code>, and <code>amount</code>, which is a <code>float</code>.</p>
+<p>We then loaded the JSON data and initialized the <code>Person</code> dataclass with the given data. Note that we had to convert the <code>date_of_birth</code> string to a <code>datetime.date</code> object before initializing the <code>Person</code> dataclass.</p>
+<p>This is a basic example, but you can customize the dataclasses based on your specific requirements.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -364,6 +364,67 @@ print(f&quot;Orders: {data.orders}&quot;)
 <p>This example shows you how to use <code>marshmallow_dataclass</code> to automatically generate schemas for your dataclasses, with details on how to specify a data type for each field and convert the data to its native type for serialization.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create data classes using the Marshmallow library based on the provided JSON, you can follow the following steps:</p>
+<ol>
+<li>First, install the Marshmallow library for Python. You can do this using pip, the Python package manager. Here is the command in your terminal:</li>
+</ol>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<ol>
+<li>Next, create the data classes in Python using Marshmallow. Here is an example implementation:</li>
+</ol>
+<pre><code class="language-python">from datetime import datetime
+import json
+from marshmallow import Schema, fields, String, DateTime, Decimal
+
+# User data class
+class User:
+    def __init__(self, first_name, last_name, date_of_birth, orders):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+        self.orders = orders
+
+    @classmethod
+    def from_dict(cls, user_dict):
+        date_of_birth = datetime.strptime(user_dict.pop('date_of_birth'), &quot;%m/%d/%Y&quot;).date()
+        return cls(**user_dict, date_of_birth=date_of_birth)
+
+# Order data class
+class Order:
+    def __init__(self, created, amount):
+        self.created = created
+        self.amount = amount
+
+    @classmethod
+    def from_dict(cls, order_dict):
+        return cls(datetime.strptime(order_dict.pop('created'), &quot;%Y-%m-%dT%H:%M:%S&quot;), Decimal(order_dict.pop('amount')))
+
+# User schema
+class UserSchema(Schema):
+    first_name = String(required=True)
+    last_name = String(required=True)
+    date_of_birth = fields.Date(required=True)
+    orders = fields.List(fields.Nested(OrderSchema), required=True)
+
+# Order schema
+class OrderSchema(Schema):
+    created = DateTime(required=True)
+    amount = Decimal(required=True)
+
+# Marshmallow JSON converter
+def from_json(json_data):
+    json_dict = json.loads(json_data)
+    user_schema = UserSchema()
+    user_dict = user_schema.load(json_dict)
+    user = User.from_dict(user_dict)
+    return user
+</code></pre>
+<p>In this code, we define two data classes, <code>User</code> and <code>Order</code>, with <code>from_dict</code> class methods to convert dictionaries into objects of each class. We also define two corresponding Marshmallow schema classes, <code>UserSchema</code> and <code>OrderSchema</code>, each of which define the fields and data types used in the class instances.</p>
+<p>The <code>marismallow.DateTime</code> and <code>marshmallow.Decimal</code> type decouplers will automatically serialize and deserialize dates and decimal numbers as defined. The <code>DateTime</code> class uses the <code>datetime.strptime</code> method to convert the ISO 8601-format date from the JSON into a Python <code>datetime</code> object, and the <code>Decimal</code> class uses the <code>Decimal</code> constructor to convert the amount value into a <code>decimal.Decimal</code> object.</p>
+<p>Finally, we define the <code>from_json</code> function, which uses the <code>json.loads</code> method to parse the JSON string, then constructs the <code>UserSchema</code> and <code>User</code> instances from the resulting dictionary.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

@@ -413,6 +413,59 @@ Sample sample_data.json (Replace this file with your data):
 <p>That's it! You have successfully converted your JSON data to Python dataclasses using the Marshmallow library. If there are any errors in your JSON data, such as missing or invalid keys, our function <code>process_json</code> will handle them gracefully. You can modify this implementation as necessary to fit your specific application requirements.</p></p>
                 <hr/>
             
+                <p>Content: <p>To achieve this task, you will need to use the <code>Marshmallow</code> library in Python. It provides a simple way of converting complex datatypes, handling validation and deserialization of DateTime and Decimal types. Follow the steps below:</p>
+<ol>
+<li>Install the <code>Marshmallow</code>, <code>marshmallow-sqlalchemy</code> and <code>marshmallow-dataclass</code> packages (optional):</li>
+</ol>
+<pre><code class="language-bash">pip install marshmallow marshmallow-sqlalchemy marshmallow-dataclass
+</code></pre>
+<ol>
+<li>Define your data classes:</li>
+</ol>
+<pre><code class="language-python">from dataclasses import dataclass
+from datetime import date, datetime, time
+from typing import List, Dict, Optional
+from marshmallow_dataclass import dataclass, field
+
+@dataclass
+class Order:
+    created: datetime
+    amount: Decimal
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: List[Order] = field(default_factory=list)
+</code></pre>
+<ol>
+<li>Create new instance of user and deserialize the JSON data into the <code>User</code> object:</li>
+</ol>
+<pre><code class="language-python">from marshmallow import ValidationError
+from datetime import datetime, date
+from decimal import Decimal
+from dataclasses import replace
+
+import marshmallow_dataclass
+Schema = (marshmallow_dataclass.class_registry[User].Schema)
+
+with open('data.json') as file:
+    data = json.load(file)
+
+# This line will throw a ValidationError if there is an error in the JSON data.
+try:
+    user = Schema().load(data)
+except ValidationError as err:
+    print('The given data is not valid: /n', err)
+    raise SystemExit('Aborting...')
+
+# Update the dataclass with parses values
+user = replace(user, date_of_birth=datetime.strptime(data['date_of_birth'], '%m/%d/%Y').date(), orders=data['orders'])
+</code></pre>
+<p>Now, you have successfully parsed the JSON data and created <code>User</code> and <code>Order</code> objects from it. The <code>date_of_birth</code> field is now a <code>date</code> object, <code>created</code> is a <code>datetime</code> object and <code>amount</code> is a <code>Decimal</code> object.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

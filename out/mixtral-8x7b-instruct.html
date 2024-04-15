@@ -355,6 +355,60 @@ pprint(user_data.to_dict())
 <p>In this script, we define dataclasses for the User and Order objects using marshmallow. We also load the JSON using the schema, parse the string-formatted date_of_birth, and serialize it to the newly defined User dataclass.</p></p>
                 <hr/>
             
+                <p>Content: <p>Sure! Here's how you can create dataclasses using the marshmallow library for that JSON data. First, install the library using pip:</p>
+<pre><code class="language-bash">pip install marshmallow
+</code></pre>
+<p>Now, here's the Python code to generate the dataclasses:</p>
+<pre><code class="language-python">from datetime import datetime
+from dateutil.parser import parse
+from decimal import Decimal
+from marshmallow import Schema, fields, post_load
+
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @post_load
+    def make_order(self, data, **kwargs):
+        return {&quot;created&quot;: data[&quot;created&quot;], &quot;amount&quot;: Decimal(data[&quot;amount&quot;])}
+
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+
+    @post_load
+    def make_person(self, data, **kwargs):
+        data[&quot;date_of_birth&quot;] = parse(data[&quot;date_of_birth&quot;])
+        data[&quot;orders&quot;] = [OrderSchema().make_order(order) for order in data.get(&quot;orders&quot;, [])]
+        return {&quot;first_name&quot;: data[&quot;first_name&quot;],
+                &quot;last_name&quot;: data[&quot;last_name&quot;],
+                &quot;date_of_birth&quot;: data[&quot;date_of_birth&quot;],
+                &quot;orders&quot;: data[&quot;orders&quot;]}
+
+
+# Usage example
+person_data = {
+    'first_name': 'Jane',
+    'last_name': 'Smith',
+    'date_of_birth': '03/16/1977',
+    'orders': [
+        {
+            'created': '2024-01-25T15:00:04',
+            'amount': '100.00'
+        }
+    ]
+}
+person_schema = PersonSchema()
+person = person_schema.load(person_data)
+print(person)
+</code></pre>
+<p>This will fulfill your requirements. For each element in the orders list, <code>created</code> will be of type <code>datetime</code>, and <code>amount</code> will be of type <code>decimal</code>, while <code>date_of_birth</code> will be a <code>date</code>.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

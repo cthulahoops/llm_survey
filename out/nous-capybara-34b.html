@@ -340,6 +340,60 @@ data = PersonSchema().load(json.loads(json_data))
 <p>Now, you can load the JSON string into a <code>PersonSchema</code> object and convert it into a dataclass instance.</p></p>
                 <hr/>
             
+                <p>Content: <p>To create dataclasses using marshmallow, you first need to define your schemas. A schema is a blueprint for your data that defines how it should be structured. In your case, you have two complex objects: <code>Person</code> and <code>Order</code>. Let's define schemas for both:</p>
+<pre><code class="language-python">from marshmallow import Schema, fields
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+class PersonSchema(Schema):
+    first_name = fields.String()
+    last_name = fields.String()
+    date_of_birth = fields.Date()
+    orders = fields.Nested(OrderSchema, many=True)
+</code></pre>
+<p>Now you can use the <code>load</code> method from the schema to deserialize the JSON data and create your dataclasses. First, import the <code>dataclasses</code> module:</p>
+<pre><code class="language-python">from dataclasses import dataclass
+import marshmallow
+from marshmallow import Schema, fields
+</code></pre>
+<p>Now, create the dataclasses:</p>
+<pre><code class="language-python">@dataclass
+class Order:
+    created: datetime
+    amount: decimal.Decimal
+
+@dataclass
+class Person:
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    orders: list[Order]
+</code></pre>
+<p>Finally, load the JSON data into your schemas and construct your <code>Person</code> and <code>Order</code> dataclasses:</p>
+<pre><code class="language-python">json_data = '''
+{
+  'first_name': 'Jane',
+  'last_name': 'Smith',
+  'date_of_birth': '03/16/1977',
+  'orders': [
+    {
+      'created': '2024-01-25T15:00:04',
+      'amount': '100.00'
+    }
+  ]
+}
+'''
+
+person_schema = PersonSchema()
+order_schema = OrderSchema()
+
+person_dataclass = person_schema.load(json.loads(json_data))
+</code></pre>
+<p>Now, <code>person_dataclass</code> will be a <code>Person</code> instance with all the required attributes correctly parsed and converted to the appropriate types.</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>

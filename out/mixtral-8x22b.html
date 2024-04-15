@@ -298,6 +298,37 @@ print(person.orders[0].created)</p>
                 <p>Content: <p>To generate DataClasses from a JSON using the marshmallow library in Python, you can follow these steps:</p></p>
                 <hr/>
             
+                <p>Content: <p>To generate DataClasses from a JSON object using marshmallow, you can use the <code>Schema</code> and <code>preprocess</code> methods. Here's an example:</p>
+<pre><code class="language-python">from datetime import datetime, date
+from decimal import Decimal
+from marshmallow import Schema, fields, preprocess
+
+class PersonSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    date_of_birth = fields.Date()
+    orders = fields.List(fields.Nested('OrderSchema'))
+
+    @preprocess
+    def convert_date_of_birth(self, value, **kwargs):
+        return datetime.strptime(value['date_of_birth'], '%m/%d/%Y')
+
+    @preprocess
+    def convert_amount(self, value, **kwargs):
+        return Decimal(value['amount'])
+
+class OrderSchema(Schema):
+    created = fields.DateTime()
+    amount = fields.Decimal()
+
+    @preprocess
+    def convert_created(self, value, **kwargs):
+        return datetime.strptime(value['created'], '%Y-%m-%dT%H:%M:%S')
+</code></pre>
+<p>The <code>preprocess</code> method is used to convert the JSON values to the desired Python types.</p>
+<p>With these classes, you can then load the JSON data into the <code>Person</code> DataClass as follows:</p></p>
+                <hr/>
+            
         </main>
     </body>
 </html>
