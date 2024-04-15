@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LLM Survey</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                {% for model in models %}
+                <li><a href="{{ model }}.html">{{ model }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <main>
+            Select a model!
+        </main>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{model}}</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                {% for model in models %}
+                <li><a href="{{ model }}.html">{{ model }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <main>
+            <h1>{{ model }}</h1>
+            <p>Model: {{ model }}</p>
+
+            {% for item in items %}
+                <p>Content: {{ item|safe }}</p>
+                <hr/>
+            {% endfor %}
+        </main>
+    </body>
+</html>
