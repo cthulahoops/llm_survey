@@ -13,12 +13,13 @@
             </ul>
         </nav>
         <main>
-            <h1>{{ model }}</h1>
             <p>Model: {{ model }}</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body">{{ prompt|safe }}</div>
             {% for item in items %}
-                <p>Content: {{ item|safe }}</p>
-                <hr/>
+                <p>Response {{ loop.index }}.</p>
+                <div class="markdown-body">{{ item|safe }}</div>
             {% endfor %}
         </main>
     </body>

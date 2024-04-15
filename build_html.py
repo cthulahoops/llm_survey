@@ -3,7 +3,7 @@ import markdown
 import json
 from collections import defaultdict
 
-markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code"])
+markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
 
 
 def main():
@@ -19,13 +19,22 @@ def main():
     data = read_model_data()
     models = sorted(model_name(model) for model in data.keys())
 
-    rendered_html = index_template.render(models=models)
+    prompt = open("prompt.md").read()
+    prompt = markdown.convert(prompt)
+
+    rendered_html = index_template.render(models=models, prompt=prompt)
+
     with open("out/index.html", "w") as outfile:
         outfile.write(rendered_html)
 
     for model, items in data.items():
         items = [markdown.convert(item["content"]) for item in items]
-        rendered_html = template.render(items=items, model=model, models=models)
+        rendered_html = template.render(
+            items=items,
+            model=model,
+            models=models,
+            prompt=prompt,
+        )
 
         with open(f"out/{model_name(model)}.html", "w") as outfile:
             outfile.write(rendered_html)
