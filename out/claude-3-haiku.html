@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-3-haiku</h1>
             <p>Model: openrouter/anthropic/claude-3-haiku</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve the desired output using the Marshmallow library, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve the desired output using the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Define the data structures using Marshmallow schemas.</li>
 <li>Combine the schemas to create the final data structure.</li>
@@ -316,10 +333,10 @@ print(person)
 <p>The <code>OrderSchema</code> handles the deserialization of the <code>order</code> objects, converting the <code>created</code> field to a <code>datetime</code> object and the <code>amount</code> field to a <code>Decimal</code> object.</p>
 <p>The <code>PersonSchema</code> handles the deserialization of the top-level <code>Person</code> object, converting the <code>date_of_birth</code> field to a <code>date</code> object and the <code>orders</code> field to a list of <code>Order</code> objects.</p>
 <p>The <code>post_load</code> decorators are used to create the <code>Order</code> and <code>Person</code> objects from the deserialized data.</p>
-<p>Finally, the example shows how to use the <code>PersonSchema</code> to deserialize the JSON data and create a <code>Person</code> object.</p></p>
-                <hr/>
+<p>Finally, the example shows how to use the <code>PersonSchema</code> to deserialize the JSON data and create a <code>Person</code> object.</p></div>
             
-                <p>Content: <p>To convert the given JSON data into dataclasses using the Marshmallow library, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To convert the given JSON data into dataclasses using the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Define the dataclasses and Marshmallow schemas:</li>
 </ol>
@@ -369,10 +386,10 @@ print(person)
 </code></pre>
 <p>In this example, we define two dataclasses: <code>Order</code> and <code>Person</code>. The <code>Order</code> class has <code>created</code> (a <code>datetime</code> object) and <code>amount</code> (a <code>Decimal</code> object) fields, and the <code>Person</code> class has <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code> (a <code>date</code> object), and <code>orders</code> (a list of <code>Order</code> objects) fields.</p>
 <p>We then use the <code>class_schema</code> function from the <code>marshmallow_dataclass</code> library to generate Marshmallow schemas for the dataclasses, <code>PersonSchema</code> and <code>OrderSchema</code>.</p>
-<p>Finally, we use the <code>PersonSchema</code> to deserialize the JSON data into a <code>Person</code> object. The <code>date_of_birth</code> field is automatically converted to a <code>date</code> object, and the <code>created</code> and <code>amount</code> fields of the <code>Order</code> object are also automatically converted to <code>datetime</code> and <code>Decimal</code> objects, respectively.</p></p>
-                <hr/>
+<p>Finally, we use the <code>PersonSchema</code> to deserialize the JSON data into a <code>Person</code> object. The <code>date_of_birth</code> field is automatically converted to a <code>date</code> object, and the <code>created</code> and <code>amount</code> fields of the <code>Order</code> object are also automatically converted to <code>datetime</code> and <code>Decimal</code> objects, respectively.</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library to create dataclasses that correspond to the provided JSON structure. Here's an example of how you can do it:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library to create dataclasses that correspond to the provided JSON structure. Here's an example of how you can do it:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -430,8 +447,7 @@ print(person)
 </code></pre>
 <p>In this example, we define two dataclasses: <code>Order</code> and <code>Person</code>. The <code>OrderSchema</code> and <code>PersonSchema</code> classes use Marshmallow fields to define the expected structure of the JSON data.</p>
 <p>The <code>post_load</code> methods are used to create the <code>Order</code> and <code>Person</code> objects from the deserialized data.</p>
-<p>When you call <code>person_schema.load(json_data)</code>, Marshmallow will deserialize the JSON data into the appropriate dataclass instances, with the <code>date_of_birth</code> field parsed as a <code>date</code> object and the <code>created</code> and <code>amount</code> fields parsed as <code>datetime</code> and <code>Decimal</code> objects, respectively.</p></p>
-                <hr/>
+<p>When you call <code>person_schema.load(json_data)</code>, Marshmallow will deserialize the JSON data into the appropriate dataclass instances, with the <code>date_of_birth</code> field parsed as a <code>date</code> object and the <code>created</code> and <code>amount</code> fields parsed as <code>datetime</code> and <code>Decimal</code> objects, respectively.</p></div>
             
         </main>
     </body>

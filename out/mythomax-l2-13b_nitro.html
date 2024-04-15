@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/gryphe/mythomax-l2-13b:nitro</h1>
             <p>Model: openrouter/gryphe/mythomax-l2-13b:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Using the marshmallow library in Python, you can define your dataclasses as follows:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Using the marshmallow library in Python, you can define your dataclasses as follows:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validates_datetime
 
 class CustomerInformation(Schema):
@@ -279,10 +296,10 @@ class OrderInfo(Schema):
 }
 customer_info = CustomerInformation().load_instance(data)
 </code></pre>
-<p>This will create a <code>CustomerInformation</code> object with the loaded values.</p></p>
-                <hr/>
+<p>This will create a <code>CustomerInformation</code> object with the loaded values.</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data, we can use the <code>marshmallow</code> library in Python. Here's an example:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data, we can use the <code>marshmallow</code> library in Python. Here's an example:</p>
 <pre><code class="language-python">from marshmallow import fields, Schema, validate
 
 class NameSchema(Schema):
@@ -315,10 +332,10 @@ print(person_data)
 </code></pre>
 <p>This code defines three dataclasses: <code>NameSchema</code>, <code>OrderSchema</code>, and <code>PersonSchema</code>. The <code>PersonSchema</code> class includes both the <code>name</code> and <code>orders</code> fields, which are populated with the values from the JSON data.</p>
 <p>The <code>validate</code> function is used to validate the JSON data against the <code>PersonSchema</code>. The <code>data</code> variable contains the JSON data as a dictionary. The <code>load</code> method of the <code>PersonSchema</code> is used to load the JSON data into the <code>PersonSchema</code> object.</p>
-<p>Finally, the <code>person_data</code> variable is printed to demonstrate that the dataclasses have been successfully generated from the JSON data.</p></p>
-                <hr/>
+<p>Finally, the <code>person_data</code> variable is printed to demonstrate that the dataclasses have been successfully generated from the JSON data.</p></div>
             
-                <p>Content: <p>Here's an example of how you can define your dataclasses using Marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's an example of how you can define your dataclasses using Marshmallow:</p>
 <pre><code class="language-python">from marshmallow import (
     fields,
     Schema,
@@ -370,8 +387,7 @@ json_person = person.to_dict()
 
 person2 = Person.from_dict(json_person)
 </code></pre>
-<p>This creates a <code>Person</code> object with the given data, then serializes it to JSON and deserializes it back again. The resulting <code>Person</code> object will have the same attributes as the original.</p></p>
-                <hr/>
+<p>This creates a <code>Person</code> object with the given data, then serializes it to JSON and deserializes it back again. The resulting <code>Person</code> object will have the same attributes as the original.</p></div>
             
         </main>
     </body>

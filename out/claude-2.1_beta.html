@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-2.1:beta</h1>
             <p>Model: openrouter/anthropic/claude-2.1:beta</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 import datetime
 from decimal import Decimal
@@ -296,10 +313,10 @@ print(person)
 <li>Override the field types to get date, datetime and decimal parsing</li>
 <li>Load the JSON using the schema to get a populated dataclass</li>
 </ul>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from decimal import Decimal
 from datetime import date, datetime
@@ -341,10 +358,10 @@ print(user)
 <li>Use marshmallow_dataclass to generate a Schema</li>
 <li>The schema's load method will deserialize the JSON and perform type conversions</li>
 </ul>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 import datetime
 from decimal import Decimal
@@ -386,8 +403,7 @@ print(user)
 <li>Create a Marshmallow schema from the dataclass with class_schema</li>
 <li>Deserialize the JSON into the dataclass by calling .load()</li>
 </ul>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
         </main>
     </body>

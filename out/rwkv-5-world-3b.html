@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/rwkv/rwkv-5-world-3b</h1>
             <p>Model: openrouter/rwkv/rwkv-5-world-3b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.<br />
 Here's an example of how you can do this:</p>
 <pre><code class="language-python">from datetime import datetime, timedelta
 from decimal import Decimal
@@ -281,10 +298,10 @@ data = {
 data2 = data.__schema__.dumps({})
 print(data2)  # {&quot;firstName&quot;:&quot;Jane&quot;,&quot;lastName&quot;:&quot;Smith&quot;,&quot;dateOfBirth&quot;:&quot;03/16/1977&quot;,&quot;orders&quot;:[{&quot;created&quot;:1500444800,&quot;amount&quot;:100}]}
 
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.<br />
 Here's an example of how you can do this:</p>
 <pre><code class="language-python">from datetime import datetime, timedelta
 from decimal import Decimal
@@ -314,10 +331,10 @@ data = {
 schema = OrderData(**data)
 print(schema)  # Output: {'firstName': 'Jane', 'lastName': 'Smith', 'dateOfBirth': datetime(...), ...}
 
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the <code>datetime</code> and <code>decimal</code> modules to convert the date and amount fields to their respective dataclasses.<br />
 Here's an example of how you can do this:</p>
 <pre><code class="language-python">from datetime import datetime, timedelta
 from decimal import Decimal
@@ -347,8 +364,7 @@ data = {
 schema = OrderData(**data)
 print(schema)  # Output: {'firstName': 'Jane', 'lastName': 'Smith', 'dateOfBirth': datetime(...), ...}
 
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

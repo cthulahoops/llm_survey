@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/meta-llama/codellama-34b-instruct</h1>
             <p>Model: openrouter/meta-llama/codellama-34b-instruct</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from JSON using the Marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from JSON using the Marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>Install the Marshmallow library using <code>pip install marshmallow</code>.</li>
 <li>Import the necessary modules:</li>
@@ -288,20 +305,20 @@ class OrderSchema(Schema):
     created = fields.DateTime()
     amount = fields.Decimal()
 </code></pre>
-<p>Here, we've defined two schemas: <code>CustomerSchema</code> and <code>OrderSchema</code>. <code>CustomerSchema</code> has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>, which are all strings. <code>orders</code> is a List of <code>OrderSchema</code> objects. <code>OrderSchema</code> has two fields: <code>created</code> and <code>amount</code>, which are both datetimes and decimals, respectively.
+<p>Here, we've defined two schemas: <code>CustomerSchema</code> and <code>OrderSchema</code>. <code>CustomerSchema</code> has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>, which are all strings. <code>orders</code> is a List of <code>OrderSchema</code> objects. <code>OrderSchema</code> has two fields: <code>created</code> and <code>amount</code>, which are both datetimes and decimals, respectively.<br />
 5. Load the JSON data into a Python object using the <code>marshmallow.load</code> function:</p>
 <pre><code>customer = marshmallow.load(json_data, CustomerSchema)
 </code></pre>
-<p>This will create a <code>Customer</code> object with the data from the JSON.
+<p>This will create a <code>Customer</code> object with the data from the JSON.<br />
 6. You can now access the data in the <code>Customer</code> object using the dataclasses accessors:</p>
 <pre><code>print(customer.first_name)  # prints 'Jane'
 print(customer.orders[0].amount)  # prints '100.00'
 </code></pre>
 <p>Note that the <code>orders</code> field is a list of <code>OrderSchema</code> objects, so you'll need to access them using the appropriate index.</p>
-<p>That's it! Marshmallow takes care of converting the JSON data into a Python object with the correct data types.</p></p>
-                <hr/>
+<p>That's it! Marshmallow takes care of converting the JSON data into a Python object with the correct data types.</p></div>
             
-                <p>Content: <p>To achieve this, you can use the <code>marshmallow</code> library in Python, which provides a powerful and flexible way to serialize and deserialize data. Here's an example of how you could use it to generate the dataclasses you need:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this, you can use the <code>marshmallow</code> library in Python, which provides a powerful and flexible way to serialize and deserialize data. Here's an example of how you could use it to generate the dataclasses you need:</p>
 <pre><code>import marshmallow as ma
 from marshmallow_dataclasses import dataclass
 
@@ -344,10 +361,10 @@ print(customer.orders[0].amount)  # Decimal('100.00')
 <p>In this example, we define two dataclasses <code>Customer</code> and <code>Order</code> using the <code>dataclass</code> decorator from the <code>marshmallow_dataclasses</code> library. The <code>Order</code> class has two fields: <code>created</code> and <code>amount</code>, which are defined using the <code>fields.DateTime()</code> and <code>fields.Decimal()</code> field types from the <code>marshmallow</code> library.</p>
 <p>The <code>Customer</code> class has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>, which are defined using the <code>fields.String()</code> field type. The <code>orders</code> field is defined using the <code>fields.Nested()</code> field type, which allows us to define a list of <code>Order</code> objects.</p>
 <p>To deserialize the data, we create a <code>Customer.Schema</code> object and call its <code>load()</code> method, passing in the data dictionary. The resulting <code>customer</code> object is an instance of the <code>Customer</code> class, with the <code>orders</code> field now being a list of <code>Order</code> objects.</p>
-<p>Note that the <code>date_of_birth</code> field is now a <code>datetime</code> object, and the <code>orders</code> field is now a list of <code>Order</code> objects.</p></p>
-                <hr/>
+<p>Note that the <code>date_of_birth</code> field is now a <code>datetime</code> object, and the <code>orders</code> field is now a list of <code>Order</code> objects.</p></div>
             
-                <p>Content: <p>Here's an example of how you can use the marshmallow library to define dataclasses with the specified fields and types:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's an example of how you can use the marshmallow library to define dataclasses with the specified fields and types:</p>
 <pre><code>from dataclasses import dataclass
 from marshmallow_dataclass import dataclass
 import datetime
@@ -385,8 +402,7 @@ customer = datana.loads(data)
 json_data = datana.dumps(customer)
 </code></pre>
 <p>In this example, we first create a <code>Datana</code> object that maps the JSON data to the <code>Customer</code> dataclass. We then load the JSON data from a file using the <code>json</code> module, and deserialize it to a Python object using the <code>loads</code> method of the <code>Datana</code> object. Finally, we serialize the Python object back to JSON using the <code>dumps</code> method of the <code>Datana</code> object.</p>
-<p>Note that the <code>Datana</code> class also allows you to specify the field renaming scheme, which you can use to modify the names of the fields in the JSON data before they are deserialized to Python objects.</p></p>
-                <hr/>
+<p>Note that the <code>Datana</code> class also allows you to specify the field renaming scheme, which you can use to modify the names of the fields in the JSON data before they are deserialized to Python objects.</p></div>
             
         </main>
     </body>

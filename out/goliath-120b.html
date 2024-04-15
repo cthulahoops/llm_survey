@@ -247,30 +247,47 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/alpindale/goliath-120b</h1>
             <p>Model: openrouter/alpindale/goliath-120b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can first install the library with pip:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can first install the library with pip:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
-<p>Then, you can create a new Python file (e.g., <code>app.py</code>) and add the following code:
+<p>Then, you can create a new Python file (e.g., <code>app.py</code>) and add the following code:<br />
 <code>``python
 import marshmallow as ma
-import marshmallow_</code>@datetime import Timestamp
+import marshmallow_</code>@datetime import Timestamp<br />
 from marshmallow_ @decimal import DecimalapedNu</p>
-<p>from datetime import date
+<p>from datetime import date<br />
 from typing import Dict, Union</p>
-<p>class Order(ma. principales):
-    created: Union[Timestamp, str]
+<p>class Order(ma. principales):<br />
+    created: Union[Timestamp, str]<br />
     amount: Union[Decimal, str]</p>
 <pre><code>def mote(self, value: dict) -&gt; Union[dict, Timestamp]:
     return Timestamp.from_isoformat(value['created']) if isinstance(value, dict) else value
 </code></pre>
-<p>class User(ma. Schema):
-    first_name: str
-    last_name: str
-    date_of_birth: Union[date, str]
+<p>class User(ma. Schema):<br />
+    first_name: str<br />
+    last_name: str<br />
+    date_of_birth: Union[date, str]<br />
     orders: Union[list[Order], list[Any]]</p>
 <pre><code>def mote(self, value: dict) -&gt; User:
     date_of_birth_parsed = None
@@ -280,10 +297,10 @@ from typing import Dict, Union</p>
 
     return User(**value, date_of_birth=date_of_birth_parased, orders=orders)
 </code></pre>
-<p>def main():</p></p>
-                <hr/>
+<p>def main():</p></div>
             
-                <p>Content: <p>You can use the marshmallow library with dataclasses to deserialize JSON data into Python objects while still maintaining type safety. First, you'll need to install the marshmallow-dataclassschema package and dataclasses itself if you haven't already:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the marshmallow library with dataclasses to deserialize JSON data into Python objects while still maintaining type safety. First, you'll need to install the marshmallow-dataclassschema package and dataclasses itself if you haven't already:</p>
 <pre><code>pip3 install marshmallow[dataclass]
 pip3 install marshmallow-dataclassschema
 </code></pre>
@@ -313,15 +330,15 @@ from typing_util import force
 from typing_x import UnionFromWrappedUnion
 from typing_x.util.mypy_extensions import
 </code></pre>
-<p>```python
-from marshmallow import Schema, fields, post_load, post_dump
-from marshmallow_dataclass import dataclass_schema
-from marshmallow_dataclass import dataclass_schema_extended
-from marshmallow_dataclass import dataclass_schematype
-from marimba_dataclassschema import (field_get</p></p>
-                <hr/>
+<p>```python<br />
+from marshmallow import Schema, fields, post_load, post_dump<br />
+from marshmallow_dataclass import dataclass_schema<br />
+from marshmallow_dataclass import dataclass_schema_extended<br />
+from marshmallow_dataclass import dataclass_schematype<br />
+from marimba_dataclassschema import (field_get</p></div>
             
-                <p>Content: <p>To achieve this using the Marshmallow library in Python, you can define the following dataclasses:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the Marshmallow library in Python, you can define the following dataclasses:</p>
 <ol>
 <li><code>Order</code>:</li>
 </ol>
@@ -345,25 +362,24 @@ class Order(Schema):
         return Order(**data)
 </code></pre>
 <ol>
-<li><code>Person</code>:
-```python
-from marshmallow import Schema, fields, post_load, pre_dump, pre_load
-from typing_extensions import TypedDict
-from datetime import date
-from typing import Dict, Union
-from dateutil.parser import parse
+<li><code>Person</code>:<br />
+```python<br />
+from marshmallow import Schema, fields, post_load, pre_dump, pre_load<br />
+from typing_extensions import TypedDict<br />
+from datetime import date<br />
+from typing import Dict, Union<br />
+from dateutil.parser import parse<br />
 from decimal import Decimal</li>
 </ol>
-<p>class Person(Schema):
-    class Order(Schema):
-        created: datetime.datetime = fields.DateTime(input_format='%Y-%m-%dT%H:%M:%S')
+<p>class Person(Schema):<br />
+    class Order(Schema):<br />
+        created: datetime.datetime = fields.DateTime(input_format='%Y-%m-%dT%H:%M:%S')<br />
         amount: Decimal = fields.Decimal(decimal_places=2)</p>
 <pre><code>first_name: str = fields.Str()
 last_name: str = fields.Str()
 date_of_birth: date = fields.Date(input_format='%m/%d/%Y')
 orders: Union[list[Order], Order, dict, dict] =
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

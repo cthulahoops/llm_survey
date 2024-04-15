@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo-instruct</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo-instruct</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Using the marshmallow library, you can create a schema to define the structure of your JSON. You can then deserialize the JSON data into data objects using the schema.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Using the marshmallow library, you can create a schema to define the structure of your JSON. You can then deserialize the JSON data into data objects using the schema.</p>
 <p>First, you would need to install the marshmallow library using pip:</p>
 <pre><code>pip install marshmallow
 </code></pre>
@@ -296,39 +313,39 @@ print(user.orders[0].amount)  # output: Decimal('100.00')
 json_data = schema.dump(user)
 print(json_data)  # output: {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]}
 </code></pre>
-<p>You can read more about using marshmallow for JSON serialization and deserialization in the documentation: https://marshmallow.readthedocs.io/en/stable/</p></p>
-                <hr/>
+<p>You can read more about using marshmallow for JSON serialization and deserialization in the documentation: https://marshmallow.readthedocs.io/en/stable/</p></div>
             
-                <p>Content: <p>To do this using the marshmallow library in python, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To do this using the marshmallow library in python, you can follow these steps:</p>
 <ol>
 <li>
-<p>Install marshmallow library:
-    First, you need to make sure that you have the marshmallow library installed in your python environment. You can install it using pip with the following command:
-    <code>pip install marshmallow</code></p>
+<p>Install marshmallow library:<br />
+    First, you need to make sure that you have the marshmallow library installed in your python environment. You can install it using pip with the following command:<br />
+<code>pip install marshmallow</code></p>
 </li>
 <li>
-<p>Import required modules:
-    Next, you need to import the required modules from the marshmallow library. In this case, you will need the <code>Schema</code> class, <code>fields</code> submodule and <code>post_load</code> decorator. You can import them with the following code:
-    <code>from marshmallow import Schema, fields, post_load</code></p>
+<p>Import required modules:<br />
+    Next, you need to import the required modules from the marshmallow library. In this case, you will need the <code>Schema</code> class, <code>fields</code> submodule and <code>post_load</code> decorator. You can import them with the following code:<br />
+<code>from marshmallow import Schema, fields, post_load</code></p>
 </li>
 <li>
-<p>Create a dataclass:
-    Then, you need to create a dataclass to store the data from the json. You can use the <code>dataclass</code> decorator from the <code>dataclasses</code> module to create a dataclass. You will also need to import <code>dataclasses</code> module for this. The code for creating the dataclass can look like this:
+<p>Create a dataclass:<br />
+    Then, you need to create a dataclass to store the data from the json. You can use the <code>dataclass</code> decorator from the <code>dataclasses</code> module to create a dataclass. You will also need to import <code>dataclasses</code> module for this. The code for creating the dataclass can look like this:<br />
     `import dataclasses</p>
-<p>@dataclasses.dataclass
-class User:
-    first_name: str
-    last_name: str
-    date_of_birth: datetime.date
+<p>@dataclasses.dataclass<br />
+class User:<br />
+    first_name: str<br />
+    last_name: str<br />
+    date_of_birth: datetime.date<br />
     orders: list`</p>
 </li>
 <li>
-<p>Create a schema:
-    Next, you need to create a schema class that will be used to deserialize the json data into the dataclass. In the schema class, you will define the field types for each attribute in the dataclass and use the <code>post_load</code> decorator to convert the data to the desired format. The code for the schema class can look like this:
-    `class UserSchema(Schema):
-        first_name = fields.String()
-        last_name = fields.String()
-        date_of_birth = fields.Date()
+<p>Create a schema:<br />
+    Next, you need to create a schema class that will be used to deserialize the json data into the dataclass. In the schema class, you will define the field types for each attribute in the dataclass and use the <code>post_load</code> decorator to convert the data to the desired format. The code for the schema class can look like this:<br />
+    `class UserSchema(Schema):<br />
+        first_name = fields.String()<br />
+        last_name = fields.String()<br />
+        date_of_birth = fields.Date()<br />
         orders = fields.List(fields.Dict) # since the orders attribute is a list of dictionaries</p>
 <pre><code>@post_load
 def make_user(self, data, **kwargs):
@@ -336,38 +353,38 @@ def make_user(self, data, **kwargs):
 </code></pre>
 </li>
 <li>
-<p>Load the json data:
-    After defining the dataclass and schema, you can now load the json data using the <code>load</code> method from the <code>UserSchema</code> class. The <code>load</code> method will deserialize the json data into the dataclass object. It takes in the json data as an argument and returns an instance of the dataclass. The code for loading the json data can look like this:
+<p>Load the json data:<br />
+    After defining the dataclass and schema, you can now load the json data using the <code>load</code> method from the <code>UserSchema</code> class. The <code>load</code> method will deserialize the json data into the dataclass object. It takes in the json data as an argument and returns an instance of the dataclass. The code for loading the json data can look like this:<br />
     `import json</p>
-<p>json_data = '''
-{
-    'first_name': 'Jane',
-    'last_name': 'Smith',
-    'date_of_birth': '03/16/1977',
-    orders: [
-        {
-        'created': '2024-01-25T15:00:04',
-        'amount': '100.00'
-    }
-    ]
+<p>json_data = '''<br />
+{<br />
+    'first_name': 'Jane',<br />
+    'last_name': 'Smith',<br />
+    'date_of_birth': '03/16/1977',<br />
+    orders: [<br />
+        {<br />
+        'created': '2024-01-25T15:00:04',<br />
+        'amount': '100.00'<br />
+    }<br />
+    ]<br />
 }'</p>
 <p>data = json.loads(json_data)</p>
-<p>schema = UserSchema()
+<p>schema = UserSchema()<br />
 user = schema.load(data)`</p>
 </li>
 <li>
-<p>Access the data:
-    Finally, you can access the data in the dataclass by using the attribute names. You can also use the <code>dataclasses.asdict</code> function to convert the dataclass object into a dictionary. The code for accessing the data can look like this:
-    `print(user.first_name) # Output: Jane
-    print(user.last_name) # Output: Smith
-    print(user.date_of_birth) # Output: 1977-03-16
+<p>Access the data:<br />
+    Finally, you can access the data in the dataclass by using the attribute names. You can also use the <code>dataclasses.asdict</code> function to convert the dataclass object into a dictionary. The code for accessing the data can look like this:<br />
+    `print(user.first_name) # Output: Jane<br />
+    print(user.last_name) # Output: Smith<br />
+    print(user.date_of_birth) # Output: 1977-03-16<br />
     print(user.orders[0]['created']) # Output: 2024-01-25T15:00:04</p>
 <p>print(dataclasses.asdict(user)) # Output: {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': datetime.date(1977, 3, 16), 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]}`</p>
 </li>
-</ol></p>
-                <hr/>
+</ol></div>
             
-                <p>Content: <p>First, you will need to install the marshmallow library by running the command "pip install marshmallow" in your terminal.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>First, you will need to install the marshmallow library by running the command "pip install marshmallow" in your terminal.</p>
 <p>Next, you will need to create a dataclass for the order with the fields 'created' as datetime and 'amount' as decimal. This can be done with the help of the marshmallow library's @dataclass decorator. The code for this would look like this:</p>
 <pre><code>from dataclasses import dataclass
 from marshmallow import fields
@@ -430,8 +447,7 @@ print(user.orders[0].amount)
 2024-01-25 15:00:04
 100.00
 </code></pre>
-<p>This shows that the json data has been successfully deserialized into our defined dataclasses with the correct data types.</p></p>
-                <hr/>
+<p>This shows that the json data has been successfully deserialized into our defined dataclasses with the correct data types.</p></div>
             
         </main>
     </body>

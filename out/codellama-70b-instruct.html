@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/codellama/codellama-70b-instruct</h1>
             <p>Model: openrouter/codellama/codellama-70b-instruct</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>🎉 Great question! 🎉 Here is the code to build the dataclasses using <a href="https://marshmallow.readthedocs.io/en/stable/">Marshmallow</a> in Python:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>🎉 Great question! 🎉 Here is the code to build the dataclasses using <a href="https://marshmallow.readthedocs.io/en/stable/">Marshmallow</a> in Python:</p>
 <pre><code class="language-py">from marshmallow import Schema, fields, post_load
 
 class BaseSchema(Schema):
@@ -310,10 +327,10 @@ print(customer)
 </code></pre>
 <p>This demonstrates using the <a href="https://marshmallow.readthedocs.io/en/stable/">marshmallow</a> library to serialize JSON data into <a href="https://docs.python.org/3/library/dataclasses.html">Python dataclasses</a>. We use the <code>post_load</code> attribute in the "customer" schema to serialize the data from the JSON into a <code>Customer</code> object.</p>
 <p>The result of running this code will show a <code>Customer</code> object with the data from the JSON.</p>
-<p>The <a href="https://marshmallow.readthedocs.io/en/stable/">marshmallow</a> library I mentioned is a well-established and reputable library for serializing JSON data into Python objects.</p></p>
-                <hr/>
+<p>The <a href="https://marshmallow.readthedocs.io/en/stable/">marshmallow</a> library I mentioned is a well-established and reputable library for serializing JSON data into Python objects.</p></div>
             
-                <p>Content: <p>😊 I'll help you generate dataclasses for your JSON using the marshmallow library in Python. Marshmallow is a great library for serialization/deserialization of complex data structures. 📊</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>😊 I'll help you generate dataclasses for your JSON using the marshmallow library in Python. Marshmallow is a great library for serialization/deserialization of complex data structures. 📊</p>
 <p>Here's an example of how you could approach it:</p>
 <p>Let's assume that we have a dataclass called <code>Customer</code> and define fields using the <code>@dataclass</code> decorator from the <code>dataclasses</code> module. 🤖</p>
 <p><strong>Step 1: Define the dataclasses</strong></p>
@@ -360,17 +377,16 @@ result: Customer = schema.load(data)  # Deserialize the data
 else:
     print(result.errors)  # Print any errors
 </code></pre>
-<p>I hope this helps! 🤩 You can tweak this example according to your specific needs. 🤓</p></p>
-                <hr/>
+<p>I hope this helps! 🤩 You can tweak this example according to your specific needs. 🤓</p></div>
             
-                <p>Content: <ol>
+                <p>Response 3.</p>
+                <div class="markdown-body"><ol>
 <li>Save the dataclasses and using the marshmallow-dataclass library.</li>
 <li>Add the validation for date_of_birth and the created fields using <code>fields.Date</code> and <code>fields.DateTime</code> respectively.</li>
 <li>Define the order class with the amount attribute.</li>
 <li>Create the User class with the first_name, last_name, date_of_birth, and order attributes.</li>
 <li>Use the <code>load</code> method of the User schema to deserialize the provided json data into a <code>User</code> object.</li>
-</ol></p>
-                <hr/>
+</ol></div>
             
         </main>
     </body>

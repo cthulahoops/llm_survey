@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/togethercomputer/stripedhyena-nous-7b</h1>
             <p>Model: openrouter/togethercomputer/stripedhyena-nous-7b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Let's start by copying and pasting your JSON into a Python dictionary. We'll name this dictionary <code>person_data</code>.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Let's start by copying and pasting your JSON into a Python dictionary. We'll name this dictionary <code>person_data</code>.</p>
 <ol>
 <li>First, we need to install the marshmallow library if we haven't already:</li>
 </ol>
@@ -287,10 +304,10 @@ person_data_formatted = cs.dump(person_data)
 </code></pre>
 <ol>
 <li>If you have any other JSON you'd like to convert into this format, you can simply repeat steps 3 and 4 with a new schema or the same one if you've confirmed that the data is the same type.</li>
-</ol></p>
-                <hr/>
+</ol></div>
             
-                <p>Content: <p>Well, you've got a JSON containing some information about a person named Jane Smith, including her date of birth, orders, and more. To create a Dataclass structure from the JSON content, you can use the marshmallow library in Python. Here's a step-by-step guide on how you might do this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Well, you've got a JSON containing some information about a person named Jane Smith, including her date of birth, orders, and more. To create a Dataclass structure from the JSON content, you can use the marshmallow library in Python. Here's a step-by-step guide on how you might do this:</p>
 <ol>
 <li>First, you need to install the marshmallow library if you haven't already. You can install it using pip:</li>
 </ol>
@@ -335,10 +352,10 @@ print(python_data.orders[0].created)
 print(python_data.orders[0].amount)
 </code></pre>
 <p>After loading your data with <code>cs.load(json_data)</code>, the <code>python_data</code> object is a Python dataclass with the fields and their values from the JSON. You can access and manipulate the data as needed.</p>
-<p>That's it! Now, you have populated the dataclasses with the responses from the JSON.</p></p>
-                <hr/>
+<p>That's it! Now, you have populated the dataclasses with the responses from the JSON.</p></div>
             
-                <p>Content: <p>To generate the necessary dataclasses using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate the necessary dataclasses using the marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, import the necessary modules:</li>
 </ol>
@@ -387,8 +404,7 @@ user_obj = user_schema.dump(json_data)
 user_data = user_schema.dump(user_obj)
 </code></pre>
 <p>Here, we convert the <code>user_obj</code> back to a JSON object.</p>
-<p>Note that this is a simplified example, and you might need to customize the schemas and data types based on your specific use case.</p></p>
-                <hr/>
+<p>Note that this is a simplified example, and you might need to customize the schemas and data types based on your specific use case.</p></div>
             
         </main>
     </body>

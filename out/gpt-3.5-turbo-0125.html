@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo-0125</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo-0125</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can achieve this by creating dataclasses using the marshmallow library in python. Here is an example code snippet for creating dataclasses with the specified data types:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can achieve this by creating dataclasses using the marshmallow library in python. Here is an example code snippet for creating dataclasses with the specified data types:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -297,10 +314,10 @@ customer = Customer(**result)
 
 print(customer)
 </code></pre>
-<p>This code snippet defines the dataclasses <code>Order</code> and <code>Customer</code> with the specified data types for the fields. It also creates schemas <code>OrderSchema</code> and <code>CustomerSchema</code> using the marshmallow library to load the data into the defined dataclasses. Finally, the data from the JSON is loaded into the <code>Customer</code> dataclass instance and printed out.</p></p>
-                <hr/>
+<p>This code snippet defines the dataclasses <code>Order</code> and <code>Customer</code> with the specified data types for the fields. It also creates schemas <code>OrderSchema</code> and <code>CustomerSchema</code> using the marshmallow library to load the data into the defined dataclasses. Finally, the data from the JSON is loaded into the <code>Customer</code> dataclass instance and printed out.</p></div>
             
-                <p>Content: <p>You can achieve this by defining the dataclasses using the <code>marshmallow</code> library in Python. Here is an example code snippet that demonstrates how to achieve this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can achieve this by defining the dataclasses using the <code>marshmallow</code> library in Python. Here is an example code snippet that demonstrates how to achieve this:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime, date
 from decimal import Decimal
@@ -349,10 +366,10 @@ customer_data = customer_schema.load(data)
 print(customer_data)
 </code></pre>
 <p>In this code snippet, we define the <code>Order</code> dataclass to represent the order data, and the <code>Customer</code> dataclass to represent the customer data. We then define schema classes <code>OrderSchema</code> and <code>CustomerSchema</code> that map to the corresponding dataclasses. We use the <code>fields.DateTime()</code>, <code>fields.Decimal(as_string=True)</code>, and <code>fields.Date()</code> to specify the data types for the fields in the schema.</p>
-<p>Finally, we load the JSON data using the <code>CustomerSchema</code> and print the deserialized data.</p></p>
-                <hr/>
+<p>Finally, we load the JSON data using the <code>CustomerSchema</code> and print the deserialized data.</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can create dataclasses for the JSON data and use marshmallow schema to define the data structure and data types. Here's an example code snippet to demonstrate this:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can create dataclasses for the JSON data and use marshmallow schema to define the data structure and data types. Here's an example code snippet to demonstrate this:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -408,8 +425,7 @@ print(user_object)
 </code></pre>
 <p>In this code snippet, we first define the dataclasses for Order and User, where Order contains information about the order, and User contains information about the user along with a list of orders. We then define schemas for Order and User using marshmallow, specifying the data types for each attribute.</p>
 <p>We load the JSON data into the UserSchema and use the <code>load</code> method to deserialize the JSON data into a User dataclass object. Finally, we print the User dataclass object to verify the deserialization process.</p>
-<p>Make sure to have the marshmallow library installed in your Python environment by running <code>pip install marshmallow</code>.</p></p>
-                <hr/>
+<p>Make sure to have the marshmallow library installed in your Python environment by running <code>pip install marshmallow</code>.</p></div>
             
         </main>
     </body>

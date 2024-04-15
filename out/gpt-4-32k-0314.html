@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-4-32k-0314</h1>
             <p>Model: openrouter/openai/gpt-4-32k-0314</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can follow the steps below:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can follow the steps below:</p>
 <ol>
 <li>
 <p>Install the marshmallow library if you haven't already: <code>pip install marshmallow</code></p>
@@ -324,10 +341,10 @@ person = person_schema.load(loaded_json)
 print(person)
 </code></pre>
 <p>In this example, Order and Person dataclasses are defined, along with their respective schemas using the marshmallow library. The <code>post_load</code> decorators are used to create instances of the dataclasses after deserializing the input data.</p>
-<p>Finally, the JSON string is deserialized into the Person dataclass instance (<code>person</code>), with the specified field types correctly set (date, datetime, and decimal).</p></p>
-                <hr/>
+<p>Finally, the JSON string is deserialized into the Person dataclass instance (<code>person</code>), with the specified field types correctly set (date, datetime, and decimal).</p></div>
             
-                <p>Content: <p>First, you need to install the marshmallow library if you haven't already:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>First, you need to install the marshmallow library if you haven't already:</p>
 <pre><code>pip install marshmallow
 </code></pre>
 <p>Next, you can create a Python script with the following code to define the data classes and use the marshmallow library for deserialization:</p>
@@ -391,10 +408,10 @@ print(user)
 </code></pre>
 <p>Replace the <code>json_string</code> variable with the JSON string you want to deserialize.</p>
 <p>This script defines data classes for <code>User</code> and <code>Order</code>, and creates schema classes to handle the deserialization with marshmallow. The <code>@post_load</code> decorator is used to create the data class instances after loading the data.</p>
-<p>Once you run the script, it will deserialize the JSON string into a <code>User</code> object with the specified attributes.</p></p>
-                <hr/>
+<p>Once you run the script, it will deserialize the JSON string into a <code>User</code> object with the specified attributes.</p></div>
             
-                <p>Content: <p>To use the Marshmallow library, you should first install it using pip:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To use the Marshmallow library, you should first install it using pip:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Then, you can create dataclasses and use Marshmallow schemas to deserialize the JSON string and validate the data types. Here's an example:</p>
@@ -464,8 +481,7 @@ validated_data = person_schema.load(json_data)
 print(validated_data)
 </code></pre>
 <p>In this example, we first define the dataclasses <code>Order</code> and <code>Person</code>. Then, we create Marshmallow schemas <code>OrderSchema</code> and <code>PersonSchema</code> to specify the validation rules and deserialization methods (<code>post_load</code> methods used to create dataclasses).</p>
-<p>Finally, we load the JSON data into the <code>PersonSchema</code> using the <code>load</code> method, which generates the <code>Person</code> and <code>Order</code> dataclass instances with the correct data types.</p></p>
-                <hr/>
+<p>Finally, we load the JSON data into the <code>PersonSchema</code> using the <code>load</code> method, which generates the <code>Person</code> and <code>Order</code> dataclass instances with the correct data types.</p></div>
             
         </main>
     </body>

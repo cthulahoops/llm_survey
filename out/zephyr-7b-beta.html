@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/huggingfaceh4/zephyr-7b-beta</h1>
             <p>Model: openrouter/huggingfaceh4/zephyr-7b-beta</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library in Python to create dataclasses that map the fields in the JSON data to corresponding marshmallow field class types. Here's an example:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library in Python to create dataclasses that map the fields in the JSON data to corresponding marshmallow field class types. Here's an example:</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
 from marshmallow import fields, validate
@@ -282,10 +299,10 @@ person.orders.validate()
 # Output: 2024-01-25T15:00:04
 </code></pre>
 <p>In this example, we have defined a <code>Person</code> dataclass that maps the fields in the JSON data to corresponding marshmallow field class types. The <code>DateTime</code> field is used for the <code>date_of_birth</code> and <code>orders</code> fields. The <code>validate()</code> decorator is used to validate the date format. If the validation fails for a specific field, an <code>InvalidField</code> exception will be raised with an error message.</p>
-<p>You can then create instances of the dataclass from the JSON data using the <code>**</code> operator. The marshmallow validation is performed automatically during the serialization process, and errors are stored in the <code>errors</code> attribute of the <code>Person</code> instance. You can then access these errors or perform more validation if needed.</p></p>
-                <hr/>
+<p>You can then create instances of the dataclass from the JSON data using the <code>**</code> operator. The marshmallow validation is performed automatically during the serialization process, and errors are stored in the <code>errors</code> attribute of the <code>Person</code> instance. You can then access these errors or perform more validation if needed.</p></div>
             
-                <p>Content: <p>You can use the <code>dataclasses</code> module and the <code>datetime</code> and <code>decimal</code> modules to create dataclasses for the different data types in the JSON. Here's an example of how you can do this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the <code>dataclasses</code> module and the <code>datetime</code> and <code>decimal</code> modules to create dataclasses for the different data types in the JSON. Here's an example of how you can do this:</p>
 <pre><code class="language-python">from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
@@ -345,10 +362,10 @@ print(person_obj)
   'date_of_birth': Birthday(date_of_birth='03/16/1977'),
   'orders': [Order(created='2024-01-25T15:00:04', amount='100.00')]
 }
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can use the <code>datetime</code> class from the <code>datetime</code> module to create a custom field type for <code>date_of_birth</code> that converts it to a <code>datetime</code> object. Here's an example implementation using the <code>marshmallow</code> library:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the <code>datetime</code> class from the <code>datetime</code> module to create a custom field type for <code>date_of_birth</code> that converts it to a <code>datetime</code> object. Here's an example implementation using the <code>marshmallow</code> library:</p>
 <pre><code class="language-python">from datetime import datetime
 from marshmallow import fields, Schema
 
@@ -383,8 +400,7 @@ print(date_of_birth_objects)
 <p>This will output:</p>
 <pre><code class="language-csharp">&lt;datetime.datetime datetime='1977-03-16 15:44:44+00:00', tzinfo=&lt;timezone 'UTC' PST+00:00 : zoneinfo='&lt;zonefile 'UTC'/'&lt;zoneid 1 /&gt;'&gt;&gt;
 </code></pre>
-<p>Note that the <code>allow_none=False</code> argument in the <code>Decimal</code> field is used to ensure that the <code>amount</code> field is always a decimal value, even if it is None in the input JSON.</p></p>
-                <hr/>
+<p>Note that the <code>allow_none=False</code> argument in the <code>Decimal</code> field is used to ensure that the <code>amount</code> field is always a decimal value, even if it is None in the input JSON.</p></div>
             
         </main>
     </body>

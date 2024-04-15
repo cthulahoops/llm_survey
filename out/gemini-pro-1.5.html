@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/gemini-pro-1.5</h1>
             <p>Model: openrouter/google/gemini-pro-1.5</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <h2>Using Marshmallow to Generate Dataclasses from JSON</h2>
+                <p>Response 1.</p>
+                <div class="markdown-body"><h2>Using Marshmallow to Generate Dataclasses from JSON</h2>
 <p>Here's how you can achieve this using the <code>marshmallow</code> library in Python:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 from marshmallow.validate import Length
@@ -319,10 +336,10 @@ print(type(customer.orders[0].amount))  # Output: &lt;class 'decimal.Decimal'&gt
 <li>Marshmallow helps define schemas for data structures, validating and deserializing data into Python objects. </li>
 <li>Nested schemas like <code>OrderSchema</code> handle complex structures within the JSON data.</li>
 <li>The <code>post_load</code> decorator allows custom actions after data loading, such as creating instances of your data classes. </li>
-</ul></p>
-                <hr/>
+</ul></div>
             
-                <p>Content: <h2>Using Marshmallow for Data Classes with JSON</h2>
+                <p>Response 2.</p>
+                <div class="markdown-body"><h2>Using Marshmallow for Data Classes with JSON</h2>
 <p>Here's how to achieve your goal using the marshmallow library in Python:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 from datetime import date, datetime
@@ -384,10 +401,10 @@ print(result)
 <p><strong>Example Usage:</strong> We create a <code>UserSchema</code> instance and use its <code>load</code> method to parse the provided JSON data. The resulting <code>result</code> dictionary will have the correct data types.</p>
 </li>
 </ol>
-<p><strong>Note:</strong> In this example, we're not directly creating data classes. Marshmallow primarily focuses on serialization/deserialization. You could potentially use libraries like <code>attrs</code> or <code>dataclasses</code> in conjunction with Marshmallow to create dataclasses with the appropriate types from the loaded data.</p></p>
-                <hr/>
+<p><strong>Note:</strong> In this example, we're not directly creating data classes. Marshmallow primarily focuses on serialization/deserialization. You could potentially use libraries like <code>attrs</code> or <code>dataclasses</code> in conjunction with Marshmallow to create dataclasses with the appropriate types from the loaded data.</p></div>
             
-                <p>Content: <h2>Using Marshmallow to Generate Dataclasses</h2>
+                <p>Response 3.</p>
+                <div class="markdown-body"><h2>Using Marshmallow to Generate Dataclasses</h2>
 <p>Here's how you can use the marshmallow library in Python to generate dataclasses from your JSON data, handling the specified data types:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 from marshmallow_dataclass import dataclass
@@ -458,8 +475,7 @@ print(customer.orders[0].amount)  # Output: 100.00 (Decimal object)
 <li><code>marshmallow_dataclass</code> simplifies the process by automatically generating schemas from dataclasses.</li>
 <li>Using specific field types ensures correct data type conversion during deserialization.</li>
 <li>The <code>post_load</code> hook allows for custom logic after deserialization, such as creating an instance of the dataclass. </li>
-</ul></p>
-                <hr/>
+</ul></div>
             
         </main>
     </body>

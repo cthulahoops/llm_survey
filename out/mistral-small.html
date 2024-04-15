@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mistral-small</h1>
             <p>Model: openrouter/mistralai/mistral-small</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library in Python to create schemas for your JSON data and then use those schemas to deserialize the JSON into data classes with the appropriate types. Here's an example of how you can do that:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library in Python to create schemas for your JSON data and then use those schemas to deserialize the JSON into data classes with the appropriate types. Here's an example of how you can do that:</p>
 <p>First, install the <code>marshmallow</code> and <code>marshmallow-dataclass</code> libraries if you haven't already:</p>
 <pre><code class="language-bash">pip install marshmallow marshmallow-dataclass
 </code></pre>
@@ -268,26 +285,25 @@ import dataclasses
 </code></pre>
 <ol>
 <li>Create the data classes:</li>
-</ol></p>
-                <hr/>
+</ol></div>
             
-                <p>Content: <p>To create dataclasses from the given JSON using the Marshmallow library in Python, you would first need to install the library by running <code>pip install marshmallow</code>. After that, you can use the following code to define the schemas and dataclasses as per your requirements:</p>
-<p>```python
-import json
-from datetime import datetime
-from decimal import Decimal
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create dataclasses from the given JSON using the Marshmallow library in Python, you would first need to install the library by running <code>pip install marshmallow</code>. After that, you can use the following code to define the schemas and dataclasses as per your requirements:</p>
+<p>```python<br />
+import json<br />
+from datetime import datetime<br />
+from decimal import Decimal<br />
 from marshmallow import Schema, fields, pprint</p>
 <h1>Define the Order dataclass</h1>
-<p>class Order:
-    def <strong>init</strong>(self, created, amount):
-        self.created = created
-        self.amount = Decimal(amount)</p></p>
-                <hr/>
+<p>class Order:<br />
+    def <strong>init</strong>(self, created, amount):<br />
+        self.created = created<br />
+        self.amount = Decimal(amount)</p></div>
             
-                <p>Content: <p>First, you will need to install the marshmallow library if you haven't already. You can do this by running:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>First, you will need to install the marshmallow library if you haven't already. You can do this by running:</p>
 <pre><code class="language-bash">pip install marshmallow
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

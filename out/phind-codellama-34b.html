@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/phind/phind-codellama-34b</h1>
             <p>Model: openrouter/phind/phind-codellama-34b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from the JSON using the marshmallow library in python, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the JSON using the marshmallow library in python, you can follow these steps:</p>
 <ol>
 <li>
 <p>Install marshmallow by running <code>pip install marshmallow</code>.</p>
@@ -330,10 +347,10 @@ class Customer:
 loaded_data = CustomerSchema().load(json.loads(json_data))
 print(loaded_data)  # This will print the dataclasses
 </code></pre>
-<p>This will properly create the dataclasses from the JSON using the marshmallow library in python.</p></p>
-                <hr/>
+<p>This will properly create the dataclasses from the JSON using the marshmallow library in python.</p></div>
             
-                <p>Content: <p>To achieve this, you can use the marshmallow library to define a schema for your JSON data and then deserialize it into dataclasses. First, you'd need to install the required packages:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this, you can use the marshmallow library to define a schema for your JSON data and then deserialize it into dataclasses. First, you'd need to install the required packages:</p>
 <pre><code class="language-bash">pip install marshmallow marshmallow-dataclass
 </code></pre>
 <p>Here's how you'd define dataclasses and schemas using the marshmallow library:</p>
@@ -392,14 +409,14 @@ json_data = {
 schema = CustomerSchema(unknown=EXCLUDE)
 customer = schema.load(json_data)
 </code></pre>
-<p>This will create and populate a <code>Customer</code> dataclass from the provided JSON data, using the marshmallow library to handle field types and conversions.</p></p>
-                <hr/>
+<p>This will create and populate a <code>Customer</code> dataclass from the provided JSON data, using the marshmallow library to handle field types and conversions.</p></div>
             
-                <p>Content: <p>To achieve this, you can follow these steps:
-1. Install the marshmallow library if you haven't already by running <code>pip install marshmallow</code>.
-2. Import the necessary modules.
-3. Define your data model using Python dataclasses.
-4. Define the corresponding schemas for each of your data classes using marshmallow's dataclass.Schema.
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this, you can follow these steps:<br />
+1. Install the marshmallow library if you haven't already by running <code>pip install marshmallow</code>.<br />
+2. Import the necessary modules.<br />
+3. Define your data model using Python dataclasses.<br />
+4. Define the corresponding schemas for each of your data classes using marshmallow's dataclass.Schema.<br />
 5. Load the JSON data using the schema.</p>
 <p>Here's an example of how you can do this:</p>
 <pre><code class="language-python">import json
@@ -454,8 +471,7 @@ try:
 except ValidationError as err:
     print(f&quot;Validation error: {err}&quot;)
 </code></pre>
-<p>This code will create the <code>Order</code> and <code>Person</code> data classes with <code>marshmallow</code> schemas and load the provided JSON data into a Person object. The <code>date_of_birth</code> and <code>created</code> fields will be converted to <code>datetime.date</code> and <code>datetime</code> objects respectively, while the <code>amount</code> field will be a <code>decimal.Decimal</code> object.</p></p>
-                <hr/>
+<p>This code will create the <code>Order</code> and <code>Person</code> data classes with <code>marshmallow</code> schemas and load the provided JSON data into a Person object. The <code>date_of_birth</code> and <code>created</code> fields will be converted to <code>datetime.date</code> and <code>datetime</code> objects respectively, while the <code>amount</code> field will be a <code>decimal.Decimal</code> object.</p></div>
             
         </main>
     </body>

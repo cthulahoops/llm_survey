@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/lizpreciatior/lzlv-70b-fp16-hf</h1>
             <p>Model: openrouter/lizpreciatior/lzlv-70b-fp16-hf</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Install the marshmallow library if you haven't already:</li>
 </ol>
@@ -358,10 +375,10 @@ print(user_dict)
    ]
 }
 </code></pre>
-<p>Now the <code>date_of_birth</code> is a <code>datetime.date</code>, <code>created</code> is a <code>datetime.datetime</code>, and <code>amount</code> is a <code>decimal.Decimal</code>.</p></p>
-                <hr/>
+<p>Now the <code>date_of_birth</code> is a <code>datetime.date</code>, <code>created</code> is a <code>datetime.datetime</code>, and <code>amount</code> is a <code>decimal.Decimal</code>.</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data using the marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>Install marshmallow library:</li>
 </ol>
@@ -434,10 +451,10 @@ print(person)
 </code></pre>
 <p>When you run the script, you should see the PersonModel dataclass instance with the loaded data from the JSON:</p>
 <pre><code class="language-python">PersonModel(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[OrderModel(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>Install marshmallow:</li>
 </ol>
@@ -504,8 +521,7 @@ print(user)
 <p>This should output:</p>
 <pre><code class="language-python">User(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
 </code></pre>
-<p>Note: The <code>post_load</code> method is necessary to convert the <code>date_of_birth</code> and <code>created</code> strings to <code>datetime</code> and <code>date</code> objects, respectively, and to convert the <code>amount</code> string to a <code>Decimal</code> object.</p></p>
-                <hr/>
+<p>Note: The <code>post_load</code> method is necessary to convert the <code>date_of_birth</code> and <code>created</code> strings to <code>datetime</code> and <code>date</code> objects, respectively, and to convert the <code>amount</code> string to a <code>Decimal</code> object.</p></div>
             
         </main>
     </body>

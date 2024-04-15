@@ -247,84 +247,100 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openrouter/cinematika-7b:free</h1>
             <p>Model: openrouter/openrouter/cinematika-7b:free</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
 <p>from marshmallow import Schema, fields</p>
-<p>class UserSchema(Schema):
-  first_name = fields.Str()
-  last_name = fields.Str()
-  date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+  first_name = fields.Str()<br />
+  last_name = fields.Str()<br />
+  date_of_birth = fields.Date()<br />
   orders = fields.List(fields.Nested('OrderSchema'))</p>
-<p>class OrderSchema(Schema):
-  created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+  created = fields.DateTime()<br />
   amount = fields.Decimal()</p>
 <p>user_schema = UserSchema().load({'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]})</p>
 <p>print(user_schema.data)</p>
-<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></p>
-                <hr/>
+<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
 <p>from marshmallow import Schema, fields</p>
-<p>class UserSchema(Schema):
-  first_name = fields.Str()
-  last_name = fields.Str()
-  date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+  first_name = fields.Str()<br />
+  last_name = fields.Str()<br />
+  date_of_birth = fields.Date()<br />
   orders = fields.List(fields.Nested('OrderSchema'))</p>
-<p>class OrderSchema(Schema):
-  created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+  created = fields.DateTime()<br />
   amount = fields.Decimal()</p>
 <p>user_schema = UserSchema().load({'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]})</p>
 <p>print(user_schema.data)</p>
-<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></p>
-                <hr/>
+<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
 <p>from marshmallow import Schema, fields</p>
-<p>class UserSchema(Schema):
-  first_name = fields.Str()
-  last_name = fields.Str()
-  date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+  first_name = fields.Str()<br />
+  last_name = fields.Str()<br />
+  date_of_birth = fields.Date()<br />
   orders = fields.List(fields.Nested('OrderSchema'))</p>
-<p>class OrderSchema(Schema):
-  created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+  created = fields.DateTime()<br />
   amount = fields.Decimal()</p>
 <p>user_schema = UserSchema().load({'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]})</p>
 <p>print(user_schema.data)</p>
-<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></p>
-                <hr/>
+<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
+                <p>Response 4.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
 <p>from marshmallow import Schema, fields</p>
-<p>class UserSchema(Schema):
-  first_name = fields.Str()
-  last_name = fields.Str()
-  date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+  first_name = fields.Str()<br />
+  last_name = fields.Str()<br />
+  date_of_birth = fields.Date()<br />
   orders = fields.List(fields.Nested('OrderSchema'))</p>
-<p>class OrderSchema(Schema):
-  created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+  created = fields.DateTime()<br />
   amount = fields.Decimal()</p>
 <p>user_schema = UserSchema().load({'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]})</p>
 <p>print(user_schema.data)</p>
-<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></p>
-                <hr/>
+<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
+                <p>Response 5.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you can use the marshmallow library to generate dataclasses from a JSON string:</p>
 <p>from marshmallow import Schema, fields</p>
-<p>class UserSchema(Schema):
-  first_name = fields.Str()
-  last_name = fields.Str()
-  date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+  first_name = fields.Str()<br />
+  last_name = fields.Str()<br />
+  date_of_birth = fields.Date()<br />
   orders = fields.List(fields.Nested('OrderSchema'))</p>
-<p>class OrderSchema(Schema):
-  created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+  created = fields.DateTime()<br />
   amount = fields.Decimal()</p>
 <p>user_schema = UserSchema().load({'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': '2024-01-25T15:00:04', 'amount': '100.00'}]})</p>
 <p>print(user_schema.data)</p>
-<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></p>
-                <hr/>
+<p>This will create a UserSchema and an OrderSchema, which you can use to validate and serialize your data. The UserSchema has fields for the user's first name, last name, date of birth, and a list of OrderSchema objects, which represent the user's orders. The OrderSchema has fields for the order's creation date and amount.</p></div>
             
         </main>
     </body>

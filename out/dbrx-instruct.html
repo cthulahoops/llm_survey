@@ -247,17 +247,34 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/databricks/dbrx-instruct</h1>
             <p>Model: openrouter/databricks/dbrx-instruct</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: </p>
-                <hr/>
+                <p>Response 1.</p>
+                <div class="markdown-body"></div>
             
-                <p>Content: </p>
-                <hr/>
+                <p>Response 2.</p>
+                <div class="markdown-body"></div>
             
-                <p>Content: <p>:
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>:<br />
 First, you need to install the <code>marshmallow</code> and <code>marshmallow-dataclass</code> libraries if you haven't already. You can do this using pip:</p>
 <pre><code class="language-bash">pip install marshmallow marshmallow-dataclass
 </code></pre>
@@ -320,8 +337,7 @@ class User:
 user_schema = class_schema(User)
 user_obj = user_schema.loads(user_data)
 </code></pre>
-<p>This will give you an instance of the <code>User</code> dataclass, with the <code>date_of_birth</code> field as a <code>date</code> object and the <code>orders</code> field as a list of <code>Order</code> objects, with <code>created</code> as a <code>datetime</code> object and <code>amount</code> as a <code>decimal.Decimal</code> object.</p></p>
-                <hr/>
+<p>This will give you an instance of the <code>User</code> dataclass, with the <code>date_of_birth</code> field as a <code>date</code> object and the <code>orders</code> field as a list of <code>Order</code> objects, with <code>created</code> as a <code>datetime</code> object and <code>amount</code> as a <code>decimal.Decimal</code> object.</p></div>
             
         </main>
     </body>

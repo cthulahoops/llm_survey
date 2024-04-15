@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-hermes-yi-34b</h1>
             <p>Model: openrouter/nousresearch/nous-hermes-yi-34b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can generate dataclasses from JSON data using the marshmallow library. First, you need to define a marshmallow schema for your data. Then, you can use the <code>dataclass_from_schema</code> function from the <code>datasets</code> module to automatically generate dataclasses for your schema.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can generate dataclasses from JSON data using the marshmallow library. First, you need to define a marshmallow schema for your data. Then, you can use the <code>dataclass_from_schema</code> function from the <code>datasets</code> module to automatically generate dataclasses for your schema.</p>
 <p>Here is the code to perform this task:</p>
 <pre><code class="language-python">from typing import List
 from datetime import datetime
@@ -306,10 +323,10 @@ person_dict = asdict(class_to_use(first_name=person.get(&quot;first_name&quot;),
 print(person_dict)
 </code></pre>
 <p>This code snippet will generate two dataclasses <code>Person</code> and <code>Order</code>, which can be used to convert JSON data into python dataclasses and vice versa. The <code>Person</code> dataclass will have a <code>date_of_birth</code> attribute of type <code>datetime</code>, and the <code>Order</code> dataclass will have a <code>created</code> attribute of type <code>datetime</code> and an <code>amount</code> attribute of type <code>Decimal</code>.</p>
-<p>There are also validation functions implemented in the schema classes <code>PersonSchema</code> and <code>OrderSchema</code> to ensure that the JSON data is correctly formatted for the respective dataclasses.</p></p>
-                <hr/>
+<p>There are also validation functions implemented in the schema classes <code>PersonSchema</code> and <code>OrderSchema</code> to ensure that the JSON data is correctly formatted for the respective dataclasses.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON schema using Marshmallow, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON schema using Marshmallow, you can follow these steps:</p>
 <ol>
 <li>First, install Marshmallow if you haven't already. You can do this by running the following command:</li>
 </ol>
@@ -387,10 +404,10 @@ data = {
 # Generate person instance
 person = PersonSchema().load(data)
 </code></pre>
-<p>The code above will generate a <code>Person</code> instance with the desired dataclasses and their associated values from the provided JSON schema. Additionally, it'll ensure that the values are properly converted to the correct data types (date, datetime, decimal).</p></p>
-                <hr/>
+<p>The code above will generate a <code>Person</code> instance with the desired dataclasses and their associated values from the provided JSON schema. Additionally, it'll ensure that the values are properly converted to the correct data types (date, datetime, decimal).</p></div>
             
-                <p>Content: <p>To generate classes for your JSON data you can use <code>attrs</code> package along with <code>jsonschema</code> package which can infer classes from data, then <code>attrs</code> can be used to add attributes to each class.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate classes for your JSON data you can use <code>attrs</code> package along with <code>jsonschema</code> package which can infer classes from data, then <code>attrs</code> can be used to add attributes to each class.</p>
 <p>Here's how you can use the packages:</p>
 <ol>
 <li>First, install the necessary packages using pip:</li>
@@ -519,55 +536,54 @@ def infer_python_types_from_schema(schema):
 <ol>
 <li>Finally, you can validate and convert the data using:</li>
 </ol>
-<p>```python
-from metadata.SchemaKeyDataclass import SchemaKeyDataclass
-from metadata.UnionDataclass import UnionDataclass
-from attributes.AttributeFieldClass import AttributeFieldClass
-from attributes.UnionBaseClass import UnionBaseClass
-from metadata.JSONinfo import JSONinfo
+<p>```python<br />
+from metadata.SchemaKeyDataclass import SchemaKeyDataclass<br />
+from metadata.UnionDataclass import UnionDataclass<br />
+from attributes.AttributeFieldClass import AttributeFieldClass<br />
+from attributes.UnionBaseClass import UnionBaseClass<br />
+from metadata.JSONinfo import JSONinfo<br />
 from metadata import info</p>
 <h1>Example JSON data you would like to convert</h1>
-<p>data = {
-    "first_name": "Jane",
-    "last_name": "Smith",
-    "date_of_birth": "1977-03-16T15:00:04",
-    "orders": [
-        {
-            "created": "2024-01-25T15:00:04",
-            "amount": "100.00"
-        }
-    ]
+<p>data = {<br />
+    "first_name": "Jane",<br />
+    "last_name": "Smith",<br />
+    "date_of_birth": "1977-03-16T15:00:04",<br />
+    "orders": [<br />
+        {<br />
+            "created": "2024-01-25T15:00:04",<br />
+            "amount": "100.00"<br />
+        }<br />
+    ]<br />
 }</p>
 <h1>Get JSON schema from JSON data</h1>
-<p>info = JSONinfo(data)
+<p>info = JSONinfo(data)<br />
 schema = info.create_schema()</p>
 <h1>Get Python dataclass</h1>
-<p>class PythonDataclass(SchemaKeyDataclass):
-    def <strong>init</strong>(self) -&gt; None:
+<p>class PythonDataclass(SchemaKeyDataclass):<br />
+    def <strong>init</strong>(self) -&gt; None:<br />
         super().<strong>init</strong>()</p>
 <pre><code>@property
 def schema(self):
     return Draft7Validator(schema, resolver).Meta.schema
 </code></pre>
-<p>jsonclass = PythonDataclass('root', metadata=SchemaKeyDataclass(
-    'root', **infer_types(infer_python_types_from_schema(info.schema))
+<p>jsonclass = PythonDataclass('root', metadata=SchemaKeyDataclass(<br />
+    'root', **infer_types(infer_python_types_from_schema(info.schema))<br />
 ))</p>
 <h1>Validate and convert data</h1>
-<p>data = jsonclass.default()
-for attribute in reversed(tuple(jsonclass.<strong>init</strong>.<strong>code</strong>.co_varnames[:1] +
-                                  (key for key in jsonclass.<strong>dict</strong>.keys()
-                                   if key.startswith('_')))) + tuple(
-                                   param.name
-                                   for param in jsonclass.<strong>init</strong>.<strong>code</strong>
-                                   .co_varnames[1:]):
-    if attribute not in jsonclass.<strong>dict</strong> and attribute not in ('<strong>module</strong>',
-                                                                 '<strong>dict</strong>') and attribute not in ('<strong>weakref</strong>',):
-        info = JSONinfo(data[attribute])
-        derive_schema(jsonclass.<strong>dict</strong>[attribute], info)
+<p>data = jsonclass.default()<br />
+for attribute in reversed(tuple(jsonclass.<strong>init</strong>.<strong>code</strong>.co_varnames[:1] +<br />
+                                  (key for key in jsonclass.<strong>dict</strong>.keys()<br />
+                                   if key.startswith('_')))) + tuple(<br />
+                                   param.name<br />
+                                   for param in jsonclass.<strong>init</strong>.<strong>code</strong><br />
+                                   .co_varnames[1:]):<br />
+    if attribute not in jsonclass.<strong>dict</strong> and attribute not in ('<strong>module</strong>',<br />
+                                                                 '<strong>dict</strong>') and attribute not in ('<strong>weakref</strong>',):<br />
+        info = JSONinfo(data[attribute])<br />
+        derive_schema(jsonclass.<strong>dict</strong>[attribute], info)<br />
         data[attribute] = _info.create_schema()</p>
 <h1>Final data</h1>
-<p>converted_data = PythonDataclass(schema, **data)</p></p>
-                <hr/>
+<p>converted_data = PythonDataclass(schema, **data)</p></div>
             
         </main>
     </body>

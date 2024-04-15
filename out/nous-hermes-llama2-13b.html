@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-hermes-llama2-13b</h1>
             <p>Model: openrouter/nousresearch/nous-hermes-llama2-13b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given json, you can use the <code>marshmallow</code> library in Python. Here is an example code that shows how to achieve this:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given json, you can use the <code>marshmallow</code> library in Python. Here is an example code that shows how to achieve this:</p>
 <pre><code class="language-python">from marshmallow import fields, Schema
 import datetime
 class PersonSchema(Schema):
@@ -298,10 +315,10 @@ print(person_data)
   )]
 )
 </code></pre>
-<p>As you can see, the <code>marshmallow</code> library has generated a <code>Person</code> and an <code>Order</code> class based on the given json. The <code>Person</code> class has <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and <code>orders</code> fields, while the <code>Order</code> class has <code>created</code>, and <code>amount</code> fields. The <code>date_of_birth</code> field has been converted to a date object, while the <code>created</code> field has been converted to a datetime object. The <code>amount</code> field has been converted to a decimal.</p></p>
-                <hr/>
+<p>As you can see, the <code>marshmallow</code> library has generated a <code>Person</code> and an <code>Order</code> class based on the given json. The <code>Person</code> class has <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and <code>orders</code> fields, while the <code>Order</code> class has <code>created</code>, and <code>amount</code> fields. The <code>date_of_birth</code> field has been converted to a date object, while the <code>created</code> field has been converted to a datetime object. The <code>amount</code> field has been converted to a decimal.</p></div>
             
-                <p>Content: <p>Here's how you can define the dataclasses using the Marshmallow library in Python:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here's how you can define the dataclasses using the Marshmallow library in Python:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate
 
 
@@ -332,10 +349,10 @@ class OrderSchema(Schema):
 user = UserSchema().load(user_data)
 orders = user['orders'][0]
 </code></pre>
-<p>The dataclasses are now populated with the data from the json.</p></p>
-                <hr/>
+<p>The dataclasses are now populated with the data from the json.</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data using Marshmallow, you can use the <code>marshmallow_dataclass</code> package. Here's an example of how you can define the dataclasses for the given JSON data:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data using Marshmallow, you can use the <code>marshmallow_dataclass</code> package. Here's an example of how you can define the dataclasses for the given JSON data:</p>
 <pre><code class="language-python">from marshmallow_dataclass import dataclass
 import datetime
 
@@ -373,8 +390,7 @@ person = Person(**data)
 </code></pre>
 <p>In this example, we defined two dataclasses - <code>Person</code> and <code>Order</code>. The <code>Person</code> class has properties for <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a single <code>Order</code> instance. The <code>Order</code> class has properties for <code>created</code>, which is a <code>datetime.datetime</code>, and <code>amount</code>, which is a <code>float</code>.</p>
 <p>We then loaded the JSON data and initialized the <code>Person</code> dataclass with the given data. Note that we had to convert the <code>date_of_birth</code> string to a <code>datetime.date</code> object before initializing the <code>Person</code> dataclass.</p>
-<p>This is a basic example, but you can customize the dataclasses based on your specific requirements.</p></p>
-                <hr/>
+<p>This is a basic example, but you can customize the dataclasses based on your specific requirements.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/gryphe/mythomax-l2-13b</h1>
             <p>Model: openrouter/gryphe/mythomax-l2-13b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here are the dataclasses generated using Marshmallow:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here are the dataclasses generated using Marshmallow:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 
 class PersonSchema(Schema):
@@ -301,10 +318,10 @@ for order in person_data['orders']:
     ]
 }
 {'created': '2024-01-25T15:00:04', 'amount': '100.00'}
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library in Python to convert the JSON data into Python dataclasses. Here's an example of how you can do it:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library in Python to convert the JSON data into Python dataclasses. Here's an example of how you can do it:</p>
 <pre><code class="language-python">from marshmallow import fields, Schema, post_load
 from marshmallow_datetime import Date, DateTime
 
@@ -348,10 +365,10 @@ for person in persons:
 <p>This code defines two <code>Schema</code> classes, <code>PersonSchema</code> and <code>OrderSchema</code>, based on the JSON data you provided. The <code>PersonSchema</code> class has fields for <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>, and the <code>OrderSchema</code> class has fields for <code>created</code> and <code>amount</code>.</p>
 <p>The <code>make_person()</code> and <code>make_order()</code> methods are used for post-processing the loaded data. The <code>make_person()</code> method simply returns the loaded data, and the <code>make_order()</code> method returns the loaded data.</p>
 <p>Finally, the JSON data is loaded into a list of <code>Person</code> objects using the <code>PersonSchema().dump()</code> method. The <code>dump()</code> method converts Python dataclasses to JSON format. The resulting list of <code>Person</code> objects is then printed to the console.</p>
-<p>Note that this code also formats the <code>date_of_birth</code> field as a date object using the <code>marshmallow_datetime</code> module. The <code>date_format</code> argument is used to specify the format of the date string in the JSON data.</p></p>
-                <hr/>
+<p>Note that this code also formats the <code>date_of_birth</code> field as a date object using the <code>marshmallow_datetime</code> module. The <code>date_format</code> argument is used to specify the format of the date string in the JSON data.</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library in Python to create dataclasses from the given JSON data. Here's an example code:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library in Python to create dataclasses from the given JSON data. Here's an example code:</p>
 <pre><code class="language-python">from marshmallow import Shape, fields, validate, EXCLUDE, Schema, dataclass
 
 class PersonSchema(Shape):
@@ -384,8 +401,7 @@ person = Person(**json_data)
 print(person)
 </code></pre>
 <p>In the above code, we have created two schemas: <code>PersonSchema</code> and <code>OrderSchema</code>. The <code>PersonSchema</code> defines the structure of a person object, including their <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a list of <code>orders</code>. The <code>OrderSchema</code> defines the structure of an order object, including its <code>created</code> date and time, and the <code>amount</code> spent.</p>
-<p>We then define a <code>Person</code> dataclass that inherits from the <code>PersonSchema</code>, and a <code>Order</code> dataclass that inherits from the <code>OrderSchema</code>. Finally, we create a <code>person</code> object using the given JSON data and print it out.</p></p>
-                <hr/>
+<p>We then define a <code>Person</code> dataclass that inherits from the <code>PersonSchema</code>, and a <code>Order</code> dataclass that inherits from the <code>OrderSchema</code>. Finally, we create a <code>person</code> object using the given JSON data and print it out.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/palm-2-chat-bison</h1>
             <p>Model: openrouter/google/palm-2-chat-bison</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Sure, here's what your dataclasses look like using the marshmallow library in Python:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Sure, here's what your dataclasses look like using the marshmallow library in Python:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from marshmallow import Schema, fields
 
@@ -281,10 +298,10 @@ class PersonSchema(Schema):
     date_of_birth = fields.Date()
     orders = fields.Nested(OrderSchema, many=True)
 </code></pre>
-<p>With these dataclasses, you can easily parse JSON objects into data objects, and also dump data objects to JSON.</p></p>
-                <hr/>
+<p>With these dataclasses, you can easily parse JSON objects into data objects, and also dump data objects to JSON.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you would generate dataclasses for the provided JSON using Marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you would generate dataclasses for the provided JSON using Marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -314,10 +331,10 @@ user = UserSchema().load({
     ]
 })
 </code></pre>
-<p>I hope this example helps!</p></p>
-                <hr/>
+<p>I hope this example helps!</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you would generate dataclasses for the provided JSON using Marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you would generate dataclasses for the provided JSON using Marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -347,8 +364,7 @@ user = UserSchema().load({
     ]
 })
 </code></pre>
-<p>I hope this example helps!</p></p>
-                <hr/>
+<p>I hope this example helps!</p></div>
             
         </main>
     </body>

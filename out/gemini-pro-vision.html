@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/gemini-pro-vision</h1>
             <p>Model: openrouter/google/gemini-pro-vision</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <pre><code class="language-python">from datetime import date, datetime
+                <p>Response 1.</p>
+                <div class="markdown-body"><pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 
 from marshmallow import Schema, fields, post_load
@@ -293,10 +310,10 @@ data = {
 }
 
 person = person_schema.load(data)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code>import marshmallow_dataclass
+                <p>Response 2.</p>
+                <div class="markdown-body"><pre><code>import marshmallow_dataclass
 from marshmallow import fields
 import marshmallow
 import datetime
@@ -336,10 +353,10 @@ class DecimalField(fields.Field):
             return value
         else:
             raise marshmallow.ValidationError('Invalid type for DecimalField.')
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">import decimal
+                <p>Response 3.</p>
+                <div class="markdown-body"><pre><code class="language-python">import decimal
 from datetime import datetime
 from marshmallow import Schema, fields, post_load
 
@@ -381,8 +398,7 @@ customer = CustomerSchema().load(
         ],
     }
 )
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

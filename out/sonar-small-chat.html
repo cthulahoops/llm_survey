@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/perplexity/sonar-small-chat</h1>
             <p>Model: openrouter/perplexity/sonar-small-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library to create dataclasses for the given JSON. First, you need to import the required libraries:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library to create dataclasses for the given JSON. First, you need to import the required libraries:</p>
 <pre><code class="language-python">import datetime
 from dataclasses import dataclass
 from marshmallow import fields, post_load, validates
@@ -306,10 +323,10 @@ class MyData:
 
 json_data = ma.load(json_text, MyData, context={**{Formulate: True}})
 </code></pre>
-<p>The <code>MyData</code> class is the dataclass for the JSON and handles the conversion of date_of_birth and created fields using the <code>post_load</code> decorator. The <code>Schema</code> class defines the schema for the JSON object and uses the Decimal and Function types to validate and serialize the value of each field. Finally, the <code>ma.load</code> function deserializes the JSON text, resulting in a <code>MyData</code> object.</p></p>
-                <hr/>
+<p>The <code>MyData</code> class is the dataclass for the JSON and handles the conversion of date_of_birth and created fields using the <code>post_load</code> decorator. The <code>Schema</code> class defines the schema for the JSON object and uses the Decimal and Function types to validate and serialize the value of each field. Finally, the <code>ma.load</code> function deserializes the JSON text, resulting in a <code>MyData</code> object.</p></div>
             
-                <p>Content: <p>To define dataclasses and use them with the Marshmallow library, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To define dataclasses and use them with the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Import the necessary modules and create the dataclass using the <code>@dataclass</code> decorator from the <code>dataclasses</code> module.</li>
 <li>Create a private class for the JSON structure and use the <code>@dataclass</code> decorator again.</li>
@@ -354,10 +371,10 @@ class JsonSchema(Schema):
 
 json_structure = JsonStructure()
 </code></pre>
-<p>Now you can use the <code>json_structure</code> object to serialize and deserialize JSON data using the Marshmallow schema.</p></p>
-                <hr/>
+<p>Now you can use the <code>json_structure</code> object to serialize and deserialize JSON data using the Marshmallow schema.</p></div>
             
-                <p>Content: <p>You can achieve this by using the marshmallow library in Python.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can achieve this by using the marshmallow library in Python.</p>
 <p>First, you need to import the necessary modules and establish a schema.</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
@@ -400,8 +417,7 @@ data = ...
 
 parsed_json = User.load(data).json()  # Output: {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '1977-03-16', 'orders': [{'created': '2024-01-25 15:00:04', 'amount': '100.00'}]}
 </code></pre>
-<p>For more in-depth marshmallow examples, please refer to the <a href="https://docs.marshmallow-code.readthedocs.io/en/latest/">documentation</a>.</p></p>
-                <hr/>
+<p>For more in-depth marshmallow examples, please refer to the <a href="https://docs.marshmallow-code.readthedocs.io/en/latest/">documentation</a>.</p></div>
             
         </main>
     </body>

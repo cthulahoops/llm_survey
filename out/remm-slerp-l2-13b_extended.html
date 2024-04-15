@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/undi95/remm-slerp-l2-13b:extended</h1>
             <p>Model: openrouter/undi95/remm-slerp-l2-13b:extended</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To accomplish this using Marshmallow, you would need to define two custom dataclasses that match the <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, <code>orders</code>, and their respective nested fields. Here's an example implementation:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To accomplish this using Marshmallow, you would need to define two custom dataclasses that match the <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, <code>orders</code>, and their respective nested fields. Here's an example implementation:</p>
 <pre><code class="language-python">from datetime import datetime
 from marshmallow import Schema, fields, post_load, post_dump, ValidationError
 
@@ -281,47 +298,47 @@ Person.orders.post_load = __post_load_orders
 Person.orders.post_dump = __post_dump_orders
 </code></pre>
 <p>With this implementation, you can now deserialize the given JSON into a <code>Person</code> object:</p>
-<p>```python
-json_data = {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth</p></p>
-                <hr/>
+<p>```python<br />
+json_data = {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth</p></div>
             
-                <p>Content: <p>You can use Marshmallow's <code>fields</code> module to define the expected data types for each field in the JSON response, and then use the <code>AutoSchema</code> class to automatically generate the dataclasses based on the schema. Here's an example code snippet that does this:</p>
-<p>```python
-import marshmallow
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use Marshmallow's <code>fields</code> module to define the expected data types for each field in the JSON response, and then use the <code>AutoSchema</code> class to automatically generate the dataclasses based on the schema. Here's an example code snippet that does this:</p>
+<p>```python<br />
+import marshmallow<br />
 from marshmallow import fields</p>
-<p>class CustomerSchema(marshmallow.Schema):
-    class Meta:
+<p>class CustomerSchema(marshmallow.Schema):<br />
+    class Meta:<br />
         unknown = marshmallow.EXCLUDE</p>
 <pre><code>first_name = marshmallow.fields.Str(required=True)
 last_name = marshmallow.fields.Str(required=True)
 date_of_birth = marshmallow.fields.Date(format='%m/%d/%Y')
 orders = marshmallow.fields.Nested('OrderSchema')
 </code></pre>
-<p>class OrderSchema(marshmallow.Schema):
-    class Meta:
+<p>class OrderSchema(marshmallow.Schema):<br />
+    class Meta:<br />
         unknown = marshmallow.EXCLUDE</p>
 <pre><code>created = marshmallow.fields.DateTime()
 amount = marshmallow.fields.Decimal(required=True, places=2)
 </code></pre>
-<p>customers = [
-    {
-        'first_name': 'Jane',
-        'last_name': 'Smith',
-        'date_of_birth': '03/16/1977',
-        'orders': [
-            {
-                'created': '2024-01-25T15:00:04',
-                'amount': '100.00'
-            }
-        ]
-    }
+<p>customers = [<br />
+    {<br />
+        'first_name': 'Jane',<br />
+        'last_name': 'Smith',<br />
+        'date_of_birth': '03/16/1977',<br />
+        'orders': [<br />
+            {<br />
+                'created': '2024-01-25T15:00:04',<br />
+                'amount': '100.00'<br />
+            }<br />
+        ]<br />
+    }<br />
 ]</p>
-<p>data = marshmallow.validate(customers, CustomerSchema(many=True))
-for customer in data:
-    print(customer)</p></p>
-                <hr/>
+<p>data = marshmallow.validate(customers, CustomerSchema(many=True))<br />
+for customer in data:<br />
+    print(customer)</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data using Marshmallow, you can use the <code>DataClassSerializer</code> class provided by the library. Here's an example:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data using Marshmallow, you can use the <code>DataClassSerializer</code> class provided by the library. Here's an example:</p>
 <pre><code class="language-python">from marshmallow import DataClassSerializer, fields, ValidationError
 
 # Define custom dataclasses
@@ -355,10 +372,10 @@ except ValidationError as e:
 # Output: Person object with loaded data
 print(person)
 </code></pre>
-<p>In this example, I've used two custom dataclasses: <code>Person</code> and <code>Order</code>. The <code>Person</code> class has two attributes (<code>first_name</code> and <code>last_name</code>) that are ordinary strings</p></p>
-                <hr/>
+<p>In this example, I've used two custom dataclasses: <code>Person</code> and <code>Order</code>. The <code>Person</code> class has two attributes (<code>first_name</code> and <code>last_name</code>) that are ordinary strings</p></div>
             
-                <p>Content: <p>You can use the <code>dataclasses-json</code> package to convert this JSON data into Python dataclasses. Here's an example:</p>
+                <p>Response 4.</p>
+                <div class="markdown-body"><p>You can use the <code>dataclasses-json</code> package to convert this JSON data into Python dataclasses. Here's an example:</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
 from marshmallow import dataclass, fields, Schema
@@ -387,10 +404,10 @@ for person in schema.load(persons)
 <p>Output:</p>
 <pre><code class="language-python">{'date_of_birth': datetime.datetime(1977, 12, 1, 3, 0, 0), 'first_name': 'Jane', 'last_name': 'Smith', 'orders': [{'created': datetime.datetime(2024, 1, 25, 15, 0, 4), 'amount': Decimal('100.00')}]}
 </code></pre>
-<p>In this example, we define two dataclasses <code>PersonSchema</code> and <code>OrderSchema</code>, where <code>PersonSchema</code> has a nested list of `OrderSchema</p></p>
-                <hr/>
+<p>In this example, we define two dataclasses <code>PersonSchema</code> and <code>OrderSchema</code>, where <code>PersonSchema</code> has a nested list of `OrderSchema</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow</code> library in Python along with its <code>dataclasses_reland</code> extension to convert the JSON data into Python dataclasses. Here's an example code that does that:</p>
+                <p>Response 5.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow</code> library in Python along with its <code>dataclasses_reland</code> extension to convert the JSON data into Python dataclasses. Here's an example code that does that:</p>
 <pre><code class="language-python">from marshmallow import (
     Schema,
     fields,
@@ -441,13 +458,13 @@ def create_order(**data):
 <p>Now, you can use these schemas to convert the JSON data into Python dataclasses. For example:</p>
 <p>```python</p>
 <h1>JSON data</h1>
-<p>json_data = {
-    "first_name": "Jane",
-    "last_name": "Smith",
-    "date_of_birth":</p></p>
-                <hr/>
+<p>json_data = {<br />
+    "first_name": "Jane",<br />
+    "last_name": "Smith",<br />
+    "date_of_birth":</p></div>
             
-                <p>Content: <p>Sure, here's an example implementation using Marshmallow:</p>
+                <p>Response 6.</p>
+                <div class="markdown-body"><p>Sure, here's an example implementation using Marshmallow:</p>
 <pre><code class="language-python">from marshmallow import fields, Schema, post_load
 
 class UserSchema(Schema):
@@ -476,8 +493,7 @@ class Order:
 </code></pre>
 <p>In this example, we define two dataclasses: <code>User</code> and <code>Order</code>. The <code>User</code> class has a list of <code>Order</code> objects as an attribute. The <code>Order</code> class has fields for <code>created</code> (a datetime object) and <code>amount</code> (a float).</p>
 <p>The <code>UserSchema</code> is a subclass of <code>Schema</code> and defines the user's name, date of birth, and a list of orders. The interface is quite similar to the original JSON structure. The <code>date_of_birth</code> field is marked as <code>dump_only</code> to indicate that it should not be included in the generated JSON output.</p>
-<p>The <code>OrderSchema</code> defines the fields for an individual order object, including a creation datetime and amount. Like <code>UserSchema</code>, the `Order</p></p>
-                <hr/>
+<p>The <code>OrderSchema</code> defines the fields for an individual order object, including a creation datetime and amount. Like <code>UserSchema</code>, the `Order</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-2.1</h1>
             <p>Model: openrouter/anthropic/claude-2.1</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 import datetime
 from decimal import Decimal
@@ -308,10 +325,10 @@ print(person)
 <li>Add post_load methods to the Schemas to construct the dataclasses</li>
 <li>marshmallow will handle the conversion from strings to objects</li>
 </ul>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from decimal import Decimal
 from datetime import date, datetime
@@ -359,10 +376,10 @@ print(user)
 <li>Use custom fields like Date, DateTime and Decimal to parse the strings into right types</li>
 <li>Call .load() on the UserSchema to parse the dict into a User dataclass</li>
 </ul>
-<p>Let me know if any part needs more explanation!</p></p>
-                <hr/>
+<p>Let me know if any part needs more explanation!</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 import datetime
 from decimal import Decimal
@@ -407,8 +424,7 @@ print(user)
 <li>Override the field types to get correct Python types</li>
 <li>Deserialize the JSON into a User dataclass</li>
 </ul>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
         </main>
     </body>

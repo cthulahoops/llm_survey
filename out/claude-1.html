@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-1</h1>
             <p>Model: openrouter/anthropic/claude-1</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here's how you can generate dataclasses from that JSON using marshmallow:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here's how you can generate dataclasses from that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -299,10 +316,10 @@ assert person.orders[0].amount == Decimal('100.00')
 <li>Loads the JSON data into the PersonSchema</li>
 <li>Asserts that the data was properly deserialized into the dataclasses, with the correct types</li>
 </ul>
-<p>So this allows you to easily translate JSON into rich Python dataclasses with validation and typing. Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>So this allows you to easily translate JSON into rich Python dataclasses with validation and typing. Let me know if you have any other questions!</p></div>
             
-                <p>Content: <p>Here's how you can do this using marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here's how you can do this using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -355,10 +372,10 @@ assert person == Person(
 <li>Creates a marshmallow schema for the Person dataclass</li>
 <li>Loads the raw JSON data using the schema, asserting that the correct types are used.</li>
 </ul>
-<p>So this allows you to easily translate untyped JSON into a typed dataclass object using marshmallow. Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>So this allows you to easily translate untyped JSON into a typed dataclass object using marshmallow. Let me know if you have any other questions!</p></div>
             
-                <p>Content: <p>Here's how you can do this using marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's how you can do this using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -413,8 +430,7 @@ Person(
 <li>The <code>person_schema.loads(json_data)</code> call deserializes the JSON into the dataclasses</li>
 </ul>
 <p>So the <code>person</code> variable will end up with the correct types - <code>date</code> for <code>date_of_birth</code>, <code>datetime</code> for <code>created</code>, and <code>Decimal</code> for <code>amount</code>.</p>
-<p>Let me know if you have any other questions!</p></p>
-                <hr/>
+<p>Let me know if you have any other questions!</p></div>
             
         </main>
     </body>

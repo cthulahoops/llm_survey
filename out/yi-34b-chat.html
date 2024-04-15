@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/01-ai/yi-34b-chat</h1>
             <p>Model: openrouter/01-ai/yi-34b-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -303,10 +320,10 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -358,10 +375,10 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -413,10 +430,10 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 4.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -468,10 +485,10 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 5.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -523,10 +540,10 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
+                <p>Response 6.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON object using the <code>marshmallow</code> library in Python, you'll need to define a schema that can deserialize the JSON data into Python objects. Marshmallow provides a way to create such schemas using <code>fields</code>.</p>
 <p>Here's how you can define a schema for your JSON data:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, ValidationError
 from datetime import date, datetime
@@ -578,8 +595,7 @@ except ValidationError as err:
 <p>In the above code, <code>UserSchema</code> and <code>OrderSchema</code> are defined using <code>fields</code> from marshmallow. The <code>load</code> method is used to deserialize the JSON data into a dictionary, and then the <code>dump</code> method is used to convert the dictionary to a dataclass instance.</p>
 <p>Please note that the <code>dump</code> method is used for serialization, but in this case, we're using it to convert the loaded dictionary into a dataclass instance. This is because <code>dump</code> expects a dictionary, and <code>load</code> returns a dictionary, so we can chain these operations.</p>
 <p>The <code>OrderSchema</code> is nested within the <code>UserSchema</code> because the <code>orders</code> field contains a list of <code>Order</code> objects.</p>
-<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as shown in the example.</p></div>
             
         </main>
     </body>

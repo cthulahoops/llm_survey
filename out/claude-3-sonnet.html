@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-3-sonnet</h1>
             <p>Model: openrouter/anthropic/claude-3-sonnet</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON using the <code>marshmallow</code> library in Python, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON using the <code>marshmallow</code> library in Python, you can follow these steps:</p>
 <ol>
 <li>Install the <code>marshmallow</code> and <code>marshmallow-dataclass</code> libraries:</li>
 </ol>
@@ -280,12 +297,12 @@ class Person:
     date_of_birth: date = fields.Date()
     orders: List[Order] = fields.List(fields.Nested(Order.Schema))
 </code></pre>
-<p>In this code:
-- We define two dataclasses: <code>Order</code> and <code>Person</code>.
-- For each field, we specify the corresponding <code>marshmallow</code> field type.
-- The <code>created</code> field uses <code>fields.DateTime()</code> to represent a datetime object.
-- The <code>amount</code> field uses <code>fields.Decimal()</code> to represent a decimal object.
-- The <code>date_of_birth</code> field uses <code>fields.Date()</code> to represent a date object.
+<p>In this code:<br />
+- We define two dataclasses: <code>Order</code> and <code>Person</code>.<br />
+- For each field, we specify the corresponding <code>marshmallow</code> field type.<br />
+- The <code>created</code> field uses <code>fields.DateTime()</code> to represent a datetime object.<br />
+- The <code>amount</code> field uses <code>fields.Decimal()</code> to represent a decimal object.<br />
+- The <code>date_of_birth</code> field uses <code>fields.Date()</code> to represent a date object.<br />
 - The <code>orders</code> field is a list of <code>Order</code> objects, and we use <code>fields.List(fields.Nested(Order.Schema))</code> to handle the nested structure.</p>
 <ol>
 <li>Load the JSON data into the dataclasses:</li>
@@ -310,10 +327,10 @@ print(person)
 <p>When you run this code, it will output:</p>
 <pre><code>Person(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
 </code></pre>
-<p>The <code>marshmallow</code> library automatically converts the JSON data into the corresponding dataclasses, handling the date, datetime, and decimal types correctly.</p></p>
-                <hr/>
+<p>The <code>marshmallow</code> library automatically converts the JSON data into the corresponding dataclasses, handling the date, datetime, and decimal types correctly.</p></div>
             
-                <p>Content: <p>To define dataclasses and use the Marshmallow library for serialization/deserialization, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To define dataclasses and use the Marshmallow library for serialization/deserialization, you can follow these steps:</p>
 <ol>
 <li>Install the Marshmallow library:</li>
 </ol>
@@ -393,10 +410,10 @@ print(person)
 <p>This will output:</p>
 <pre><code>Person(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
 </code></pre>
-<p>The Marshmallow library automatically handles the conversion of string values to the appropriate data types (<code>date</code>, <code>datetime</code>, <code>Decimal</code>) based on the defined schema fields.</p></p>
-                <hr/>
+<p>The Marshmallow library automatically handles the conversion of string values to the appropriate data types (<code>date</code>, <code>datetime</code>, <code>Decimal</code>) based on the defined schema fields.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you need to create schemas that define the structure of your data. Here's an example of how you can define schemas for the provided JSON data and generate dataclasses:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python, you need to create schemas that define the structure of your data. Here's an example of how you can define schemas for the provided JSON data and generate dataclasses:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -458,8 +475,7 @@ print(customer)
 <p>When loading the JSON data using <code>schema.load(json_data)</code>, the <code>Customer</code> dataclass instance is created with the appropriate data types for each field, including the nested <code>Order</code> objects.</p>
 <p>Note that you need to install the <code>marshmallow</code> and <code>marshmallow_dataclass</code> libraries to use this code:</p>
 <pre><code>pip install marshmallow marshmallow-dataclass
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

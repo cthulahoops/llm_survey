@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mistral-7b-instruct:nitro</h1>
             <p>Model: openrouter/mistralai/mistral-7b-instruct:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To create dataclasses using Marshmallow in Python, you'll first need to define your data classes and then create schemas for them. Here's the step-by-step process based on your provided JSON:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To create dataclasses using Marshmallow in Python, you'll first need to define your data classes and then create schemas for them. Here's the step-by-step process based on your provided JSON:</p>
 <ol>
 <li>Define data classes:</li>
 </ol>
@@ -330,10 +347,10 @@ orders = [Order(&quot;2024-03-20T10:20:00&quot;, 100.5), Order(&quot;2024-04-12T
 customers_orders = CustomerWithOrders(data=[OrderSchema().dump(o) for o in orders], id=&quot;example_id&quot;)
 json_data = customers_orders.json()
 print(json_data)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To create dataclasses and use the Marshmallow library in Python for serializing and deserializing the given JSON data, follow the steps below:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create dataclasses and use the Marshmallow library in Python for serializing and deserializing the given JSON data, follow the steps below:</p>
 <ol>
 <li>First, create the dataclasses using Python's <code>dataclass</code> decorator and include the required fields with their types.</li>
 </ol>
@@ -453,10 +470,10 @@ print(result)
 
 json_data_serialized = root_schema.dump(result)
 print(json_data_serialized)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To create dataclasses with Marshmallow in Python, you first need to define your SQLAlchemy models or Pydantic data classes and then use Marshmallow to define the serializers. Here's an example of how you can accomplish this with your provided JSON structure:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create dataclasses with Marshmallow in Python, you first need to define your SQLAlchemy models or Pydantic data classes and then use Marshmallow to define the serializers. Here's an example of how you can accomplish this with your provided JSON structure:</p>
 <p>First, let's create the required classes for the given JSON:</p>
 <pre><code class="language-python">from datetime import date
 from marshmallow import fields, Schema, post_load
@@ -488,8 +505,7 @@ class MyData:
     def __init__(self, json_data):
         self.data = PersonSchema().load(json_data)
 </code></pre>
-<p>Now you can call <code>MyData().load(json_data)</code> to deserialize the JSON data. The <code>PersonSchema</code> class will handle the deserialization and conversion of the 'date_of_birth' and 'amount' fields according to your requirements.</p></p>
-                <hr/>
+<p>Now you can call <code>MyData().load(json_data)</code> to deserialize the JSON data. The <code>PersonSchema</code> class will handle the deserialization and conversion of the 'date_of_birth' and 'amount' fields according to your requirements.</p></div>
             
         </main>
     </body>

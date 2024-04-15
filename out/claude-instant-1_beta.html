@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-instant-1:beta</h1>
             <p>Model: openrouter/anthropic/claude-instant-1:beta</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is how you can use Marshmallow to generate dataclasses from that JSON and specify the types:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is how you can use Marshmallow to generate dataclasses from that JSON and specify the types:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from decimal import Decimal
 from datetime import date, datetime
@@ -290,10 +307,10 @@ class PersonSchema(Schema):
 schema = PersonSchema()
 result = schema.load(your_json)
 </code></pre>
-<p>This will validate the JSON against the schemas, deserialize the fields to the proper types, and return Person and Order dataclass instances.</p></p>
-                <hr/>
+<p>This will validate the JSON against the schemas, deserialize the fields to the proper types, and return Person and Order dataclass instances.</p></div>
             
-                <p>Content: <p>Here is how you can use marshmallow to generate dataclasses from that JSON and specify the types:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here is how you can use marshmallow to generate dataclasses from that JSON and specify the types:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -336,10 +353,10 @@ data = {
 
 person = person_schema.load(data)
 </code></pre>
-<p>This uses Marshmallow Schemas to specify the field types, then loads the JSON data into a Person dataclass instance. The Order dataclass and schema handle nested serialization/deserialization of the orders list.</p></p>
-                <hr/>
+<p>This uses Marshmallow Schemas to specify the field types, then loads the JSON data into a Person dataclass instance. The Order dataclass and schema handle nested serialization/deserialization of the orders list.</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using Marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using Marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -378,8 +395,7 @@ class PersonSchema(Schema):
 schema = PersonSchema()
 person = schema.load(json_data)
 </code></pre>
-<p>This uses Marshmallow Schemas and post_load callbacks to deserialize the JSON into the appropriate Python data types defined in the Person and Order dataclasses.</p></p>
-                <hr/>
+<p>This uses Marshmallow Schemas and post_load callbacks to deserialize the JSON into the appropriate Python data types defined in the Person and Order dataclasses.</p></div>
             
         </main>
     </body>

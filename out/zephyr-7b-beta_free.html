@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/huggingfaceh4/zephyr-7b-beta:free</h1>
             <p>Model: openrouter/huggingfaceh4/zephyr-7b-beta:free</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, install the Marshmallow library using pip:</li>
 </ol>
@@ -321,10 +338,10 @@ except ValidationError as e:
     print(e.messages)
 </code></pre>
 <p>Here, we're loading the JSON data into the <code>PersonWithOrders</code> dataclass using the <code>load</code> method of the Marshmallow schema. If there are any validation errors, a <code>ValidationError</code> exception will be raised with a list of error messages.</p>
-<p>This is just a basic example, but you can customize the dataclasses and Marshmallow schema to fit your specific use case.</p></p>
-                <hr/>
+<p>This is just a basic example, but you can customize the dataclasses and Marshmallow schema to fit your specific use case.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, install the Marshmallow library using pip:</li>
 </ol>
@@ -394,10 +411,10 @@ except ValidationError as e:
     print(e.messages)
 </code></pre>
 <p>Here, we're loading the JSON data into the <code>PersonWithOrders</code> dataclass using the <code>load</code> method of the Marshmallow schema. If there are any validation errors, a <code>ValidationError</code> exception will be raised with a list of error messages.</p>
-<p>This is just a basic example, but you can customize the dataclasses and Marshmallow schema to fit your specific use case.</p></p>
-                <hr/>
+<p>This is just a basic example, but you can customize the dataclasses and Marshmallow schema to fit your specific use case.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the Marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, install Marshmallow using pip:</li>
 </ol>
@@ -446,8 +463,7 @@ print(person.orders[0].amount)
 <p>In this example, we define two schemas: <code>OrderSchema</code> and <code>PersonSchema</code>. The <code>OrderSchema</code> has two fields: <code>created</code> (a datetime) and <code>amount</code> (a decimal). The <code>PersonSchema</code> has three fields: <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code> (a date), and a nested list of <code>OrderSchema</code> objects.</p>
 <p>We then load the JSON data using Marshmallow's <code>load</code> method, which returns a dictionary of dataclasses. We can access the attributes of the dataclasses using Python's dot notation.</p>
 <p>Note that we've set the <code>as_string</code> parameter of the <code>Decimal</code> field to <code>True</code>, which converts the decimal value to a string with two decimal places. This is necessary because Marshmallow's <code>Decimal</code> field doesn't support decimal values by default.</p>
-<p>This approach allows us to easily convert JSON data to Python dataclasses using Marshmallow's schema-based approach, which provides type checking, validation, and serialization capabilities.</p></p>
-                <hr/>
+<p>This approach allows us to easily convert JSON data to Python dataclasses using Marshmallow's schema-based approach, which provides type checking, validation, and serialization capabilities.</p></div>
             
         </main>
     </body>

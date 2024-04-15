@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mistral-medium</h1>
             <p>Model: openrouter/mistralai/mistral-medium</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>In order to use the <code>marshmallow</code> library to create dataclasses from the provided JSON, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>In order to use the <code>marshmallow</code> library to create dataclasses from the provided JSON, you can follow these steps:</p>
 <ol>
 <li>Install the <code>marshmallow</code> and <code>marshmallow-dataclass</code> libraries.</li>
 <li>Import the necessary modules.</li>
@@ -303,10 +320,10 @@ user = User(first_name='Jane', last_name='Smith', date_of_birth='1977-03-16', or
 json_string = User.Schema().dump(user)
 print(json_string)
 </code></pre>
-<p>By following these steps, you can use the <code>marshmallow</code> library to convert JSON data to dataclass objects and vice versa while handling appropriate data types such as <code>date</code>, <code>datetime</code>, and <code>decimal</code>.</p></p>
-                <hr/>
+<p>By following these steps, you can use the <code>marshmallow</code> library to convert JSON data to dataclass objects and vice versa while handling appropriate data types such as <code>date</code>, <code>datetime</code>, and <code>decimal</code>.</p></div>
             
-                <p>Content: <p>To generate data classes using Marshmallow in Python, you first need to install the library by running <code>pip install marshmallow</code>. Then, you can create classes for each of the JSON objects, as shown below:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate data classes using Marshmallow in Python, you first need to install the library by running <code>pip install marshmallow</code>. Then, you can create classes for each of the JSON objects, as shown below:</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
 from marshmallow import Schema, fields, pprint, pre_load
@@ -349,10 +366,10 @@ pprint(result)
 <p>To ensure that <code>date_of_birth</code> and <code>created</code> fields are properly converted, the <code>pre_load</code> method is used to preprocess the data before loading it into the schema.</p>
 <p>The <code>@pre_load</code> decorator marks the <code>preprocess_user_data</code> method as the one to be executed before loading the data. In the method, we format the <code>date_of_birth</code> field to a <code>datetime.date()</code> object.</p>
 <p>Finally, the data is loaded into the schema using the <code>load()</code> method, and the result can be printed using the <code>pprint()</code> function.</p>
-<p>Keep in mind that this data transformation is happening from JSON to data classes, if you need to convert data classes back to JSON, you can use <code>Schema.dump()</code> method.</p></p>
-                <hr/>
+<p>Keep in mind that this data transformation is happening from JSON to data classes, if you need to convert data classes back to JSON, you can use <code>Schema.dump()</code> method.</p></div>
             
-                <p>Content: <p>You can achieve this by creating data classes using the <code>marshmallow-dataclass</code> library and defining fields with appropriate types for each value. Here's an example:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can achieve this by creating data classes using the <code>marshmallow-dataclass</code> library and defining fields with appropriate types for each value. Here's an example:</p>
 <ol>
 <li>First, install the required libraries:</li>
 </ol>
@@ -402,8 +419,7 @@ person_data = PersonSchema().load(json_data)
 print(order_data)
 print(person_data)
 </code></pre>
-<p>This script will create the data classes and generate the corresponding schemas using the <code>class_schema()</code>. The <code>fields</code> decorators are used to specify the expected data types and formats. Finally, the script loads the JSON data using the generated schemas, and you can access the parsed data from the <code>order_data</code> and <code>person_data</code> variables.</p></p>
-                <hr/>
+<p>This script will create the data classes and generate the corresponding schemas using the <code>class_schema()</code>. The <code>fields</code> decorators are used to specify the expected data types and formats. Finally, the script loads the JSON data using the generated schemas, and you can access the parsed data from the <code>order_data</code> and <code>person_data</code> variables.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-4-1106-preview</h1>
             <p>Model: openrouter/openai/gpt-4-1106-preview</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses and serialize/deserialize JSON data with specific types using the <code>marshmallow</code> library in Python, you need to follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses and serialize/deserialize JSON data with specific types using the <code>marshmallow</code> library in Python, you need to follow these steps:</p>
 <ol>
 <li>Define your dataclasses with appropriate type annotations.</li>
 <li>Create corresponding <code>marshmallow</code> Schema classes to define how serialization and deserialization should work for each dataclass.</li>
@@ -315,15 +332,15 @@ person = person_schema.load(input_json)
 print(person)
 # You should now have a Person instance with the attributes properly typed
 </code></pre>
-<p><strong>Notes:</strong>
-- Marshmallow will automatically deserialize the ISO 8601 formatted datetime string to a <code>datetime</code> object in the <code>created</code> field and will parse the date string to a <code>date</code> object for the <code>date_of_birth</code> field.
-- The <code>Decimal</code> field will be loaded from the JSON string representation of the decimal number automatically as well.
-- I fixed the JSON structure to have string keys which is the correct JSON format (<code>'orders'</code> instead of <code>orders</code> without quotes). (Note that the JSON specification requires dictionary keys to be strings. Nevertheless, Python's <code>json</code> library can parse non-string dictionary keys as strings.)
+<p><strong>Notes:</strong><br />
+- Marshmallow will automatically deserialize the ISO 8601 formatted datetime string to a <code>datetime</code> object in the <code>created</code> field and will parse the date string to a <code>date</code> object for the <code>date_of_birth</code> field.<br />
+- The <code>Decimal</code> field will be loaded from the JSON string representation of the decimal number automatically as well.<br />
+- I fixed the JSON structure to have string keys which is the correct JSON format (<code>'orders'</code> instead of <code>orders</code> without quotes). (Note that the JSON specification requires dictionary keys to be strings. Nevertheless, Python's <code>json</code> library can parse non-string dictionary keys as strings.)<br />
 - The <code>date_of_birth</code> field in the input JSON must be formatted as <code>'YYYY-MM-DD'</code> to match the expected format for Python's <code>date</code> objects.</p>
-<p>Remember that the fed JSON data keys must match the marshmallow schema fields exactly, or marshmallow won't be able to deserialize the JSON properly.</p></p>
-                <hr/>
+<p>Remember that the fed JSON data keys must match the marshmallow schema fields exactly, or marshmallow won't be able to deserialize the JSON properly.</p></div>
             
-                <p>Content: <p>To work with <code>marshmallow</code> to serialize and deserialize the given JSON data into dataclasses, you would first need to define the appropriate dataclasses with their respective types. You would then create custom <code>Field</code> classes or use <code>marshmallow</code> provided fields for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> to match your requirements. Here's a step-by-step procedure:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To work with <code>marshmallow</code> to serialize and deserialize the given JSON data into dataclasses, you would first need to define the appropriate dataclasses with their respective types. You would then create custom <code>Field</code> classes or use <code>marshmallow</code> provided fields for <code>date</code>, <code>datetime</code>, and <code>Decimal</code> to match your requirements. Here's a step-by-step procedure:</p>
 <ol>
 <li>Install <code>marshmallow</code> if you haven't already:</li>
 </ol>
@@ -405,10 +422,10 @@ try:
 except ValidationError as err:
     print(err.messages)  # If validation fails, you will see error messages
 </code></pre>
-<p>This will create a <code>Person</code> object with the <code>date_of_birth</code> as a <code>date</code> object, <code>orders</code> as a list of <code>Order</code> objects with <code>datetime</code> and <code>Decimal</code> for <code>created</code> and <code>amount</code>, respectively.</p></p>
-                <hr/>
+<p>This will create a <code>Person</code> object with the <code>date_of_birth</code> as a <code>date</code> object, <code>orders</code> as a list of <code>Order</code> objects with <code>datetime</code> and <code>Decimal</code> for <code>created</code> and <code>amount</code>, respectively.</p></div>
             
-                <p>Content: <p>To generate dataclasses and use the <code>marshmallow</code> library to serialize and deserialize the given JSON data, you'll first need to define dataclasses that represent your data structure, and then create corresponding marshmallow schemas that will handle the conversion of field types.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses and use the <code>marshmallow</code> library to serialize and deserialize the given JSON data, you'll first need to define dataclasses that represent your data structure, and then create corresponding marshmallow schemas that will handle the conversion of field types.</p>
 <p>Here's an example of what this might look like:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime, date
@@ -501,8 +518,7 @@ print(person)
 <pre><code class="language-python">person_json = schema.dump(person)
 print(person_json)
 </code></pre>
-<p>Remember to handle any possible exceptions for invalid input data, such as incorrect date formats or invalid data types. Marshmallow will throw validation errors if the input doesn't match the specified schema.</p></p>
-                <hr/>
+<p>Remember to handle any possible exceptions for invalid input data, such as incorrect date formats or invalid data types. Marshmallow will throw validation errors if the input doesn't match the specified schema.</p></div>
             
         </main>
     </body>

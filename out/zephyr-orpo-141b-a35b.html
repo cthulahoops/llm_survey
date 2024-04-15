@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/huggingfaceh4/zephyr-orpo-141b-a35b</h1>
             <p>Model: openrouter/huggingfaceh4/zephyr-orpo-141b-a35b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To use the marshmallow library to generate dataclasses with field data types, follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To use the marshmallow library to generate dataclasses with field data types, follow these steps:</p>
 <ol>
 <li>Define the dataclasses for the JSON structure.</li>
 <li>Implement schema classes for the dataclasses using marshmallow.</li>
@@ -315,10 +332,10 @@ print(&quot;First name:&quot;, person.first_name)
 print(&quot;Orders:&quot;, person.orders)
 </code></pre>
 <p>This code defines the <code>Person</code> and <code>Order</code> dataclasses, as well as the corresponding <code>PersonSchema</code> and <code>OrderSchema</code>. It then creates an instance of <code>PersonSchema</code>, loads the JSON data, and converts it into a <code>Person</code> object. You can access the data field as <code>person.first_name</code>, <code>person.date_of_birth</code>, <code>person.orders</code>, etc.</p>
-<p>Note that your JSON <code>date_of_birth</code> string needs to be in a suitable format, e.g., '1977-03-16' or '1977-03-16T00:00:00.000000Z', for <code>marshmallow.fields.Date</code> to properly parse it. In the example provided, you have '03/16/1977', which may not be parsed correctly.</p></p>
-                <hr/>
+<p>Note that your JSON <code>date_of_birth</code> string needs to be in a suitable format, e.g., '1977-03-16' or '1977-03-16T00:00:00.000000Z', for <code>marshmallow.fields.Date</code> to properly parse it. In the example provided, you have '03/16/1977', which may not be parsed correctly.</p></div>
             
-                <p>Content: <p>To achieve this using the <code>marshmallow</code> library in Python, you first need to create a <code>marshmallow</code> <code>Schema</code> for your JSON data. This schema will define the data types for each field in your JSON data.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this using the <code>marshmallow</code> library in Python, you first need to create a <code>marshmallow</code> <code>Schema</code> for your JSON data. This schema will define the data types for each field in your JSON data.</p>
 <p>Then, you will create dataclasses corresponding to the structure of your JSON data and use the marshmallow schema to load the data into these dataclasses. Here is how to do this:</p>
 <p>Install marshmallow if you haven't already:</p>
 <pre><code class="language-python">pip install marshmallow
@@ -410,10 +427,10 @@ Sample sample_data.json (Replace this file with your data):
   ]
 }
 </code></pre>
-<p>That's it! You have successfully converted your JSON data to Python dataclasses using the Marshmallow library. If there are any errors in your JSON data, such as missing or invalid keys, our function <code>process_json</code> will handle them gracefully. You can modify this implementation as necessary to fit your specific application requirements.</p></p>
-                <hr/>
+<p>That's it! You have successfully converted your JSON data to Python dataclasses using the Marshmallow library. If there are any errors in your JSON data, such as missing or invalid keys, our function <code>process_json</code> will handle them gracefully. You can modify this implementation as necessary to fit your specific application requirements.</p></div>
             
-                <p>Content: <p>To achieve this task, you will need to use the <code>Marshmallow</code> library in Python. It provides a simple way of converting complex datatypes, handling validation and deserialization of DateTime and Decimal types. Follow the steps below:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this task, you will need to use the <code>Marshmallow</code> library in Python. It provides a simple way of converting complex datatypes, handling validation and deserialization of DateTime and Decimal types. Follow the steps below:</p>
 <ol>
 <li>Install the <code>Marshmallow</code>, <code>marshmallow-sqlalchemy</code> and <code>marshmallow-dataclass</code> packages (optional):</li>
 </ol>
@@ -463,8 +480,7 @@ except ValidationError as err:
 # Update the dataclass with parses values
 user = replace(user, date_of_birth=datetime.strptime(data['date_of_birth'], '%m/%d/%Y').date(), orders=data['orders'])
 </code></pre>
-<p>Now, you have successfully parsed the JSON data and created <code>User</code> and <code>Order</code> objects from it. The <code>date_of_birth</code> field is now a <code>date</code> object, <code>created</code> is a <code>datetime</code> object and <code>amount</code> is a <code>Decimal</code> object.</p></p>
-                <hr/>
+<p>Now, you have successfully parsed the JSON data and created <code>User</code> and <code>Order</code> objects from it. The <code>date_of_birth</code> field is now a <code>date</code> object, <code>created</code> is a <code>datetime</code> object and <code>amount</code> is a <code>Decimal</code> object.</p></div>
             
         </main>
     </body>

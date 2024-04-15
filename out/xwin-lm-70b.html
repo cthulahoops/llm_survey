@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/xwin-lm/xwin-lm-70b</h1>
             <p>Model: openrouter/xwin-lm/xwin-lm-70b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this with the marshmallow library, you'll first need to install it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this with the marshmallow library, you'll first need to install it:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Next, you can create a Python script to define the data classes and use marshmallow to load and dump the JSON data. Here's an example:</p>
@@ -285,38 +302,38 @@ data = json.loads(json_data)
 customer = CustomerSchema().load(data)
 print(customer.first_name, customer.last_name, customer.date_of_birth, customer.orders)
 </code></pre>
-<p>Make sure to replace <code>json_data</code> with the JSON string you provided. The <code>pendulum</code> and <code>decimal</code> libraries are required for the <code>DateTime</code> and <code>Decimal</code> fields, so remember to install them if you haven't already:
-```bash
-pip install pendulum decimal</p></p>
-                <hr/>
+<p>Make sure to replace <code>json_data</code> with the JSON string you provided. The <code>pendulum</code> and <code>decimal</code> libraries are required for the <code>DateTime</code> and <code>Decimal</code> fields, so remember to install them if you haven't already:<br />
+```bash<br />
+pip install pendulum decimal</p></div>
             
-                <p>Content: <p>To achieve this using the Marshmallow library, first, you need to install it:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this using the Marshmallow library, first, you need to install it:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
-<p>Then, create the following dataclasses based on the provided JSON structure:
-```python
-import marshmallow
-from marshmallow import Schema, fields, pydantic, post_load
-from datetime import datetime
+<p>Then, create the following dataclasses based on the provided JSON structure:<br />
+```python<br />
+import marshmallow<br />
+from marshmallow import Schema, fields, pydantic, post_load<br />
+from datetime import datetime<br />
 from dateutil.parser import parse</p>
-<p>class OrderSchema(Schema):
-    created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+    created = fields.DateTime()<br />
     amount = fields.Decimal()</p>
-<p>class UserSchema(Schema):
-    first_name = fields.Str()
-    last_name = fields.Str()
-    date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+    first_name = fields.Str()<br />
+    last_name = fields.Str()<br />
+    date_of_birth = fields.Date()<br />
     orders = fields.Nested(OrderSchema, many=True)</p>
 <pre><code>@post_load
 def post_process_data(self, data):
     user_dict = data["value"]
     return User(**user_dict)
 </code></pre>
-<p>class User:
-    def <strong>init</strong>(self, first_name: str, last_name: str, date_of_birth: datetime.date, orders: list[Order]):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.date_of_irth = date_of_birth
+<p>class User:<br />
+    def <strong>init</strong>(self, first_name: str, last_name: str, date_of_birth: datetime.date, orders: list[Order]):<br />
+        self.first_name = first_name<br />
+        self.last_name = last_name<br />
+        self.date_of_irth = date_of_birth<br />
         self.orders = orders</p>
 <pre><code>def to_dict(self):
     return {
@@ -326,10 +343,10 @@ def post_process_data(self, data):
         "orders": [order.to_dict() for order in self.orders]
     }
 </code></pre>
-<h1>Usage Example</h1></p>
-                <hr/>
+<h1>Usage Example</h1></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already:</p>
 <pre><code>pip install marshmallow
 </code></pre>
 <p>Next, create dataclasses and define the models for the JSON data:</p>
@@ -377,8 +394,7 @@ data = {
 result = UserSchema().load(data, many=True)
 print(result)
 </code></pre>
-<p>In this example, we import the</p></p>
-                <hr/>
+<p>In this example, we import the</p></div>
             
         </main>
     </body>

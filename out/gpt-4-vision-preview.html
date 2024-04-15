@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-4-vision-preview</h1>
             <p>Model: openrouter/openai/gpt-4-vision-preview</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>First, you need to install the marshmallow library by running <code>pip install marshmallow</code>.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>First, you need to install the marshmallow library by running <code>pip install marshmallow</code>.</p>
 <p>Next, you need to import required modules and define your data classes. Here is an example of how you could do that:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime, date
@@ -308,10 +325,10 @@ person_schema = PersonSchema()
 person = person_schema.load(json_data)
 print(person)
 </code></pre>
-<p>This will convert the JSON data into instances of the <code>Person</code> and <code>Order</code> data classes, with the <code>date_of_birth</code> field as a <code>date</code> object, <code>created</code> as a <code>datetime</code> object, and <code>amount</code> as a <code>Decimal</code>. The <code>EXCLUDE</code> option in <code>Meta</code> class will make sure that if there are unknown fields in the input data, marshmallow will exclude them in the output.</p></p>
-                <hr/>
+<p>This will convert the JSON data into instances of the <code>Person</code> and <code>Order</code> data classes, with the <code>date_of_birth</code> field as a <code>date</code> object, <code>created</code> as a <code>datetime</code> object, and <code>amount</code> as a <code>Decimal</code>. The <code>EXCLUDE</code> option in <code>Meta</code> class will make sure that if there are unknown fields in the input data, marshmallow will exclude them in the output.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you'll first need to install the library by running <code>pip install marshmallow</code> and <code>pip install marshmallow-dataclass</code>. Then, you can define your dataclasses and create marshmallow schemas with the appropriate field types to handle the serialization and deserialization of the JSON data. Here's an example of how to do this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python, you'll first need to install the library by running <code>pip install marshmallow</code> and <code>pip install marshmallow-dataclass</code>. Then, you can define your dataclasses and create marshmallow schemas with the appropriate field types to handle the serialization and deserialization of the JSON data. Here's an example of how to do this:</p>
 <pre><code class="language-python">from datetime import datetime, date
 from decimal import Decimal
 from dataclasses import dataclass
@@ -376,10 +393,10 @@ print(person)
 person_json = person_schema.dump(person)
 print(person_json)
 </code></pre>
-<p>Make sure to validate the data according to your requirements and convert the <code>amount</code> to a <code>Decimal</code> and <code>date_of_birth</code> and <code>created</code> to <code>date</code> and <code>datetime</code> objects, respectively.</p></p>
-                <hr/>
+<p>Make sure to validate the data according to your requirements and convert the <code>amount</code> to a <code>Decimal</code> and <code>date_of_birth</code> and <code>created</code> to <code>date</code> and <code>datetime</code> objects, respectively.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you need to define a schema for each dataclass that you want to create. Here's how you can do it for the JSON provided:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python, you need to define a schema for each dataclass that you want to create. Here's how you can do it for the JSON provided:</p>
 <p>First, install marshmallow if you haven't already:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -447,8 +464,7 @@ print(person)
 </code></pre>
 <p>This code sets up a <code>Person</code> class and an <code>Order</code> class as dataclasses, along with corresponding Schemas <code>PersonSchema</code> and <code>OrderSchema</code>. Marshmallow's <code>fields</code> module is used to define the type of each field and how it should be deserialized. </p>
 <p>The <code>@post_load</code> decorator is a marshmallow hook that allows you to instantiate the dataclass with the deserialized data.</p>
-<p>Finally, we deserialize the <code>json_data</code> into a <code>Person</code> dataclass instance with all the data properly typed (string to <code>str</code>, ISO date to <code>date</code>, ISO datetime to <code>datetime</code>, and string to <code>Decimal</code>). If an incorrect date format is entered for <code>date_of_birth</code>, it will raise a validation error due to the custom <code>validate_dob</code> method.</p></p>
-                <hr/>
+<p>Finally, we deserialize the <code>json_data</code> into a <code>Person</code> dataclass instance with all the data properly typed (string to <code>str</code>, ISO date to <code>date</code>, ISO datetime to <code>datetime</code>, and string to <code>Decimal</code>). If an incorrect date format is entered for <code>date_of_birth</code>, it will raise a validation error due to the custom <code>validate_dob</code> method.</p></div>
             
         </main>
     </body>

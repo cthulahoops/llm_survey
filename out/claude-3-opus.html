@@ -247,15 +247,32 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-3-opus</h1>
             <p>Model: openrouter/anthropic/claude-3-opus</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python based on the provided JSON, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python based on the provided JSON, you can follow these steps:</p>
 <ol>
 <li>
-<p>Install the marshmallow library if you haven't already:
-   <code>pip install marshmallow</code></p>
+<p>Install the marshmallow library if you haven't already:<br />
+<code>pip install marshmallow</code></p>
 </li>
 <li>
 <p>Define the dataclasses and their corresponding marshmallow schemas:</p>
@@ -302,12 +319,12 @@ class PersonSchema(Schema):
     def make_person(self, data, **kwargs):
         return Person(**data)
 </code></pre>
-<p>In this code:
-- We define two dataclasses: <code>Order</code> and <code>Person</code>.
-- The <code>Order</code> dataclass has <code>created</code> as a <code>datetime</code> field and <code>amount</code> as a <code>Decimal</code> field.
-- The <code>Person</code> dataclass has <code>first_name</code> and <code>last_name</code> as string fields, <code>date_of_birth</code> as a <code>date</code> field, and <code>orders</code> as a list of <code>Order</code> objects.
-- We define corresponding marshmallow schemas: <code>OrderSchema</code> and <code>PersonSchema</code>.
-- In the schemas, we specify the field types and any necessary formatting options.
+<p>In this code:<br />
+- We define two dataclasses: <code>Order</code> and <code>Person</code>.<br />
+- The <code>Order</code> dataclass has <code>created</code> as a <code>datetime</code> field and <code>amount</code> as a <code>Decimal</code> field.<br />
+- The <code>Person</code> dataclass has <code>first_name</code> and <code>last_name</code> as string fields, <code>date_of_birth</code> as a <code>date</code> field, and <code>orders</code> as a list of <code>Order</code> objects.<br />
+- We define corresponding marshmallow schemas: <code>OrderSchema</code> and <code>PersonSchema</code>.<br />
+- In the schemas, we specify the field types and any necessary formatting options.<br />
 - We use the <code>@post_load</code> decorator to define a method that creates the respective dataclass instance after the data is loaded and validated.</p>
 <ol>
 <li>Load the JSON data using the marshmallow schema:</li>
@@ -328,16 +345,16 @@ person_schema = PersonSchema()
 person = person_schema.load(json_data)
 print(person)
 </code></pre>
-<p>In this code:
-- We have the JSON data stored in the <code>json_data</code> variable.
-- We create an instance of the <code>PersonSchema</code>.
-- We use the <code>load</code> method of the schema to load and validate the JSON data.
+<p>In this code:<br />
+- We have the JSON data stored in the <code>json_data</code> variable.<br />
+- We create an instance of the <code>PersonSchema</code>.<br />
+- We use the <code>load</code> method of the schema to load and validate the JSON data.<br />
 - The <code>person</code> variable will contain an instance of the <code>Person</code> dataclass with the loaded data.</p>
 <p>When you run this code, it will output the <code>Person</code> dataclass instance with the correctly formatted <code>date_of_birth</code>, <code>created</code>, and <code>amount</code> fields based on the provided JSON data.</p>
-<p>The marshmallow library handles the deserialization and validation of the JSON data based on the defined schemas, making it easier to work with the data in the form of dataclasses.</p></p>
-                <hr/>
+<p>The marshmallow library handles the deserialization and validation of the JSON data based on the defined schemas, making it easier to work with the data in the form of dataclasses.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python based on the provided JSON structure, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python based on the provided JSON structure, you can follow these steps:</p>
 <ol>
 <li>Define the dataclasses:</li>
 </ol>
@@ -423,10 +440,10 @@ print(person)
 <p>Finally, we load the JSON data using <code>json.loads()</code>, create an instance of <code>PersonSchema</code>, and use its <code>load()</code> method to deserialize the data into a <code>Person</code> object.</p>
 </li>
 </ul>
-<p>The resulting <code>person</code> object will be an instance of the <code>Person</code> dataclass with the deserialized data, including the <code>date_of_birth</code> as a <code>date</code> object, <code>created</code> as a <code>datetime</code> object, and <code>amount</code> as a <code>Decimal</code> object.</p></p>
-                <hr/>
+<p>The resulting <code>person</code> object will be an instance of the <code>Person</code> dataclass with the deserialized data, including the <code>date_of_birth</code> as a <code>date</code> object, <code>created</code> as a <code>datetime</code> object, and <code>amount</code> as a <code>Decimal</code> object.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python based on the given JSON, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python based on the given JSON, you can follow these steps:</p>
 <ol>
 <li>Define the dataclasses:</li>
 </ol>
@@ -513,8 +530,7 @@ print(person)
 <p>Finally, we use the <code>PersonSchema</code> to deserialize the JSON data using <code>person_schema.loads(json_data)</code>, which returns a <code>Person</code> dataclass instance.</p>
 </li>
 </ul>
-<p>When you run this code, it will deserialize the JSON data into a <code>Person</code> dataclass instance, with the <code>date_of_birth</code> field as a <code>date</code> object, the <code>created</code> field as a <code>datetime</code> object, and the <code>amount</code> field as a <code>Decimal</code> object.</p></p>
-                <hr/>
+<p>When you run this code, it will deserialize the JSON data into a <code>Person</code> dataclass instance, with the <code>date_of_birth</code> field as a <code>date</code> object, the <code>created</code> field as a <code>datetime</code> object, and the <code>amount</code> field as a <code>Decimal</code> object.</p></div>
             
         </main>
     </body>

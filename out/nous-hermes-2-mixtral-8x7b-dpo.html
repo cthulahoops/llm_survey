@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-hermes-2-mixtral-8x7b-dpo</h1>
             <p>Model: openrouter/nousresearch/nous-hermes-2-mixtral-8x7b-dpo</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you'll first need to define your dataclasses, then create schemas based on those dataclasses.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python, you'll first need to define your dataclasses, then create schemas based on those dataclasses.</p>
 <p>Here's an example of how you can define the dataclasses:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 import datetime
@@ -308,10 +325,10 @@ class UserSchema(Schema):
 user_schema = UserSchema()
 user_data = user_schema.loads(json_data)
 </code></pre>
-<p>Now, <code>user_data</code> will be a <code>User</code> object with the deserialized data.</p></p>
-                <hr/>
+<p>Now, <code>user_data</code> will be a <code>User</code> object with the deserialized data.</p></div>
             
-                <p>Content: <p>To generate data classes from the given JSON using the marshmallow library in Python, you need to follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate data classes from the given JSON using the marshmallow library in Python, you need to follow these steps:</p>
 <ol>
 <li>Install the marshmallow library using pip:</li>
 </ol>
@@ -390,10 +407,10 @@ user_schema = UserSchema()
 user = user_schema.load(json_data)
 
 # Now, `user` is a User object with the correct data types for its attributes.
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To generate the dataclasses using the marshmallow library in python, first, you need to import the necessary classes and library functions. Then, you can define the dataclasses for <code>User</code> and <code>Order</code>. Here's an example:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate the dataclasses using the marshmallow library in python, first, you need to import the necessary classes and library functions. Then, you can define the dataclasses for <code>User</code> and <code>Order</code>. Here's an example:</p>
 <pre><code class="language-python">from typing import List
 from datetime import datetime
 from decimal import Decimal
@@ -457,8 +474,7 @@ print(user.date_of_birth)
 print(user.orders)
 </code></pre>
 <p>In this example, I've defined <code>User</code> and <code>Order</code> as dataclasses. The marshmallow's <code>Schema</code> class is used to define schemas for serializing and deserializing the data. The <code>UserSchema</code> processes the orders in the <code>pre_load</code> hook method. This method converts the date-string to a date object and the amount-string to a decimal object. The <code>OrderSchema</code> is also defined for the <code>Order</code> class, although it does not need any processing.</p>
-<p>You can use the <code>from_json</code> function to convert JSON data to a dataclass instance. In the example, the JSON data is converted to a <code>User</code> instance, and you can access and print the needed information easily.</p></p>
-                <hr/>
+<p>You can use the <code>from_json</code> function to convert JSON data to a dataclass instance. In the example, the JSON data is converted to a <code>User</code> instance, and you can access and print the needed information easily.</p></div>
             
         </main>
     </body>

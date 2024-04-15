@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/pygmalionai/mythalion-13b</h1>
             <p>Model: openrouter/pygmalionai/mythalion-13b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here's an example of how you can use the Marshmallow library to parse the JSON data into Python dataclasses:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here's an example of how you can use the Marshmallow library to parse the JSON data into Python dataclasses:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_dump
 
 from datetime import datetime
@@ -284,10 +301,10 @@ PersonSchema.post_dump = post_dump
 order = OrderSchema().load(person.orders[0])
 order = OrderSchema().dump(order)
 </code></pre>
-<p>Make sure to include the <code>PersonSchema.post_dump = post_dump</code> line if you're using Marshmallow &gt;= 4.0.0.0. This will help format the date of birth as a readable string when serializing to JSON.</p></p>
-                <hr/>
+<p>Make sure to include the <code>PersonSchema.post_dump = post_dump</code> line if you're using Marshmallow &gt;= 4.0.0.0. This will help format the date of birth as a readable string when serializing to JSON.</p></div>
             
-                <p>Content: <p>You can use the marshmallow library to convert the given JSON data into dataclasses using the following code:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the marshmallow library to convert the given JSON data into dataclasses using the following code:</p>
 <pre><code class="language-python">from marshmallow import fields, Schema
 
 
@@ -330,10 +347,10 @@ In [3]: order
 Out[3]: &lt;class '__main__.Order'&gt;
     created: datetime.datetime(2024, 1, 25, 15, 0, 0, 4)
     amount: 100.0
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To create dataclasses from the provided JSON using Marshmallow, you can do the following:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create dataclasses from the provided JSON using Marshmallow, you can do the following:</p>
 <pre><code class="language-python">from datetime import datetime
 from marshmallow import Schema, fields
 
@@ -375,8 +392,7 @@ parsed_data = PersonSchema().load(json_data)
 for order in parsed_data['orders']:
     OrderSchema().load(order)
 </code></pre>
-<p>This will generate a <code>Person</code> class with four fields: <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a <code>list</code> of <code>Order</code> objects with two fields each: <code>created</code> (a <code>datetime</code> object) and <code>amount</code> (a <code>float</code>). The resulting dataclasses will look like this:</p></p>
-                <hr/>
+<p>This will generate a <code>Person</code> class with four fields: <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a <code>list</code> of <code>Order</code> objects with two fields each: <code>created</code> (a <code>datetime</code> object) and <code>amount</code> (a <code>float</code>). The resulting dataclasses will look like this:</p></div>
             
         </main>
     </body>

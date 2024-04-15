@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/perplexity/pplx-7b-chat</h1>
             <p>Model: openrouter/perplexity/pplx-7b-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can achieve this by creating custom classes for the fields in Schema, as well as defining the serialization and deserialization behavior. Here's the code for your question:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can achieve this by creating custom classes for the fields in Schema, as well as defining the serialization and deserialization behavior. Here's the code for your question:</p>
 <pre><code class="language-python">from marshmallow_dataclass import class_serializer
 from datetime import datetime
 from marshmallow import fields, decimals
@@ -302,10 +319,10 @@ class NodeOrderSchema:
 <p>The Name field is defined with mangle and unmarshal methods to capitalize the first letter of the name and lowercase the rest of the name.</p>
 <p>The Node class contains the init method that initializes the fields passed as arguments, and the <code>__getstate__</code> and <code>__setstate__</code> methods check their equality for pickling support.</p>
 <p>We define two schemas: CustomRootSchema for serialization and deserialization of the Node object, and NodeOrderSchema for serialization and deserialization of the NodeOrder field within the orders field of the Node class.</p>
-<p>Make sure to import the necessary modules and define the appropriate variables before using this code.</p></p>
-                <hr/>
+<p>Make sure to import the necessary modules and define the appropriate variables before using this code.</p></div>
             
-                <p>Content: <p>To create a datetime serializer in Python using the Marshmallow library, you have to define a field for <code>created</code>, which extends the <code>DateTime</code> base class of marshmallow. Here's an example code snippet that demonstrates how to create a <code>DatetimeField</code> class:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create a datetime serializer in Python using the Marshmallow library, you have to define a field for <code>created</code>, which extends the <code>DateTime</code> base class of marshmallow. Here's an example code snippet that demonstrates how to create a <code>DatetimeField</code> class:</p>
 <pre><code class="language-python">from marshmallow import fields
 import datetime
 
@@ -350,10 +367,10 @@ class OrdersArray(Schema):
 <pre><code class="language-python">turning_gates = ConvertDisableJsonClass()
 turning_gates.load(data)
 </code></pre>
-<p>Make sure to replace <code>data</code> with the JSON input you want to convert to the <code>ConvertDisableJsonClass</code> object.</p></p>
-                <hr/>
+<p>Make sure to replace <code>data</code> with the JSON input you want to convert to the <code>ConvertDisableJsonClass</code> object.</p></div>
             
-                <p>Content: <p>In Python, you can use the Marshmallow library to convert JSON to specific types or dataclasses. First, you need to install Marshmallow in your project. You can do this using pip:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>In Python, you can use the Marshmallow library to convert JSON to specific types or dataclasses. First, you need to install Marshmallow in your project. You can do this using pip:</p>
 <pre><code class="language-python">pip install marshmallow
 </code></pre>
 <p>Next, you can define your dataclasses using the <code>@dataclass</code> decorator from the <code>dataclasses</code> library. Here's the code to define the dataclasses:</p>
@@ -411,8 +428,7 @@ json_dict_out = dec_schema.load(todict)
 orders = dec_schema.load(todict)
 </code></pre>
 <p>In the above example, we first load the JSON string into a dictionary. Then, we create an instance of the <code>OrderSchema</code> class, which represents the schema for the <code>Order</code> dataclass. By calling <code>schema.load(json_Dict)</code>, we execute the deserialization process. Finally, we can access the deserialized object by calling <code>marsh_obgj.data</code>.</p>
-<p>You can refer to the <a href="http://marshmallow.readthedocs.org/">Marshmallow documentation</a> for more information on using Marshmallow with dataclasses.</p></p>
-                <hr/>
+<p>You can refer to the <a href="http://marshmallow.readthedocs.org/">Marshmallow documentation</a> for more information on using Marshmallow with dataclasses.</p></div>
             
         </main>
     </body>

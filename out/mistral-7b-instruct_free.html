@@ -247,14 +247,31 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mistral-7b-instruct:free</h1>
             <p>Model: openrouter/mistralai/mistral-7b-instruct:free</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON dict</p></p>
-                <hr/>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON dict</p></div>
             
-                <p>Content: <p>To create dataclasses from a JSON object using the marshmallow library in Python, you can use the <code>PyDantic</code> class from the <code>pydantic</code> module. Here's an example of how you could create the dataclasses for the given JSON object:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create dataclasses from a JSON object using the marshmallow library in Python, you can use the <code>PyDantic</code> class from the <code>pydantic</code> module. Here's an example of how you could create the dataclasses for the given JSON object:</p>
 <pre><code class="language-python">from pydantic import BaseModel, Date, DateTime, Decimal
 from typing import List
 
@@ -313,10 +330,10 @@ print(person.orders)  # Output: Order(created=datetime.datetime(2024, 1, 25, 15,
 </code></pre>
 <p>In this case, you using the <code>Schema</code> class to create the schema class for the data. The <code>Date</code> and <code>DateTime</code> fields are used to create the fields for the <code>date_of_birth</code> and <code>created</code> fields, respectively.</p>
 <p>The <code>Float</code> fields are used for the <code>amount</code> field. The <code>Str</code> fields are used for the <code>first_name</code>, <code>last_name</code>, and <code>orders</code> fields. By using the <code>Field</code> function, you can add the nested <code>OrderSchema</code> objects to the <code>orders</code> field.</p>
-<p>Please note that in this example, the roleplay is not clear, so the contexts for the code may not be perfect.</p></p>
-                <hr/>
+<p>Please note that in this example, the roleplay is not clear, so the contexts for the code may not be perfect.</p></div>
             
-                <p>Content: <p>You can use the following marshmallow dataclasses to create a model based on the given JSON:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the following marshmallow dataclasses to create a model based on the given JSON:</p>
 <pre><code>from marshmallow_dataclasses import dataclass
 from marshmallow_models import fields
 import dateutil
@@ -360,10 +377,10 @@ print(person)
      person
      ┌&lt;class 'actors_roleplay.models.Person' at 0x000001DFC41465A8&gt; soldtickets(cls, name, tickets, seasons) &lt;person.py:25&gt; (&lt;builtins.unpack&gt; 'action' 22 geek (libretto): FileId('actors_roleplay/models.py'), FrameId('1241'), Row: 35)
 </code></pre>
-<p>Note that we used <code>dateutil</code> to parse the <code>date_of_birth</code> and <code>created</code> fields into <code>date</code> and <code>datetime</code> datatypes. Also, the <code>Person</code> class inherits from the <code>Order</code> class, and we use <code>load_json</code> to load the JSON data into the <code>person</code> instance.</p></p>
-                <hr/>
+<p>Note that we used <code>dateutil</code> to parse the <code>date_of_birth</code> and <code>created</code> fields into <code>date</code> and <code>datetime</code> datatypes. Also, the <code>Person</code> class inherits from the <code>Order</code> class, and we use <code>load_json</code> to load the JSON data into the <code>person</code> instance.</p></div>
             
-                <p>Content: <p>To generate dataclasses from a dictionary in Python, you can use the <code>dataclass</code> decorator from the <code>dataclasses</code> module or a library like <code>mypy</code>.</p>
+                <p>Response 4.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a dictionary in Python, you can use the <code>dataclass</code> decorator from the <code>dataclasses</code> module or a library like <code>mypy</code>.</p>
 <p>To use the <code>mypy</code> library, you first need to install it. Then, you can apply the <code>dataclass</code> decorator to your class, and <code>mypy</code> will infer the datatype of the fields based on the keys in your dictionary.</p>
 <p>Here's an example:</p>
 <pre><code class="language-python">import dataclasses
@@ -397,13 +414,13 @@ orders = {k: data[k] for k in data.orders}
 order = JsonData.from_dict(orders)
 </code></pre>
 <p>In this example, the <code>JsonData</code> dataclass and the <code>DateTimeFromString</code> field converter are defined based on the dictionary structure. The <code>JsonData.from_dict()</code> function is then used to create an instance of the dataclass from the dictionary.</p>
-<p>You can then access the fields in the dataclass and build new dictionaries or objects as needed.</p></p>
-                <hr/>
+<p>You can then access the fields in the dataclass and build new dictionaries or objects as needed.</p></div>
             
-                <p>Content: <p>First, you'll have to install the marshmallow library. You can do this by running the following command in your terminal:</p>
+                <p>Response 5.</p>
+                <div class="markdown-body"><p>First, you'll have to install the marshmallow library. You can do this by running the following command in your terminal:</p>
 <pre><code class="language-ruby">pip install marshmallow
 </code></pre>
-<p>Then, you can define your dataclass using the <code>dataclass</code> decorator from <code>dataclasses</code> library and map your json keys to fields.
+<p>Then, you can define your dataclass using the <code>dataclass</code> decorator from <code>dataclasses</code> library and map your json keys to fields.<br />
 Here is an example:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime
@@ -443,8 +460,7 @@ def dict_to_person_and_orders(dict):
     orders = dict_to_orders(dict) 
     return person, orders
 </code></pre>
-<p>This will allow you to convert your json dictionary to python dataclasses and vice versa. Also, this will ensure that your <code>date_of_birth</code> is of type <code>datetime</code>, <code>created</code> of type <code>datetime</code> and <code>amount</code> of type <code>float</code> according to your data.</p></p>
-                <hr/>
+<p>This will allow you to convert your json dictionary to python dataclasses and vice versa. Also, this will ensure that your <code>date_of_birth</code> is of type <code>datetime</code>, <code>created</code> of type <code>datetime</code> and <code>amount</code> of type <code>float</code> according to your data.</p></div>
             
         </main>
     </body>

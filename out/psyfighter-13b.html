@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/jebcarter/psyfighter-13b</h1>
             <p>Model: openrouter/jebcarter/psyfighter-13b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 
 class UserSchema(Schema):
@@ -292,10 +309,10 @@ def test_users():
 test_users()
 </code></pre>
 <p>In this example, we define two schemas: <code>UserSchema</code> for the outer JSON object and <code>OrderSchema</code> for the inner list of orders. The <code>post_load</code> method on the UserSchema allows us to define a custom unloading method for the nested OrderSchema. Then, we define a staticmethod <code>load</code> on the OrderSchema that can be called to unmarshall an individual order from the JSON.</p>
-<p>Finally, we define a <code>test_users</code> function that loads the JSON and asserts the values are as expected. Note that this example uses <code>object</code> rather than <code>typing.Any</code> for <code>Order</code> because we want to be able to call <code>Order.load</code> statically. If you don't need the custom loading behavior, you can use <code>typing.Any</code> instead.</p></p>
-                <hr/>
+<p>Finally, we define a <code>test_users</code> function that loads the JSON and asserts the values are as expected. Note that this example uses <code>object</code> rather than <code>typing.Any</code> for <code>Order</code> because we want to be able to call <code>Order.load</code> statically. If you don't need the custom loading behavior, you can use <code>typing.Any</code> instead.</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 
 class UserSchema(Schema):
@@ -335,10 +352,10 @@ def test_users():
 
 test_users()
 </code></pre>
-<p>In this example, we define two schemas: <code>UserSchema</code> for the outer JSON object and <code>OrderSchema</code> for the inner list of orders. The <code>post_load</code> method on the UserSchema is used to tell Marshmallow to handle the nested <code>OrderSchema</code> field using the <code>Order</code> dataclass. When you load the JSON data with the UserSchema, it will automatically handle the nested requests and create the <code>Order</code> objects.</p></p>
-                <hr/>
+<p>In this example, we define two schemas: <code>UserSchema</code> for the outer JSON object and <code>OrderSchema</code> for the inner list of orders. The <code>post_load</code> method on the UserSchema is used to tell Marshmallow to handle the nested <code>OrderSchema</code> field using the <code>Order</code> dataclass. When you load the JSON data with the UserSchema, it will automatically handle the nested requests and create the <code>Order</code> objects.</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library to generate dataclasses from JSON like this:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 
 class UserSchema(Schema):
@@ -381,8 +398,7 @@ test_users()
 <p>This code defines two dataclasses, <code>UserSchema</code> and <code>OrderSchema</code>, which are derived from a common <code>Schema</code> class provided by Marshmallow. The <code>orders</code> field in <code>UserSchema</code> is a list of <code>OrderSchema</code> instances.</p>
 <p>The <code>post_load</code> method of <code>UserSchema</code> defines a helper method <code>load</code> that delegates to <code>OrderSchema.load</code> to handle loading of nested objects. The <code>@staticmethod</code> decorator ensures that <code>load</code> can be called on the class itself.</p>
 <p>The <code>OrderSchema.load</code> method uses the <code>Order</code> class as a postprocessor, allowing us to create instance of <code>Order</code> from the JSON data.</p>
-<p>Running the <code>test_users</code> function will demonstrate that the JSON data can be deserialized into instances of the dataclasses as expected.</p></p>
-                <hr/>
+<p>Running the <code>test_users</code> function will demonstrate that the JSON data can be deserialized into instances of the dataclasses as expected.</p></div>
             
         </main>
     </body>

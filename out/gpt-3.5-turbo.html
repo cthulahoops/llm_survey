@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the marshmallow library to define schema classes for your JSON data and specify the data types for each field. Here's an example of how you can achieve this:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the marshmallow library to define schema classes for your JSON data and specify the data types for each field. Here's an example of how you can achieve this:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, pre_load
 from datetime import datetime
 from decimal import Decimal
@@ -299,10 +316,10 @@ print(result)
 </code></pre>
 <p>In this code snippet, we have defined two schema classes <code>OrderSchema</code> and <code>UserSchema</code> to represent the order and user data structures respectively. We have specified the data types for each field using marshmallow's field classes such as <code>fields.String()</code>, <code>fields.Date()</code>, <code>fields.Decimal()</code>, and <code>fields.DateTime()</code>.</p>
 <p>We have also defined a custom <code>pre_load</code> method in the <code>UserSchema</code> class to convert the input data types for the <code>date_of_birth</code>, <code>created</code>, and <code>amount</code> fields to the desired types before loading the JSON data.</p>
-<p>Finally, we create an instance of the <code>UserSchema</code> class and load the JSON data using the <code>load</code> method, which applies the schema validation and data type conversions defined in the schema classes.</p></p>
-                <hr/>
+<p>Finally, we create an instance of the <code>UserSchema</code> class and load the JSON data using the <code>load</code> method, which applies the schema validation and data type conversions defined in the schema classes.</p></div>
             
-                <p>Content: <p>You can achieve this using the marshmallow library in Python by defining schemas for your data classes. Here is an example code to create the data classes using marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can achieve this using the marshmallow library in Python by defining schemas for your data classes. Here is an example code to create the data classes using marshmallow:</p>
 <pre><code class="language-python">from typing import List
 from marshmallow import Schema, fields, post_load
 from datetime import date, datetime
@@ -363,10 +380,10 @@ for order in user.orders:
     print(order.created)
     print(order.amount)
 </code></pre>
-<p>In this code sample, we defined schemas for <code>Order</code> and <code>User</code> classes using marshmallow. We also defined how to convert the incoming data into instances of these classes using the <code>@post_load</code> decorator. Finally, we loaded and deserialized the JSON data, creating the appropriate data classes with the correct data types for date, datetime, and decimal fields.</p></p>
-                <hr/>
+<p>In this code sample, we defined schemas for <code>Order</code> and <code>User</code> classes using marshmallow. We also defined how to convert the incoming data into instances of these classes using the <code>@post_load</code> decorator. Finally, we loaded and deserialized the JSON data, creating the appropriate data classes with the correct data types for date, datetime, and decimal fields.</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can define the structure of the JSON data and then create dataclasses with appropriate field types using Marshmallow Schema.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can define the structure of the JSON data and then create dataclasses with appropriate field types using Marshmallow Schema.</p>
 <p>Here's an example code snippet demonstrating how to do this:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
@@ -430,13 +447,12 @@ user.orders = order_items
 
 print(user)
 </code></pre>
-<p>In this code snippet:
-- We define dataclasses <code>Order</code> and <code>User</code> that correspond to the structure of the JSON data.
-- We create Marshmallow schemas <code>OrderSchema</code> and <code>UserSchema</code> to define how the JSON data should be deserialized into the dataclasses.
-- We load the JSON data using the schemas and construct instances of the dataclasses with the loaded data.
+<p>In this code snippet:<br />
+- We define dataclasses <code>Order</code> and <code>User</code> that correspond to the structure of the JSON data.<br />
+- We create Marshmallow schemas <code>OrderSchema</code> and <code>UserSchema</code> to define how the JSON data should be deserialized into the dataclasses.<br />
+- We load the JSON data using the schemas and construct instances of the dataclasses with the loaded data.<br />
 - Finally, we print the <code>User</code> instance for demonstration purposes.</p>
-<p>You can further enhance this code to include error handling, validation, or additional data manipulation as needed for your application.</p></p>
-                <hr/>
+<p>You can further enhance this code to include error handling, validation, or additional data manipulation as needed for your application.</p></div>
             
         </main>
     </body>

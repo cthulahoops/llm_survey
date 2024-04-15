@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-4-turbo-preview</h1>
             <p>Model: openrouter/openai/gpt-4-turbo-preview</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve your goal using the <code>marshmallow</code> library in Python, you will need to define data classes and use marshmallow <code>Schema</code> to handle serialization and deserialization, including converting types like <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as specified. Here's how you can do it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve your goal using the <code>marshmallow</code> library in Python, you will need to define data classes and use marshmallow <code>Schema</code> to handle serialization and deserialization, including converting types like <code>date</code>, <code>datetime</code>, and <code>Decimal</code> as specified. Here's how you can do it:</p>
 <p>First, ensure you have <code>marshmallow</code> installed.</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -333,10 +350,10 @@ if __name__ == &quot;__main__&quot;:
 <p><strong>Error Handling</strong>: The <code>try...except</code> block around the loading process is used to catch and print any <code>ValidationError</code> that might be raised if the input data does not comply with the schema definition.</p>
 </li>
 </ol>
-<p>This example demonstrates how to use the marshmallow library to work with complex nested data structures, including custom type conversions and collections.</p></p>
-                <hr/>
+<p>This example demonstrates how to use the marshmallow library to work with complex nested data structures, including custom type conversions and collections.</p></div>
             
-                <p>Content: <p>To accomplish your goal using the marshmallow library in Python, you need to define dataclasses for your entities and then use marshmallow Schemas to handle the serialization and deserialization of your JSON data, converting string dates to <code>date</code> objects, ISO format strings to <code>datetime</code> objects, and string representations of numbers to <code>Decimal</code> objects.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To accomplish your goal using the marshmallow library in Python, you need to define dataclasses for your entities and then use marshmallow Schemas to handle the serialization and deserialization of your JSON data, converting string dates to <code>date</code> objects, ISO format strings to <code>datetime</code> objects, and string representations of numbers to <code>Decimal</code> objects.</p>
 <p>Here's a step-by-step example:</p>
 <h3>Step 1: Install Marshmallow</h3>
 <p>First, ensure you have marshmallow installed in your environment. If not, you can install it using pip:</p>
@@ -414,10 +431,10 @@ customer = customer_schema.load(data)
 print(customer)
 # You'll see an instance of the Customer dataclass with the appropriate conversions.
 </code></pre>
-<p>This approach provides a clear separation between your data definitions and the serialization/deserialization logic, making it easier to maintain and adapt as your application grows. Marshmallow's <code>@post_load</code> decorator ensures that once the data is loaded, it's automatically converted into your dataclass instances, providing a neat and powerful mechanism for handling complex nested structures and data types.</p></p>
-                <hr/>
+<p>This approach provides a clear separation between your data definitions and the serialization/deserialization logic, making it easier to maintain and adapt as your application grows. Marshmallow's <code>@post_load</code> decorator ensures that once the data is loaded, it's automatically converted into your dataclass instances, providing a neat and powerful mechanism for handling complex nested structures and data types.</p></div>
             
-                <p>Content: <p>To achieve the data serialization and deserialization with the data types you specified (i.e., converting strings to <code>date</code>, <code>datetime</code>, and <code>decimal</code> types), you can utilize the <code>marshmallow</code> library in Python. Below is a step-by-step guide on how to define your data classes using Marshmallow schemas, perform conversions, and work with nested structures.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve the data serialization and deserialization with the data types you specified (i.e., converting strings to <code>date</code>, <code>datetime</code>, and <code>decimal</code> types), you can utilize the <code>marshmallow</code> library in Python. Below is a step-by-step guide on how to define your data classes using Marshmallow schemas, perform conversions, and work with nested structures.</p>
 <p>First, ensure that you have Marshmallow installed in your environment:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -485,8 +502,7 @@ print(user)
 <li><strong>Nested Objects Handling</strong>: The <code>OrderSchema</code> is used within <code>UserSchema</code> to handle the nested <code>orders</code> list. This nested structure allows for a clean separation of concerns and accurately models the JSON data structure.</li>
 <li><strong>@post_load Decorator</strong>: This decorator is used to instantiate your data classes after Marshmallow has loaded the data. This helps in directly getting instances of your data classes from the loaded JSON.</li>
 </ul>
-<p>This setup gives you a robust way of handling JSON serialization/deserialization that respects specific data types, especially useful for dates, datetimes, and decimals.</p></p>
-                <hr/>
+<p>This setup gives you a robust way of handling JSON serialization/deserialization that respects specific data types, especially useful for dates, datetimes, and decimals.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/gryphe/mythomax-l2-13b:extended</h1>
             <p>Model: openrouter/gryphe/mythomax-l2-13b:extended</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data using Marshmallow library in Python, you can use the <code>marshmallow</code> module to serialize and deserialize the data. Here's how you can do it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data using Marshmallow library in Python, you can use the <code>marshmallow</code> module to serialize and deserialize the data. Here's how you can do it:</p>
 <pre><code class="language-python">from marshmallow import dataclass
 
 from datetime import datetime, decimal
@@ -296,42 +313,42 @@ person = PersonSchema().loads(json_from_dict(
         }
 </code></pre>
 <p><code>``
-This will create a</code>Person` object with the given JSON data and its corresponding dataclasses.</p></p>
-                <hr/>
+This will create a</code>Person` object with the given JSON data and its corresponding dataclasses.</p></div>
             
-                <p>Content: <p>You can achieve this using the marshmallow library by defining custom marshmallow dataclasses for 'Customer' and 'Order' like so:</p>
-<p>from marshmallow import Schema, fields
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can achieve this using the marshmallow library by defining custom marshmallow dataclasses for 'Customer' and 'Order' like so:</p>
+<p>from marshmallow import Schema, fields<br />
 from datetime import datetime</p>
-<p>class CustomerSchema(Schema):
-    first_name = fields.Str()
-    last_name = fields.Str()
+<p>class CustomerSchema(Schema):<br />
+    first_name = fields.Str()<br />
+    last_name = fields.Str()<br />
     date_of_birth = fields.DateTime()</p>
-<p>class OrderSchema(Schema):
-    created = fields.DateTime(converter=lambda x: datetime.datetime.strptime(x,'%m/%d/%m/%Y:%H:%M:%S')
+<p>class OrderSchema(Schema):<br />
+    created = fields.DateTime(converter=lambda x: datetime.datetime.strptime(x,'%m/%d/%m/%Y:%H:%M:%S')<br />
     amount = fields.Decimal()</p>
-<p>And then marshalling the JSON data with <code>marshmallow.make</code> method:
-import json
-data = {'first_name': 'Jane',
- ,'last_name': 'Smith', 
-    'date_of_birth': '03/17/197',
-    orders: [{'created': '24/21/05:04:01','amount': 10.0
-        }
-}
-customers = marshallow.make(data, pks.CustomerSchema())['customers'][0]
-print(customers)
-Will give you:
-{
-    "date_of_birth": datetime.datetime(197, 3, 3, 17, 0, 0, 0, 0),
-    "amount": 10.0
-    "last_name": "Smith"
-    "first_name": "Jane"
-}
-The 'orders' will also be marshalled but without amount as it's inside an array.
-So if you need the full object including 'orders' you can do:
-data['orders'] = [marshallow.make(item['orders'] for item in data['orders'] if item]</p></p>
-                <hr/>
+<p>And then marshalling the JSON data with <code>marshmallow.make</code> method:<br />
+import json<br />
+data = {'first_name': 'Jane',<br />
+ ,'last_name': 'Smith', <br />
+    'date_of_birth': '03/17/197',<br />
+    orders: [{'created': '24/21/05:04:01','amount': 10.0<br />
+        }<br />
+}<br />
+customers = marshallow.make(data, pks.CustomerSchema())['customers'][0]<br />
+print(customers)<br />
+Will give you:<br />
+{<br />
+    "date_of_birth": datetime.datetime(197, 3, 3, 17, 0, 0, 0, 0),<br />
+    "amount": 10.0<br />
+    "last_name": "Smith"<br />
+    "first_name": "Jane"<br />
+}<br />
+The 'orders' will also be marshalled but without amount as it's inside an array.<br />
+So if you need the full object including 'orders' you can do:<br />
+data['orders'] = [marshallow.make(item['orders'] for item in data['orders'] if item]</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON data using Marshmallow library in Python, you can use the <code>load</code> method of the <code>Schema</code> class. Here's an example code snippet:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON data using Marshmallow library in Python, you can use the <code>load</code> method of the <code>Schema</code> class. Here's an example code snippet:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 
 
@@ -372,8 +389,7 @@ print(person)
     Order(
       created=datetime.datetime(202020, 4, 2, 15, 15, 0, 4, 0)
       amount=Decimal('10.0')
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

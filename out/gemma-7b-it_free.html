@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/gemma-7b-it:free</h1>
             <p>Model: openrouter/google/gemma-7b-it:free</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import fields as ma
+                <p>Response 1.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import fields as ma
 
 class Customer(ma.Model):
     first_name = ma.Str()
@@ -263,10 +280,10 @@ class Customer(ma.Model):
             'amount': ma.Decimal()
         })
     )
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields
+                <p>Response 2.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Schema, fields
 
 
 class Order(Schema):
@@ -279,10 +296,10 @@ class User(Schema):
     last_name = fields.Str()
     date_of_birth = fields.Date()
     orders = fields.List(Order())
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Model, fields
+                <p>Response 3.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Model, fields
 
 
 class Person(Model):
@@ -299,10 +316,10 @@ class Order(Model):
 class UserOrder(Model):
     user = fields.ForeignKey(Person, ondelete='CASCADE')
     orders = fields.List(Order)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields
+                <p>Response 4.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Schema, fields
 
 
 class OrderSchema(Schema):
@@ -338,10 +355,10 @@ print(result)
 </ul>
 <p><strong>Output:</strong></p>
 <pre><code class="language-json">{&quot;first_name&quot;:&quot;Jane&quot;, &quot;last_name&quot;:&quot;Smith&quot;, &quot;date_of_birth&quot;:&quot;1977-0 viciss/16 Kün/25&quot;, &quot;orders&quot;:[{&quot;created&quot;:&quot;20 viciss/1/25T15:0 viciss/25&quot;, &quot;amount&quot;:&quot;10 viciss/1&quot;}]}
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields
+                <p>Response 5.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Schema, fields
 
 
 class Order(Schema):
@@ -354,8 +371,7 @@ class User(Schema):
     last_name = fields.Str()
     date_of_birth = fields.Date()
     orders = fields.List(Order())
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

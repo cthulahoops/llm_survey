@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/perplexity/pplx-70b-chat</h1>
             <p>Model: openrouter/perplexity/pplx-70b-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this, you can use the <code>marshmallow</code> library to define your dataclasses and serialization/deserialization for your JSON data. In this case, we'll define a base class for common fields and two derived classes to handle different data types.</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this, you can use the <code>marshmallow</code> library to define your dataclasses and serialization/deserialization for your JSON data. In this case, we'll define a base class for common fields and two derived classes to handle different data types.</p>
 <p>First, make sure you have <code>marshmallow</code> installed:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -336,10 +353,10 @@ serialized_data = user_schema.dump(user_data)
 user_schema = UserSchema()
 deserialized_data = user_schema.load(json.loads(json_data))
 </code></pre>
-<p>I hope that helps! Let me know if you have any further questions.</p></p>
-                <hr/>
+<p>I hope that helps! Let me know if you have any further questions.</p></div>
             
-                <p>Content: <p>To achieve the desired result using the marshmallow library in Python, you can define your data classes along with marshmallow schemas to handle the JSON data you provided.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve the desired result using the marshmallow library in Python, you can define your data classes along with marshmallow schemas to handle the JSON data you provided.</p>
 <p>First, let's define your data classes:</p>
 <pre><code class="language-python">from datetime import datetime
 from dateutil.parser import parse
@@ -398,10 +415,10 @@ print(user.first_name)  # Output: Jane
 print(user.date_of_birth)  # Output: datetime object representing 3/16/1977
 print(user.orders[0].amount)  # Output: 100.0 as a Decimal object
 </code></pre>
-<p>Using marshmallow schemas, the JSON is automatically converted into a User object and Order object, conforming to the desired type specifications.</p></p>
-                <hr/>
+<p>Using marshmallow schemas, the JSON is automatically converted into a User object and Order object, conforming to the desired type specifications.</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can define data classes (also known as schemas in marshmallow) for the needed data structures. Here's a step-by-step guide to help you:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can define data classes (also known as schemas in marshmallow) for the needed data structures. Here's a step-by-step guide to help you:</p>
 <p>Firstly, import the required libraries and the necessary classes from the <code>marshmallow</code> package:</p>
 <pre><code class="language-python">import json
 from datetime import datetime
@@ -455,8 +472,7 @@ json_data_from_schema = PersonSchema().dump(loaded_object)
 
 print(json_data_from_schema)  # Output: {&quot;first_name&quot;: &quot;Jane&quot;, &quot;last_name&quot;: &quot;Smith&quot;, &quot;date_of_birth&quot;: &quot;1977-03-16T00:00:00Z&quot;, &quot;orders&quot;: [{&quot;created&quot;: &quot;2024-01-25T15:00:04Z&quot;, &quot;amount&quot;: 100.0}]}
 </code></pre>
-<p>Make sure you organize the files in your project in a structured way, placing the relevant files in their appropriate directories, keeping your project clean and organized.</p></p>
-                <hr/>
+<p>Make sure you organize the files in your project in a structured way, placing the relevant files in their appropriate directories, keeping your project clean and organized.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo-0613</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo-0613</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON using the marshmallow library in Python, you will need to define schemas for each class and field conversion functions. Here's an example implementation:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON using the marshmallow library in Python, you will need to define schemas for each class and field conversion functions. Here's an example implementation:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 from dataclasses import dataclass, field
@@ -309,10 +326,10 @@ person = person_schema.load(json_data)
 print(person)
 </code></pre>
 <p>In the above code, <code>OrderSchema</code> defines the schema for the <code>Order</code> class, and <code>PersonSchema</code> defines the schema for the <code>Person</code> class. The <code>@post_load</code> decorator is used to specify a method that will be called after loading the JSON data, in which the corresponding class object is created.</p>
-<p>By calling <code>person_schema.load(json_data)</code>, the JSON data is loaded and converted into the <code>Person</code> dataclass instance.</p></p>
-                <hr/>
+<p>By calling <code>person_schema.load(json_data)</code>, the JSON data is loaded and converted into the <code>Person</code> dataclass instance.</p></div>
             
-                <p>Content: <p>To achieve this, you can use the marshmallow library in Python to define schemas for serialization and deserialization of JSON data. The schemas can then be used to generate dataclasses.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this, you can use the marshmallow library in Python to define schemas for serialization and deserialization of JSON data. The schemas can then be used to generate dataclasses.</p>
 <p>First, install the <code>marshmallow</code> library if you haven't already by running <code>pip install marshmallow</code>.</p>
 <p>Next, create a new Python file and import the necessary modules:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, validate, post_load
@@ -374,10 +391,10 @@ user_schema = UserSchema()
 result = user_schema.dump(user)
 print(result)
 </code></pre>
-<p>This way, you can use the marshmallow library to define schemas and generate dataclasses with the desired types for the given JSON structure.</p></p>
-                <hr/>
+<p>This way, you can use the marshmallow library to define schemas and generate dataclasses with the desired types for the given JSON structure.</p></div>
             
-                <p>Content: <p>To generate data classes using the <code>marshmallow</code> library in Python, you can define schemas using the <code>marshmallow.Schema</code> class. Here's an example of how you can do it for your provided JSON:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate data classes using the <code>marshmallow</code> library in Python, you can define schemas using the <code>marshmallow.Schema</code> class. Here's an example of how you can do it for your provided JSON:</p>
 <p>First, you will need to install the <code>marshmallow</code> library if you haven't already done so:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -427,8 +444,7 @@ print(order.amount)  # Output: 100.00 (as Decimal type)
 </code></pre>
 <p>In the above code, we create two schemas, <code>OrderSchema</code> and <code>UserSchema</code>, which define how the JSON should be parsed and validated. The nested schema <code>OrderSchema</code> is used to handle the <code>orders</code> list, and the <code>UserSchema</code> represents the main structure.</p>
 <p>To load the JSON data into the schema, we call the <code>load()</code> method of the <code>UserSchema</code>. The resulting data classes can then be accessed and used as needed.</p>
-<p>Note: Make sure to import the necessary classes and modules (<code>Schema</code>, <code>fields</code>, <code>validate</code>, <code>date</code>, <code>datetime</code>, <code>Decimal</code>) before running the code.</p></p>
-                <hr/>
+<p>Note: Make sure to import the necessary classes and modules (<code>Schema</code>, <code>fields</code>, <code>validate</code>, <code>date</code>, <code>datetime</code>, <code>Decimal</code>) before running the code.</p></div>
             
         </main>
     </body>

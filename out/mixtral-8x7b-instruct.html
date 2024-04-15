@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mixtral-8x7b-instruct</h1>
             <p>Model: openrouter/mistralai/mixtral-8x7b-instruct</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses using the provided JSON schema and the marshmallow library, follow the steps below:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the provided JSON schema and the marshmallow library, follow the steps below:</p>
 <p>First, install marshmallow if you haven't already; you can do that by running:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -299,10 +316,10 @@ user_schema = UserSchema()
 user_obj = user_schema.load(user_data)
 print(user_obj)
 </code></pre>
-<p>In this example, I created two nested schemas, <code>Order</code> and <code>User</code>, for the given JSON. Each schema converts the appropriate fields to their corresponding data types. Don't forget to update the data for <code>date_of_birth</code>. I changed it to <code>'1977-03-16'</code> to make it a proper date format. Later, you can load the JSON into these dataclasses using the <code>load()</code> method from the respective schemas. This example uses the Python <code>datetime</code>, <code>date</code>, and <code>decimal</code> modules to ensure the correct data types are used.</p></p>
-                <hr/>
+<p>In this example, I created two nested schemas, <code>Order</code> and <code>User</code>, for the given JSON. Each schema converts the appropriate fields to their corresponding data types. Don't forget to update the data for <code>date_of_birth</code>. I changed it to <code>'1977-03-16'</code> to make it a proper date format. Later, you can load the JSON into these dataclasses using the <code>load()</code> method from the respective schemas. This example uses the Python <code>datetime</code>, <code>date</code>, and <code>decimal</code> modules to ensure the correct data types are used.</p></div>
             
-                <p>Content: <p>To generate dataclasses for the provided JSON using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses for the provided JSON using the marshmallow library in Python, you can follow these steps:</p>
 <p>First, make sure to install the marshmallow library by running <code>pip install marshmallow</code>.</p>
 <p>Then, create the dataclasses:</p>
 <pre><code class="language-python">from datetime import datetime
@@ -352,10 +369,10 @@ user_data = schema.load(json_data)
 # Print the deserialized data
 pprint(user_data.to_dict())
 </code></pre>
-<p>In this script, we define dataclasses for the User and Order objects using marshmallow. We also load the JSON using the schema, parse the string-formatted date_of_birth, and serialize it to the newly defined User dataclass.</p></p>
-                <hr/>
+<p>In this script, we define dataclasses for the User and Order objects using marshmallow. We also load the JSON using the schema, parse the string-formatted date_of_birth, and serialize it to the newly defined User dataclass.</p></div>
             
-                <p>Content: <p>Sure! Here's how you can create dataclasses using the marshmallow library for that JSON data. First, install the library using pip:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Sure! Here's how you can create dataclasses using the marshmallow library for that JSON data. First, install the library using pip:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Now, here's the Python code to generate the dataclasses:</p>
@@ -406,8 +423,7 @@ person_schema = PersonSchema()
 person = person_schema.load(person_data)
 print(person)
 </code></pre>
-<p>This will fulfill your requirements. For each element in the orders list, <code>created</code> will be of type <code>datetime</code>, and <code>amount</code> will be of type <code>decimal</code>, while <code>date_of_birth</code> will be a <code>date</code>.</p></p>
-                <hr/>
+<p>This will fulfill your requirements. For each element in the orders list, <code>created</code> will be of type <code>datetime</code>, and <code>amount</code> will be of type <code>decimal</code>, while <code>date_of_birth</code> will be a <code>date</code>.</p></div>
             
         </main>
     </body>

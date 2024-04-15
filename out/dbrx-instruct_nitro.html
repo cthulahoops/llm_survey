@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/databricks/dbrx-instruct:nitro</h1>
             <p>Model: openrouter/databricks/dbrx-instruct:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Love helping with that! To achieve this, you can use the Marshmallow library in Python to define a schema for your JSON. This schema will help in validating and deserializing the JSON into Python objects. Here's how you can do it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Love helping with that! To achieve this, you can use the Marshmallow library in Python to define a schema for your JSON. This schema will help in validating and deserializing the JSON into Python objects. Here's how you can do it:</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
 from marshmallow import Schema, fields, validate
@@ -303,10 +320,10 @@ print(user)
 
 # If you need to convert the dataclass back to JSON, use:
 # json_data = user_schema.dump(user)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>:
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>:<br />
 You can use the Marshmallow library to define the schema for your JSON data and then use it to deserialize the JSON into Python dataclasses. Here's an example of how you can do this:</p>
 <p>First, you need to install the Marshmallow library and the dataclasses library if you haven't already:</p>
 <pre><code class="language-bash">pip install marshmallow dataclasses
@@ -362,11 +379,10 @@ print(user)
 </code></pre>
 <p>This will output:</p>
 <pre><code class="language-python">User(first_name='Jane', last_name='Smith', date_of_birth=datetime.datetime(1977, 3, 16, 0, 0), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: </p>
-                <hr/>
+                <p>Response 3.</p>
+                <div class="markdown-body"></div>
             
         </main>
     </body>

@@ -247,57 +247,74 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/jondurbin/airoboros-l2-70b</h1>
             <p>Model: openrouter/jondurbin/airoboros-l2-70b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use marshmallow to convert the JSON data into Python objects by defining dataclasses and schemas. Here's an example of how you could do this:</p>
-<p>from datetime import date, datetime
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use marshmallow to convert the JSON data into Python objects by defining dataclasses and schemas. Here's an example of how you could do this:</p>
+<p>from datetime import date, datetime<br />
 from typing import List</p>
 <p>import marshmallow</p>
-<p>class UserSchema(marshmallow.Schema):
-    first_name = marshmallow.fields.Str()
-    last_name = marshmallow.fields.Str()
-    date_of_birth = marshmallow.fields.Date()
-    created = marshmallow.fields.DateTime()
+<p>class UserSchema(marshmallow.Schema):<br />
+    first_name = marshmallow.fields.Str()<br />
+    last_name = marshmallow.fields.Str()<br />
+    date_of_birth = marshmallow.fields.Date()<br />
+    created = marshmallow.fields.DateTime()<br />
     amount = marshmallow.fields.Decimal()</p>
-<p>class OrderSchema(marshmallow.Schema):
-    first_name = marshmallow.fields.Str()
-    last_name = marshmallow.fields.Str()
-    date_of_birth = marshmallow.fields.Date()
-    created = marshmallow.fields.DateTime()
+<p>class OrderSchema(marshmallow.Schema):<br />
+    first_name = marshmallow.fields.Str()<br />
+    last_name = marshmallow.fields.Str()<br />
+    date_of_birth = marshmallow.fields.Date()<br />
+    created = marshmallow.fields.DateTime()<br />
     amount = marshmallow.fields.Decimal()</p>
-<p>class User:
-    def <strong>init</strong>(self, first_name, last_name, date_of_birth, orders):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.date_of_birth = date_of_birth
+<p>class User:<br />
+    def <strong>init</strong>(self, first_name, last_name, date_of_birth, orders):<br />
+        self.first_name = first_name<br />
+        self.last_name = last_name<br />
+        self.date_of_birth = date_of_birth<br />
         self.orders = orders</p>
 <pre><code>class Meta:
     schema = UserSchema()
 </code></pre>
-<p>class Order:
-    def <strong>init</strong>(self, first_name, last_name, date_of_birth, created, amount):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.date_of_birth = date_of_birth
-        self.created = created
+<p>class Order:<br />
+    def <strong>init</strong>(self, first_name, last_name, date_of_birth, created, amount):<br />
+        self.first_name = first_name<br />
+        self.last_name = last_name<br />
+        self.date_of_birth = date_of_birth<br />
+        self.created = created<br />
         self.amount = amount</p>
 <pre><code>class Meta:
     schema = OrderSchema()
 </code></pre>
-<p>if <strong>name</strong> == "<strong>main</strong>":
-    # sample json data
-    data = {
-        "first_name": "Jane",
-        "last_name": "Smith",
-        "date_of_birth": "03/16/1977",
-        "orders": [
-            {
-                "created": "2024-01-25T15:00:04",
-                "amount": "100.00"
-            }
-        ]
+<p>if <strong>name</strong> == "<strong>main</strong>":<br />
+    # sample json data<br />
+    data = {<br />
+        "first_name": "Jane",<br />
+        "last_name": "Smith",<br />
+        "date_of_birth": "03/16/1977",<br />
+        "orders": [<br />
+            {<br />
+                "created": "2024-01-25T15:00:04",<br />
+                "amount": "100.00"<br />
+            }<br />
+        ]<br />
     }</p>
 <pre><code># load the data into a user object
 user_data = UserSchema().load(data)
@@ -307,10 +324,10 @@ user = User(**user_data)
 
 # print the User object
 print(user.as_json())
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To create dataclasses from the provided JSON using marshmallow library, you can first install the marshmallow library if you haven't already:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create dataclasses from the provided JSON using marshmallow library, you can first install the marshmallow library if you haven't already:</p>
 <pre><code class="language-python">pip install marshmallow
 </code></pre>
 <p>Then, in your code, define the appropriate schemas and classes for each type of object as follows:</p>
@@ -369,10 +386,10 @@ print(user_dict_from_schema)
 print(user)
 </code></pre>
 <p>This code defines three schemas: <code>DateSchema</code>, <code>DecimalSchema</code>, and <code>OrderSchema</code>. <code>OrderSchema</code> has two fields: <code>created</code>, which is a DateTime, and <code>amount</code>, which is a Decimal. <code>UserSchema</code> nests the <code>OrderSchema</code> and adds the fields <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code>.</p>
-<p>The <code>User</code> class takes four arguments in its constructor and configures its schema. The <code>if __name__ == '__main__'</code> block creates a user object from the provided dictionary, dumps it to a dictionary using <code>user.schema().dump(user)</code>, and then unmarshals it back into an object using <code>user.schema().load(user_dict_from_schema)</code>. Finally, both the marshaled and unmarshaled objects are printed.</p></p>
-                <hr/>
+<p>The <code>User</code> class takes four arguments in its constructor and configures its schema. The <code>if __name__ == '__main__'</code> block creates a user object from the provided dictionary, dumps it to a dictionary using <code>user.schema().dump(user)</code>, and then unmarshals it back into an object using <code>user.schema().load(user_dict_from_schema)</code>. Finally, both the marshaled and unmarshaled objects are printed.</p></div>
             
-                <p>Content: <p>Here's a basic example of how you could use the marshmallow library to deserialize the provided JSON into dataclasses:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's a basic example of how you could use the marshmallow library to deserialize the provided JSON into dataclasses:</p>
 <pre><code class="language-python">from datetime import datetime
 from dataclasses import dataclass
 from marshmallow import Schema, fields, post_load
@@ -430,8 +447,7 @@ print(user.orders[0].amount) # 100.0
 </code></pre>
 <p>In this example, I've defined the <code>User</code> and <code>Order</code> dataclasses, as well as their respective schemas (using the Marshmallow library). Then, I've used the <code>load()</code> method of the <code>UserSchema</code> class to deserialize the provided JSON into a <code>User</code> object.</p>
 <p>The <code>post_load</code> decorator is used to convert the raw data from the JSON into the actual dataclass objects.</p>
-<p>Note that you'll need to import <code>dateutil</code> for the date parsing to work.</p></p>
-                <hr/>
+<p>Note that you'll need to import <code>dateutil</code> for the date parsing to work.</p></div>
             
         </main>
     </body>

@@ -247,31 +247,48 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-instant-1.0</h1>
             <p>Model: openrouter/anthropic/claude-instant-1.0</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use marshmallow like this:
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use marshmallow like this:<br />
 from marshmallow import Schema, fields</p>
-<p>class Person(dataclass.dataclass):
-    first_name: str
-    last_name: str
+<p>class Person(dataclass.dataclass):<br />
+    first_name: str<br />
+    last_name: str<br />
     date_of_birth: date</p>
 <pre><code>orders: List[Order]
 </code></pre>
-<p>class Order(dataclass.dataclass):
-    created: datetime 
+<p>class Order(dataclass.dataclass):<br />
+    created: datetime <br />
     amount: Decimal </p>
-<p>class PersonSchema(Schema):
-    first_name = fields.Str()
-    last_name = fields.Str()
-    date_of_birth = fields.Date()
+<p>class PersonSchema(Schema):<br />
+    first_name = fields.Str()<br />
+    last_name = fields.Str()<br />
+    date_of_birth = fields.Date()<br />
     orders = fields.List(fields.Nested('OrderSchema')) </p>
-<p>class OrderSchema(Schema):
-    created = fields.DateTime() 
+<p>class OrderSchema(Schema):<br />
+    created = fields.DateTime() <br />
     amount = fields.Decimal() </p>
-<p>person_data = '{"first_name": "Jane", "last_name": "Smith", ' 
-'"date_of_birth": "03/16/1977", 
+<p>person_data = '{"first_name": "Jane", "last_name": "Smith", ' <br />
+'"date_of_birth": "03/16/1977", <br />
 "orders": [{"created": "2024-01-25T15:00:04", "amount": "100.00" } ]}' </p>
 <p>person = PersonSchema().load(person_data) </p>
 <p>print(person.date_of_birth) </p>
@@ -280,96 +297,95 @@ from marshmallow import Schema, fields</p>
 <h1>Output: 2024-01-25 15:00:04</h1>
 <p>print(person.orders[0].amount) </p>
 <h1>Output: 100.0</h1>
-<p>So you define dataclasses, then create Schema subclasses to convert to/from JSON using marshmallow.load loads the JSON into the dataclasses, and .dumps() can serialize them back to JSON.</p></p>
-                <hr/>
+<p>So you define dataclasses, then create Schema subclasses to convert to/from JSON using marshmallow.load loads the JSON into the dataclasses, and .dumps() can serialize them back to JSON.</p></div>
             
-                <p>Content: <p>You can define classes like this:
-from dataclasses import dataclass
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can define classes like this:<br />
+from dataclasses import dataclass<br />
 from marshmallow import Schema, fields</p>
-<p>@dataclass
-class User:
-    first_name: str
-    last_name: str
+<p>@dataclass<br />
+class User:<br />
+    first_name: str<br />
+    last_name: str<br />
     date_of_birth: date</p>
 <pre><code>def __init__(self, first_name, last_name, date_of_birth):
     self.first_name = first_name 
     self.last_name = last_name 
     self.date_of_birth = date_of_birth
 </code></pre>
-<p>@dataclass 
-class Order:
-    created: datetime 
+<p>@dataclass <br />
+class Order:<br />
+    created: datetime <br />
     amount: Decimal</p>
 <pre><code>def __init__(self, created, amount):
     self.created = created 
     self.amount = amount
 </code></pre>
-<p>Then define a Schema like this:
-class UserSchema(Schema):
-    first_name = fields.String() 
-    last_name = fields.String() 
-    date_of_birth = fields.Date() 
+<p>Then define a Schema like this:<br />
+class UserSchema(Schema):<br />
+    first_name = fields.String() <br />
+    last_name = fields.String() <br />
+    date_of_birth = fields.Date() <br />
     orders = fields.Nested(lambda: OrderSchema(many=True))</p>
-<p>class OrderSchema(Schema):
-    created = fields.DateTime() 
+<p>class OrderSchema(Schema):<br />
+    created = fields.DateTime() <br />
     amount = fields.Decimal() </p>
-<p>And deserialize like this:
-user_dict = your_json 
-user_schema = UserSchema() 
+<p>And deserialize like this:<br />
+user_dict = your_json <br />
+user_schema = UserSchema() <br />
 user = user_schema.load(user_dict) </p>
-<p>print(user.first_name) 
-print(user.date_of_birth) 
-print(user.orders[0].created) 
+<p>print(user.first_name) <br />
+print(user.date_of_birth) <br />
+print(user.orders[0].created) <br />
 print(user.orders[0].amount)</p>
-<p>This will give you:
-Jane 
-1977-03-16 
-2024-01-25 15:00:04 
+<p>This will give you:<br />
+Jane <br />
+1977-03-16 <br />
+2024-01-25 15:00:04 <br />
 100.0</p>
-<p>So you'll end up with strongly typed Python objects from your JSON.</p></p>
-                <hr/>
+<p>So you'll end up with strongly typed Python objects from your JSON.</p></div>
             
-                <p>Content: <p>You can define it like this:
-from datetime import date 
-from decimal import Decimal 
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can define it like this:<br />
+from datetime import date <br />
+from decimal import Decimal <br />
 from marshmallow import Schema, fields </p>
-<p>class DateSchema(fields.Date): 
-    def <strong>init</strong>(self): 
+<p>class DateSchema(fields.Date): <br />
+    def <strong>init</strong>(self): <br />
         pass </p>
 <pre><code>def __call__(self, value): 
     return date.fromisoformat(value)
 </code></pre>
-<p>class DecimalSchema(fields.Decimal): 
-    def <strong>init</strong>(self): 
+<p>class DecimalSchema(fields.Decimal): <br />
+    def <strong>init</strong>(self): <br />
         pass </p>
 <pre><code>def __call__(self, value): 
     return Decimal(value)
 </code></pre>
-<p>class UserSchema(Schema): 
-    first_name = fields.Str() 
-    last_name = fields.Str() 
-    date_of_birth = DateSchema() 
+<p>class UserSchema(Schema): <br />
+    first_name = fields.Str() <br />
+    last_name = fields.Str() <br />
+    date_of_birth = DateSchema() <br />
     orders = fields.List(fields.Nested(OrderSchema)) </p>
-<p>class OrderSchema(Schema): 
-    created = fields.DateTime() 
+<p>class OrderSchema(Schema): <br />
+    created = fields.DateTime() <br />
     amount = DecimalSchema() </p>
-<p>user = { 
-  'first_name': 'Jane', 
-  'last_name': 'Smith', 
-  'date_of_birth': '03/16/1977', 
-  orders: [
-    { 
-      'created': '2024-01-25T15:00:04', 
-      'amount': '100.00' 
-    }
-  ] 
+<p>user = { <br />
+  'first_name': 'Jane', <br />
+  'last_name': 'Smith', <br />
+  'date_of_birth': '03/16/1977', <br />
+  orders: [<br />
+    { <br />
+      'created': '2024-01-25T15:00:04', <br />
+      'amount': '100.00' <br />
+    }<br />
+  ] <br />
 } </p>
-<p>data = UserSchema().load(user) 
-print(data.date_of_birth)  # Prints 03/16/1977
-print(data.orders[0].created)  # Prints 2024-01-25 15:00:04 
+<p>data = UserSchema().load(user) <br />
+print(data.date_of_birth)  # Prints 03/16/1977<br />
+print(data.orders[0].created)  # Prints 2024-01-25 15:00:04 <br />
 print(data.orders[0].amount)  # Prints 100.0</p>
-<p>This will serialize the date_of_birth to a date, created to datetime, and amount to Decimal.</p></p>
-                <hr/>
+<p>This will serialize the date_of_birth to a date, created to datetime, and amount to Decimal.</p></div>
             
         </main>
     </body>

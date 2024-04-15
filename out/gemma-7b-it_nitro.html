@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/gemma-7b-it:nitro</h1>
             <p>Model: openrouter/google/gemma-7b-it:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <pre><code class="language-python">import datetime
+                <p>Response 1.</p>
+                <div class="markdown-body"><pre><code class="language-python">import datetime
 import decimal
 from marshmallow import Schema, fields
 
@@ -280,10 +297,10 @@ person_data = {
 person_schema.load(person_data)
 
 print(person_schema.data)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">import datetime
+                <p>Response 2.</p>
+                <div class="markdown-body"><pre><code class="language-python">import datetime
 import marshmallow
 
 class User(marshmallow.Schema):
@@ -313,10 +330,10 @@ user = User.from_dict(data)
 print(user.date_of_birth)  # Output: 1977-03-16
 print(user.orders[0]['created'])  # Output: 2024-01-25 15:00:04
 print(user.orders[0]['amount'])  # Output: 100.0
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <pre><code class="language-python">import datetime
+                <p>Response 3.</p>
+                <div class="markdown-body"><pre><code class="language-python">import datetime
 import decimal
 from marshmallow import Schema, fields
 
@@ -346,8 +363,7 @@ user_schema = User().load(user_data)
 
 # Print the results
 print(user_schema)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

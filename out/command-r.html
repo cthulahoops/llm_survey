@@ -247,16 +247,33 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/cohere/command-r</h1>
             <p>Model: openrouter/cohere/command-r</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses from the provided JSON using the <code>marshmallow</code> library, you first need to install the library:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the provided JSON using the <code>marshmallow</code> library, you first need to install the library:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
-<p>Then, you can follow these steps:
-1. Import the necessary modules.
-2. Define the dataclasses using <code>dataclasses.make_dataclass()</code>.
+<p>Then, you can follow these steps:<br />
+1. Import the necessary modules.<br />
+2. Define the dataclasses using <code>dataclasses.make_dataclass()</code>.<br />
 3. Create the Lycée marshmallow schema by specifying the fields and their types.</p>
 <p>Here's the implementation:</p>
 <pre><code class="language-python">from dataclasses import dataclass
@@ -307,10 +324,10 @@ print(customer)
 </code></pre>
 <p>When you run the above code, it will print the parsed dataclass instance:</p>
 <pre><code>Customer(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 4), amount=Decimal('100.00'))])
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can define Python dataclasses and use Marshmallow's schema classes to validate and convert the JSON data. </p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can define Python dataclasses and use Marshmallow's schema classes to validate and convert the JSON data. </p>
 <p>First, you'll need to install the <code>marshmallow</code> library:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -361,10 +378,10 @@ customer = customer_schema.load(json_data)
 
 print(customer)
 </code></pre>
-<p>This code defines two dataclasses: <code>Order</code> and <code>Customer</code>, and two corresponding Marshmallow schemas. The JSON data is parsed into the <code>Customer</code> dataclass using the <code>CustomerSchema</code>. Note that I've adjusted the date format in the JSON to be ISO 8601 compatible, which is the recommended format for Marshmallow's <code>DateTimeField</code>.</p></p>
-                <hr/>
+<p>This code defines two dataclasses: <code>Order</code> and <code>Customer</code>, and two corresponding Marshmallow schemas. The JSON data is parsed into the <code>Customer</code> dataclass using the <code>CustomerSchema</code>. Note that I've adjusted the date format in the JSON to be ISO 8601 compatible, which is the recommended format for Marshmallow's <code>DateTimeField</code>.</p></div>
             
-                <p>Content: <p>To parse JSON into dataclasses, you first need to install the required packages:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To parse JSON into dataclasses, you first need to install the required packages:</p>
 <pre><code class="language-bash">pip install marshmallow dataclasses-json
 </code></pre>
 <p>Next, you can define the dataclasses and Marshmallow schema:</p>
@@ -415,8 +432,7 @@ print(result)
 </code></pre>
 <p>When executed, this code will print out the following dataclass instance:</p>
 <pre><code>Customer(first_name='Jane', last_name='Smith', date_of_birth='1977-03-16', orders=[Order(created='2024-01-25T15:00:04', amount=Decimal('100.00'))])
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

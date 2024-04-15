@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/perplexity/sonar-medium-online</h1>
             <p>Model: openrouter/perplexity/sonar-medium-online</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To generate dataclasses for the given JSON using the marshmallow library, follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To generate dataclasses for the given JSON using the marshmallow library, follow these steps:</p>
 <ol>
 <li>Install the <code>marshmallow-dataclass</code> library and its dependencies, including <code>marshmallow</code>, <code>dataclasses</code>, and <code>datetime</code>:</li>
 </ol>
@@ -301,10 +318,10 @@ customer = Class().load(customer_data)
 # Verify the instance matches the input dictionary
 assert customer.dict() == customer_data
 </code></pre>
-<p>In this example, the <code>marshmallow_dataclass</code> library is used to automatically generate marshmallow schemas, converting dataclasses into schemas and vice versa. The library handles the type conversion of fields, such as date/datetime, and supports type annotations in the dataclass declaration for further configuration of fields.</p></p>
-                <hr/>
+<p>In this example, the <code>marshmallow_dataclass</code> library is used to automatically generate marshmallow schemas, converting dataclasses into schemas and vice versa. The library handles the type conversion of fields, such as date/datetime, and supports type annotations in the dataclass declaration for further configuration of fields.</p></div>
             
-                <p>Content: <p>To generate dataclasses with marshmallow using the provided JSON, follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses with marshmallow using the provided JSON, follow these steps:</p>
 <ol>
 <li>Convert the JSON into appropriate Python dictionaries.</li>
 <li>Install the necessary libraries (<code>marshmallow</code> and <code>marshmallow-dataclass</code>).</li>
@@ -361,10 +378,10 @@ print(f&quot;Name: {data.first_name}, {data.last_name}&quot;)
 print(f&quot;DOB: {data.date_of_birth}&quot;)
 print(f&quot;Orders: {data.orders}&quot;)
 </code></pre>
-<p>This example shows you how to use <code>marshmallow_dataclass</code> to automatically generate schemas for your dataclasses, with details on how to specify a data type for each field and convert the data to its native type for serialization.</p></p>
-                <hr/>
+<p>This example shows you how to use <code>marshmallow_dataclass</code> to automatically generate schemas for your dataclasses, with details on how to specify a data type for each field and convert the data to its native type for serialization.</p></div>
             
-                <p>Content: <p>To create data classes using the Marshmallow library based on the provided JSON, you can follow the following steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create data classes using the Marshmallow library based on the provided JSON, you can follow the following steps:</p>
 <ol>
 <li>First, install the Marshmallow library for Python. You can do this using pip, the Python package manager. Here is the command in your terminal:</li>
 </ol>
@@ -422,8 +439,7 @@ def from_json(json_data):
 </code></pre>
 <p>In this code, we define two data classes, <code>User</code> and <code>Order</code>, with <code>from_dict</code> class methods to convert dictionaries into objects of each class. We also define two corresponding Marshmallow schema classes, <code>UserSchema</code> and <code>OrderSchema</code>, each of which define the fields and data types used in the class instances.</p>
 <p>The <code>marismallow.DateTime</code> and <code>marshmallow.Decimal</code> type decouplers will automatically serialize and deserialize dates and decimal numbers as defined. The <code>DateTime</code> class uses the <code>datetime.strptime</code> method to convert the ISO 8601-format date from the JSON into a Python <code>datetime</code> object, and the <code>Decimal</code> class uses the <code>Decimal</code> constructor to convert the amount value into a <code>decimal.Decimal</code> object.</p>
-<p>Finally, we define the <code>from_json</code> function, which uses the <code>json.loads</code> method to parse the JSON string, then constructs the <code>UserSchema</code> and <code>User</code> instances from the resulting dictionary.</p></p>
-                <hr/>
+<p>Finally, we define the <code>from_json</code> function, which uses the <code>json.loads</code> method to parse the JSON string, then constructs the <code>UserSchema</code> and <code>User</code> instances from the resulting dictionary.</p></div>
             
         </main>
     </body>

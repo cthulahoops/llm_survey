@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-hermes-2-mixtral-8x7b-sft</h1>
             <p>Model: openrouter/nousresearch/nous-hermes-2-mixtral-8x7b-sft</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can generate dataclasses using the marshmallow library in Python by creating a schema class that defines the fields and their types. Here's an example based on your JSON input:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can generate dataclasses using the marshmallow library in Python by creating a schema class that defines the fields and their types. Here's an example based on your JSON input:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 from datetime import datetime
 from decimal import Decimal
@@ -266,7 +283,7 @@ class UserSchema(Schema):
     date_of_birth = fields.Date()
     orders = fields.Nested(OrderSchema, many=True)
 </code></pre>
-<p>In this code, <code>OrderSchema</code> defines the fields <code>created</code> as a datetime object and <code>amount</code> as a decimal. <code>UserSchema</code> then nests <code>OrderSchema</code> many times to define the <code>orders</code> field.
+<p>In this code, <code>OrderSchema</code> defines the fields <code>created</code> as a datetime object and <code>amount</code> as a decimal. <code>UserSchema</code> then nests <code>OrderSchema</code> many times to define the <code>orders</code> field.<br />
 To generate a dataclass from that schema using your JSON, you can use the <code>from_dict</code> method on an instance of the <code>Schema</code>. Here's an example using your JSON:</p>
 <pre><code class="language-python">user_schema = UserSchema()
 json_data = {
@@ -284,10 +301,10 @@ json_data = {
 generated_dataclass = user_schema.load(json_data)
 print(generated_dataclass)
 </code></pre>
-<p>This will generate a dataclass based on your schema and the given JSON.</p></p>
-                <hr/>
+<p>This will generate a dataclass based on your schema and the given JSON.</p></div>
             
-                <p>Content: <p>One way to generate dataclasses from JSON using the marshmallow library in Python is to use the marshmallow_dataclass library, which provides automatic serialization and deserialization of marshmallow schemas.
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>One way to generate dataclasses from JSON using the marshmallow library in Python is to use the marshmallow_dataclass library, which provides automatic serialization and deserialization of marshmallow schemas.<br />
 First, you need to install the library using pip:</p>
 <pre><code class="language-python">pip install marshmallow_dataclass
 </code></pre>
@@ -333,11 +350,11 @@ UserSchema.load_json({
   ]
 })
 </code></pre>
-<p>This will automatically convert the JSON into your dataclasses, with the appropriate types for each field.</p></p>
-                <hr/>
+<p>This will automatically convert the JSON into your dataclasses, with the appropriate types for each field.</p></div>
             
-                <p>Content: <p>Great question! Marshmallow is a popular open source library in Python used for serialization, deserialization, and validation of complex objects.
-To generate dataclasses from this JSON using Marshmallow, you can define respective schemas for each type of data.
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Great question! Marshmallow is a popular open source library in Python used for serialization, deserialization, and validation of complex objects.<br />
+To generate dataclasses from this JSON using Marshmallow, you can define respective schemas for each type of data.<br />
 First, install the marshmallow library if you haven't done so:</p>
 <pre><code>pip install marshmallow
 </code></pre>
@@ -376,10 +393,9 @@ output = user_schema.dump(data)
 # Print the output
 pprint(output)
 </code></pre>
-<p>In the above code, we have defined two schemas. The <code>MyOrderSchema</code> handles the <code>orders</code> key, which represents the orders of a user. The <code>MyUserSchema</code> handles the main data of a user.
-The actual data is defined in the 'data' dictionary, and using the <code>.dump()</code> method we can serialize the data into a Python dictionary of objects.
-Remember to adjust the field types and validations according to your needs.</p></p>
-                <hr/>
+<p>In the above code, we have defined two schemas. The <code>MyOrderSchema</code> handles the <code>orders</code> key, which represents the orders of a user. The <code>MyUserSchema</code> handles the main data of a user.<br />
+The actual data is defined in the 'data' dictionary, and using the <code>.dump()</code> method we can serialize the data into a Python dictionary of objects.<br />
+Remember to adjust the field types and validations according to your needs.</p></div>
             
         </main>
     </body>

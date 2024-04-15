@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/koboldai/psyfighter-13b-2</h1>
             <p>Model: openrouter/koboldai/psyfighter-13b-2</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use marshmallow to define your dataclasses and then unmarshal the JSON into instances of those dataclasses:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use marshmallow to define your dataclasses and then unmarshal the JSON into instances of those dataclasses:</p>
 <p>First, install Marshmallow:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -293,10 +310,10 @@ user = User().load(json.loads(data))
 <pre><code class="language-python">print(user.date_of_birth) # output: datetime.date(1977, 3, 16)
 print(user.orders[0].created) # output: datetime.datetime(2024, 1, 25, 15, 04, tzinfo=tzutc())
 print(user.orders[0].amount) # output: decimal.Decimal('100.00')
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>You can achieve that using Marshmallow and pydantic. Marshmallow is a powerful toolkit for working with JSON in Python, while Pydantic is a modern, type-safe alternative to the standard data classes.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can achieve that using Marshmallow and pydantic. Marshmallow is a powerful toolkit for working with JSON in Python, while Pydantic is a modern, type-safe alternative to the standard data classes.</p>
 <p>Here's how you can create data classes from the given JSON using Marshmallow and Pydantic:</p>
 <p>First, install Marshmallow and Pydantic:</p>
 <pre><code class="language-bash">pip install marshmallow pydantic
@@ -318,46 +335,45 @@ class User(BaseModel):
 schema = Schema(User)
 </code></pre>
 <p>This code defines two data classes: <code>Order</code> and <code>User</code>. <code>Order</code> contains information about a single order, such as its creation date and amount. <code>User</code> contains information about a user, including their first and last name, date of birth, and a list of orders they have placed.</p>
-<p>Marshmallow automatically generates a schema for each of these classes based on their fields. The <code>schema</code> variable at the bottom is a shared instance of the <code>User</code> schema that can be used for validation and serialization.</p></p>
-                <hr/>
+<p>Marshmallow automatically generates a schema for each of these classes based on their fields. The <code>schema</code> variable at the bottom is a shared instance of the <code>User</code> schema that can be used for validation and serialization.</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library to create dataclasses from the JSON input. Here's an example:</p>
-<p>```python
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library to create dataclasses from the JSON input. Here's an example:</p>
+<p>```python<br />
 from marshmallow import fields, Schema, validates_date</p>
-<p>class PersonSchema(Schema):
-    first_name = fields.Str(required=True)
-    last_name = fields.Str(required=True)
+<p>class PersonSchema(Schema):<br />
+    first_name = fields.Str(required=True)<br />
+    last_name = fields.Str(required=True)<br />
     date_of_birth = fields.Date(required=True)</p>
 <pre><code>class Meta:
     ordering = ['last_name', 'first_name']
 </code></pre>
-<p>class Order(Schema):
-    created = fields.Date(required=True)
+<p>class Order(Schema):<br />
+    created = fields.Date(required=True)<br />
     amount = fields.Decimal(required=True)</p>
 <pre><code>class Meta:
     ordering = ['created']
 </code></pre>
-<p>class OrderInvoilceSchema(Schema):
-    person = fields.Nested(PersonSchema)
+<p>class OrderInvoilceSchema(Schema):<br />
+    person = fields.Nested(PersonSchema)<br />
     order = fields.Nested(Order)</p>
 <pre><code>class Meta:
     ordering = ['person__last_name', 'person__first_name', 'order__created']
 </code></pre>
-<p>order = OrderInvoilceSchema().load(json_data['orders'][0])
-person = PersonSchema().load(json_data)
+<p>order = OrderInvoilceSchema().load(json_data['orders'][0])<br />
+person = PersonSchema().load(json_data)<br />
 full_data = OrderInvoilceSchema().load(json_data)</p>
-<p>print(person)
-print(order)
-print(full_data)
+<p>print(person)<br />
+print(order)<br />
+print(full_data)<br />
  ```</p>
 <p>This code defines three schemas: <code>PersonSchema</code>, <code>OrderSchema</code>, and <code>OrderInvoilceSchema</code>. The <code>OrderInvoilceSchema</code> inherits from <code>OrderSchema</code> and <code>PersonSchema</code> to represent the data in nested key-value pairs.</p>
-<p>The <code>OrderSchema</code> contains fields for <code>created</code> (a date) and <code>amount</code> (a decimal).
+<p>The <code>OrderSchema</code> contains fields for <code>created</code> (a date) and <code>amount</code> (a decimal).<br />
 The <code>PersonSchema</code> contains fields for <code>first_name</code>, <code>last_name</code>, and <code>date_of_birth</code> (a date).</p>
 <p>The <code>OrderInvoilceSchema</code> contains both person and order data. The person data and order data are loaded separately using the <code>PersonSchema</code> and <code>OrderSchema</code> instances. The <code>order</code> field on the <code>OrderInvoilceSchema</code> is of type <code>fields.Nested(OrderSchema)</code>, so we can load the order data into it like this:</p>
 <pre><code class="language-python">order = OrderSchema().load(item)
 </code></pre>
-<p>Finally, we load the entire JSON data into the <code>OrderInvoilceSchema</code> instance and print it out.</p></p>
-                <hr/>
+<p>Finally, we load the entire JSON data into the <code>OrderInvoilceSchema</code> instance and print it out.</p></div>
             
         </main>
     </body>

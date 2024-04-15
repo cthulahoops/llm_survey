@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/meta-llama/llama-2-70b-chat</h1>
             <p>Model: openrouter/meta-llama/llama-2-70b-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
 <pre><code>from dataclasses import dataclass
 from marshmallow import Schema, fields
 from marshmallow.HH install import DateTime
@@ -361,10 +378,10 @@ print(data_json)
     }
   ]
 }
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>Here is an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here is an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
 <pre><code>from marshmallow import Schema, fields
 from datetime import datetime
 from dateutil.parser import parse
@@ -417,10 +434,10 @@ class Order:
     created = fields.DateTime(dump_to=datetime, absolute_import=True)
     amount = fields.Decimal(dump_to=Decimal, absolute_import=True)
 </code></pre>
-<p>This will import the <code>datetime</code> and <code>Decimal</code> classes from the standard library, rather than relying on the <code>datetime</code> and <code>decimal</code> modules provided by the Marshmallow library.</p></p>
-                <hr/>
+<p>This will import the <code>datetime</code> and <code>Decimal</code> classes from the standard library, rather than relying on the <code>datetime</code> and <code>decimal</code> modules provided by the Marshmallow library.</p></div>
             
-                <p>Content: <p>Here's an example of how you could use the Marshmallow library to generate data classes for the JSON data you provided:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's an example of how you could use the Marshmallow library to generate data classes for the JSON data you provided:</p>
 <pre><code>from marshmallow import Schema, fields
 from marshmallow.dateadratetime import Date, Timestamp
 from marshmallow.decimal import Decimal
@@ -460,8 +477,7 @@ print(person.date_of_birth)  # prints a Python datetime object representing Marc
 print(person.orders[0].created)  # prints a Python datetime object representing January 25, 2024, 15:00:04
 print(person.orders[0].amount)  # prints a Python decimal object representing 100.00
 </code></pre>
-<p>I hope this helps! Let me know if you have any questions.</p></p>
-                <hr/>
+<p>I hope this helps! Let me know if you have any questions.</p></div>
             
         </main>
     </body>

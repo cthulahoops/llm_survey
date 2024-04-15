@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-instant-1</h1>
             <p>Model: openrouter/anthropic/claude-instant-1</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is how you can define dataclass models and marshmallow schemas to serialize/deserialize that JSON into Python objects with the correct data types:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is how you can define dataclass models and marshmallow schemas to serialize/deserialize that JSON into Python objects with the correct data types:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from decimal import Decimal
 from datetime import date, datetime
@@ -296,10 +313,10 @@ print(type(person.date_of_birth)) # &lt;class 'datetime.date'&gt;
 <li>Use fields.DateTime(), fields.Decimal() etc to specify types</li>
 <li>Call schema.load() to deserialize JSON into object</li>
 </ul>
-<p>This will deserialize the JSON into Python objects with the data serialized to the correct data types.</p></p>
-                <hr/>
+<p>This will deserialize the JSON into Python objects with the data serialized to the correct data types.</p></div>
             
-                <p>Content: <p>Here is how you could define dataclasses and a marshmallow Schema to serialize/deserialize that JSON using marshmallow:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here is how you could define dataclasses and a marshmallow Schema to serialize/deserialize that JSON using marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -341,10 +358,10 @@ data = schema.loads(json_string)
 # person will be a Person dataclass instance
 person = data.data
 </code></pre>
-<p>This defines the Order and Person dataclasses, along with marshmallow Schemas to handle serializing/deserializing between the JSON and the dataclass models.</p></p>
-                <hr/>
+<p>This defines the Order and Person dataclasses, along with marshmallow Schemas to handle serializing/deserializing between the JSON and the dataclass models.</p></div>
             
-                <p>Content: <p>Here is how you can generate dataclasses from that JSON using Marshmallow:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here is how you can generate dataclasses from that JSON using Marshmallow:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
@@ -392,8 +409,7 @@ result = schema.load({
 
 print(result)
 </code></pre>
-<p>This will deserialize the JSON into dataclass instances with the correct types for date/datetime/decimal fields.</p></p>
-                <hr/>
+<p>This will deserialize the JSON into dataclass instances with the correct types for date/datetime/decimal fields.</p></div>
             
         </main>
     </body>

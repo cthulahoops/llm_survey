@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/meta-llama/llama-2-13b-chat</h1>
             <p>Model: openrouter/meta-llama/llama-2-13b-chat</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>As a fictional ONG-Certified Marshmallow Artisan, I'd be happy to help you with that! </p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>As a fictional ONG-Certified Marshmallow Artisan, I'd be happy to help you with that! </p>
 <p>To generate dataclasses from the given JSON data, we'll use the <code>marshmallow.validate</code> module, which allows us to define custom validation rules for each field in our dataclass.</p>
 <p>First, let's define a dataclass <code>Order</code> to represent the <code>orders</code> list in the JSON:</p>
 <pre><code class="language-python">from marshmallow import BilledDecimal, validate, fields
@@ -286,10 +303,10 @@ class Order:
 user = marshmallow.decode(user_data, User)
 </code></pre>
 <p>In this code, we pass the JSON data as a dictionary to the <code>marshmallow.decode</code> function, which returns a <code>User</code> object with the parsed data.</p>
-<p>That's it! With these dataclasses, you can use Marshmallow to easily parse and validate JSON data with your custom date and decimal fields.</p></p>
-                <hr/>
+<p>That's it! With these dataclasses, you can use Marshmallow to easily parse and validate JSON data with your custom date and decimal fields.</p></div>
             
-                <p>Content: <p>Hello! I'd be happy to help you generate dataclasses from the JSON data you provided.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Hello! I'd be happy to help you generate dataclasses from the JSON data you provided.</p>
 <p>First, we'll need to install the <code>marshmallow</code> library if you haven't already:</p>
 <pre><code>pip install marshmallow
 </code></pre>
@@ -338,10 +355,10 @@ person = json.loads(json_data, Person)
     ]
 )
 </code></pre>
-<p>I hope this helps! Let me know if you have any further questions or if you'd like to see more examples.</p></p>
-                <hr/>
+<p>I hope this helps! Let me know if you have any further questions or if you'd like to see more examples.</p></div>
             
-                <p>Content: <p>Ah, a fellow data enthusiast! I'd be happy to help you generate some dataclasses for your JSON data using Marshmallow. 🐰💻</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Ah, a fellow data enthusiast! I'd be happy to help you generate some dataclasses for your JSON data using Marshmallow. 🐰💻</p>
 <p>To start, we can define a base <code>User</code> dataclass that contains the common fields we want to include in all of our user objects:</p>
 <pre><code class="language-python">from marshmallow import dataclass
 from marshmallow.Date import Date
@@ -380,8 +397,7 @@ class UserOrder(User):
     )
 ]
 </code></pre>
-<p>Voila! Our dataclasses are now populated with the JSON data. We can manipulate and validate the data as needed using Marshmallow's built-in methods and tools. 🎉</p></p>
-                <hr/>
+<p>Voila! Our dataclasses are now populated with the JSON data. We can manipulate and validate the data as needed using Marshmallow's built-in methods and tools. 🎉</p></div>
             
         </main>
     </body>

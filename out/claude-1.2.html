@@ -247,100 +247,116 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-1.2</h1>
             <p>Model: openrouter/anthropic/claude-1.2</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use Marshmallow to generate dataclasses (usually called schemas) from JSON schemas. It would look something like this:
-from dataclasses import dataclass
-from decimal import Decimal
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use Marshmallow to generate dataclasses (usually called schemas) from JSON schemas. It would look something like this:<br />
+from dataclasses import dataclass<br />
+from decimal import Decimal<br />
 from datetime import datetime</p>
 <p>import marshmallow</p>
-<p>class OrderSchema(marshmallow.Schema):
-    created = marshmallow.fields.DateTime()
+<p>class OrderSchema(marshmallow.Schema):<br />
+    created = marshmallow.fields.DateTime()<br />
     amount = marshmallow.fields.Decimal()</p>
-<p>class PersonSchema(marshmallow.Schema):
-    first_name = marshmallow.fields.Str()
-    last_name = marshmallow.fields.Str()
-    date_of_birth = marshmallow.fields.Date()
+<p>class PersonSchema(marshmallow.Schema):<br />
+    first_name = marshmallow.fields.Str()<br />
+    last_name = marshmallow.fields.Str()<br />
+    date_of_birth = marshmallow.fields.Date()<br />
     orders = marshmallow.fields.Nested(OrderSchema, many=True)</p>
-<p>@dataclass
-class Order:
-    created: datetime 
+<p>@dataclass<br />
+class Order:<br />
+    created: datetime <br />
     amount: Decimal </p>
-<p>@dataclass 
-class Person: 
-    first_name: str 
-    last_name: str 
-    date_of_birth: date 
+<p>@dataclass <br />
+class Person: <br />
+    first_name: str <br />
+    last_name: str <br />
+    date_of_birth: date <br />
     orders: list[Order] </p>
-<p>person_schema = PersonSchema()
+<p>person_schema = PersonSchema()<br />
 person = person_schema.load(your_json_data)</p>
-<p>So person would be an instance of the Person dataclass, with the appropriate types.
-Demo on repl.it</p></p>
-                <hr/>
+<p>So person would be an instance of the Person dataclass, with the appropriate types.<br />
+Demo on repl.it</p></div>
             
-                <p>Content: <p>You can use Marshmallow schemas to define the dataclasses, and specify the types you want:
-from dataclasses import dataclass
-from datetime import date, datetime 
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can use Marshmallow schemas to define the dataclasses, and specify the types you want:<br />
+from dataclasses import dataclass<br />
+from datetime import date, datetime <br />
 from decimal import Decimal</p>
 <p>import marshmallow</p>
-<p>class OrderSchema(marshmallow.Schema):
-    created = marshmallow.fields.DateTime()
+<p>class OrderSchema(marshmallow.Schema):<br />
+    created = marshmallow.fields.DateTime()<br />
     amount = marshmallow.fields.Decimal()</p>
 <p>order_schema = OrderSchema()</p>
-<p>@dataclass
-class Person:
-    first_name: str 
-    last_name: str 
-    date_of_birth: date 
+<p>@dataclass<br />
+class Person:<br />
+    first_name: str <br />
+    last_name: str <br />
+    date_of_birth: date <br />
     orders: list</p>
-<p>class PersonSchema(marshmallow.Schema):
-    first_name = marshmallow.fields.Str()
-    last_name = marshmallow.fields.Str()
-    date_of_birth = marshmallow.fields.Date()
+<p>class PersonSchema(marshmallow.Schema):<br />
+    first_name = marshmallow.fields.Str()<br />
+    last_name = marshmallow.fields.Str()<br />
+    date_of_birth = marshmallow.fields.Date()<br />
     orders = marshmallow.fields.List(marshmallow.fields.Nested(OrderSchema))</p>
 <p>person_schema = PersonSchema()</p>
-<p>result = person_schema.loads(your_json_string)
+<p>result = person_schema.loads(your_json_string)<br />
 print(result)</p>
 <h1>Person(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16),</h1>
 <h1>orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])</h1>
-<p>So this will deserialize the JSON into native Python datatypes, with the types you specified.</p></p>
-                <hr/>
+<p>So this will deserialize the JSON into native Python datatypes, with the types you specified.</p></div>
             
-                <p>Content: <p>You can use marshmallow.Schema to define schemas for your data, and marshmallow.post_load to deserialize into dataclasses.
-For example:
-from dataclasses import dataclass
-from datetime import date, datetime 
-from decimal import Decimal
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use marshmallow.Schema to define schemas for your data, and marshmallow.post_load to deserialize into dataclasses.<br />
+For example:<br />
+from dataclasses import dataclass<br />
+from datetime import date, datetime <br />
+from decimal import Decimal<br />
 import marshmallow</p>
-<p>@dataclass
-class Order:
-    created: datetime 
+<p>@dataclass<br />
+class Order:<br />
+    created: datetime <br />
     amount: Decimal </p>
-<p>class OrderSchema(marshmallow.Schema):
-    created = marshmallow.fields.DateTime() 
+<p>class OrderSchema(marshmallow.Schema):<br />
+    created = marshmallow.fields.DateTime() <br />
     amount = marshmallow.fields.Decimal() </p>
-<p>@dataclass
-class Person:
-    first_name: str 
-    last_name: str 
-    date_of_birth: date 
+<p>@dataclass<br />
+class Person:<br />
+    first_name: str <br />
+    last_name: str <br />
+    date_of_birth: date <br />
     orders: list[Order] </p>
-<p>class PersonSchema(marshmallow.Schema):
-    first_name = marshmallow.fields.Str() 
-    last_name = marshmallow.fields.Str() 
-    date_of_birth = marshmallow.fields.Date() 
+<p>class PersonSchema(marshmallow.Schema):<br />
+    first_name = marshmallow.fields.Str() <br />
+    last_name = marshmallow.fields.Str() <br />
+    date_of_birth = marshmallow.fields.Date() <br />
     orders = marshmallow.fields.Nested(OrderSchema, many=True) </p>
 <pre><code>@marshmallow.post_load
 def make_person(self, data, **kwargs):
     return Person(**data)
 </code></pre>
 <p>data = {...}  # Your JSON example</p>
-<p>person = PersonSchema().load(data) 
+<p>person = PersonSchema().load(data) <br />
 print(person)</p>
-<p>This will give you a Person dataclass instance with the data parsed accordingly.</p></p>
-                <hr/>
+<p>This will give you a Person dataclass instance with the data parsed accordingly.</p></div>
             
         </main>
     </body>

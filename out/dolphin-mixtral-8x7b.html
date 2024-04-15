@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/cognitivecomputations/dolphin-mixtral-8x7b</h1>
             <p>Model: openrouter/cognitivecomputations/dolphin-mixtral-8x7b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here is a Python code using marshmallow library:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here is a Python code using marshmallow library:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 
 class User:
@@ -278,10 +295,10 @@ user_json = schema.dump(data['user'])
 order_json = schema.dump(data['orders'])
 </code></pre>
 <p>In this example, User and Order classes are created using the <code>Schema</code> class from marshmallow library. <code>fields.String(required=True)</code> defines the required fields like first_name, last_name and date_of_birth of User. <code>fields.DateTime(required=True)</code> and <code>fields.Decimal(required=True, places=2)</code> define the fields of Order. The data is loaded into <code>User</code> and <code>Order</code> instances using <code>schema.dump</code> method. After loading, the data can be serialized into JSON using <code>schema.dump</code>.</p>
-<p>You can find more details about the <code>marshmallow</code> library at <a href="https://marshmallow.readthedocs.io/en/latest/">marshmallow</a>.</p></p>
-                <hr/>
+<p>You can find more details about the <code>marshmallow</code> library at <a href="https://marshmallow.readthedocs.io/en/latest/">marshmallow</a>.</p></div>
             
-                <p>Content: <p>To generate dataclasses from JSON using the marshmallow library, you can use the Schema class. Here's an example:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from JSON using the marshmallow library, you can use the Schema class. Here's an example:</p>
 <pre><code class="language-python">import marshmallow as ma
 from datetime import datetime
 from decimal import Decimal
@@ -333,10 +350,10 @@ print(person)
  'orders': [{'created': datetime.datetime(2024, 1, 25, 15, 0),
               'amount': Decimal('100.00')}]}
 </code></pre>
-<p>This means that the JSON data was successfully serialized to the Person dataclass. The <code>load</code> method was used to convert the JSON data to the PersonSchema, and the <code>serialize</code> method was used to convert the PersonSchema instance to JSON.</p></p>
-                <hr/>
+<p>This means that the JSON data was successfully serialized to the Person dataclass. The <code>load</code> method was used to convert the JSON data to the PersonSchema, and the <code>serialize</code> method was used to convert the PersonSchema instance to JSON.</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON, you can use the marshmallow library in Python. Here's an example of how you can do this:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON, you can use the marshmallow library in Python. Here's an example of how you can do this:</p>
 <p>First, define the dataclasses:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 from datetime import datetime
@@ -367,8 +384,7 @@ print(user)
 <p>This will output the following:</p>
 <pre><code class="language-python">User(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
 </code></pre>
-<p>Note that the <code>date_of_birth</code> field is converted to a <code>datetime.date</code> object, and the <code>created</code> field is converted to a <code>datetime.datetime</code> object. The <code>amount</code> field is converted to a <code>decimal.Decimal</code> object with two decimal places.</p></p>
-                <hr/>
+<p>Note that the <code>date_of_birth</code> field is converted to a <code>datetime.date</code> object, and the <code>created</code> field is converted to a <code>datetime.datetime</code> object. The <code>amount</code> field is converted to a <code>decimal.Decimal</code> object with two decimal places.</p></div>
             
         </main>
     </body>

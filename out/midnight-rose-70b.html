@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/sophosympatheia/midnight-rose-70b</h1>
             <p>Model: openrouter/sophosympatheia/midnight-rose-70b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, follow these steps:</p>
 <ol>
 <li>First, you need to install marshmallow if you haven't already:</li>
 </ol>
@@ -335,10 +352,10 @@ modified_json = {
 
 person = load_json(json.dumps(modified_json))
 </code></pre>
-<p>This example includes small functions to convert the different date and time formats used in the input JSON, but the main functionality regarding handling the JSON with DataClasses and Marshmallow remains the same. Modify the conversion functions depending on your specific use cases or input formats. Make sure to handle any missing values or inconsistencies in the input JSON adequately.</p></p>
-                <hr/>
+<p>This example includes small functions to convert the different date and time formats used in the input JSON, but the main functionality regarding handling the JSON with DataClasses and Marshmallow remains the same. Modify the conversion functions depending on your specific use cases or input formats. Make sure to handle any missing values or inconsistencies in the input JSON adequately.</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, install the marshmallow library if you haven't already:</li>
 </ol>
@@ -392,10 +409,10 @@ loaded_data = PersonSchema().load(json_data)
 </code></pre>
 <p>Now, <code>loaded_data</code> will contain the parsed JSON data with the correct data types for <code>date_of_birth</code>, <code>created</code>, and <code>amount</code>.</p>
 <p>Remember that you'll need to handle any potential errors or missing fields in the JSON data based on your specific use case. The provided schema assumes that all necessary fields are present in the JSON data. If this is not the case, you may need to adjust the schema or handle missing fields appropriately.</p>
-<p>Also, note that the <code>post_load</code> method is used to convert the <code>date_of_birth</code> string to a <code>date</code> object after the data has been loaded. This step is necessary because the <code>date</code> type is not directly supported by the marshmallow library. The <code>make_datetime</code> function is defined within the <code>PersonSchema</code> class and is called automatically by the <code>post_load</code> decorator.</p></p>
-                <hr/>
+<p>Also, note that the <code>post_load</code> method is used to convert the <code>date_of_birth</code> string to a <code>date</code> object after the data has been loaded. This step is necessary because the <code>date</code> type is not directly supported by the marshmallow library. The <code>make_datetime</code> function is defined within the <code>PersonSchema</code> class and is called automatically by the <code>post_load</code> decorator.</p></div>
             
-                <p>Content: <p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already. You can do this by running:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the marshmallow library in Python, first, you need to install the library if you haven't already. You can do this by running:</p>
 <pre><code>pip install marshmallow
 </code></pre>
 <p>Now, let's create the necessary dataclasses and schema classes for the JSON data you provided.</p>
@@ -490,8 +507,7 @@ print(person)
 serialized_json = schema.dump(person)
 print(json.dumps(serialized_json))
 </code></pre>
-<p>This will correctly handle the date, datetime, and decimal types in your JSON data using the marshmallow library.</p></p>
-                <hr/>
+<p>This will correctly handle the date, datetime, and decimal types in your JSON data using the marshmallow library.</p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/teknium/openhermes-2.5-mistral-7b</h1>
             <p>Model: openrouter/teknium/openhermes-2.5-mistral-7b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Sure, Marshmallow is a great library for working with data serialization and deserialization in Python. Here's how you can model the given JSON using Marshmallow:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Sure, Marshmallow is a great library for working with data serialization and deserialization in Python. Here's how you can model the given JSON using Marshmallow:</p>
 <p>Firstly, you'll want to define the data classes.</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
@@ -313,10 +330,10 @@ data = {
 
 dumped_data = schema.dump(validated_loaded_data)
 </code></pre>
-<p>You'd need to handle the additional conversion from Decimal or Date to strings if you're wanting to send the data to an external API or save to a database.</p></p>
-                <hr/>
+<p>You'd need to handle the additional conversion from Decimal or Date to strings if you're wanting to send the data to an external API or save to a database.</p></div>
             
-                <p>Content: <p>You can achieve this using the marshmallow library and the datevalidator from marshmallow_data. Here's an example of how to do it:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can achieve this using the marshmallow library and the datevalidator from marshmallow_data. Here's an example of how to do it:</p>
 <p>First, you need to install the libraries using pip:</p>
 <pre><code>pip install marshmallow marshmallow_data
 </code></pre>
@@ -365,10 +382,10 @@ print(customer_obj)
 <p>This will output:</p>
 <pre><code class="language-python">Customer(first_name='Jane', last_name='Smith', date_of_birth=date(1977, 3, 16), orders=[etc...])
 </code></pre>
-<p>Remember to handle exceptions like invalid JSON and validation errors.</p></p>
-                <hr/>
+<p>Remember to handle exceptions like invalid JSON and validation errors.</p></div>
             
-                <p>Content: <p>To generate the required data classes from your JSON using marshmallow in Python, you'll need to follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate the required data classes from your JSON using marshmallow in Python, you'll need to follow these steps:</p>
 <ol>
 <li>Install marshmallow library: If you don't have marshmallow installed, you can do so by running the following command in your terminal:</li>
 </ol>
@@ -421,8 +438,7 @@ import datetime
     data_schema = RootSchema().load(json_data)
     return data_schema
 </code></pre>
-<p>Now, you can pass your JSON data to the <code>load_json</code> function, and it will convert it into your custom date and decimal data types.</p></p>
-                <hr/>
+<p>Now, you can pass your JSON data to the <code>load_json</code> function, and it will convert it into your custom date and decimal data types.</p></div>
             
         </main>
     </body>

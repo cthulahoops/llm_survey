@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-4-0314</h1>
             <p>Model: openrouter/openai/gpt-4-0314</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>First, you need to install the <code>marshmallow</code> library if you don't already have it. You can do this with pip:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>First, you need to install the <code>marshmallow</code> library if you don't already have it. You can do this with pip:</p>
 <pre><code>pip install marshmallow
 </code></pre>
 <p>Now, you can use the <code>marshmallow</code> library to create data classes and perform serialization and deserialization of the JSON data. Here's the code:</p>
@@ -321,10 +338,10 @@ print(person.orders[0].amount)   # Output: 100.00
 json_dump = person_schema.dumps(person)
 print(json_dump)
 </code></pre>
-<p>This code demonstrates how to create data classes <code>Order</code> and <code>Person</code> and their corresponding schemas <code>OrderSchema</code> and <code>PersonSchema</code>. It uses the <code>marshmallow</code> library to deserialize the given JSON data to the data classes and then serialize them back to JSON.</p></p>
-                <hr/>
+<p>This code demonstrates how to create data classes <code>Order</code> and <code>Person</code> and their corresponding schemas <code>OrderSchema</code> and <code>PersonSchema</code>. It uses the <code>marshmallow</code> library to deserialize the given JSON data to the data classes and then serialize them back to JSON.</p></div>
             
-                <p>Content: <p>You can do this using the marshmallow library by first installing it:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can do this using the marshmallow library by first installing it:</p>
 <pre><code>pip install marshmallow
 </code></pre>
 <p>Then you can create your data classes and schemas to deserialize the JSON data:</p>
@@ -382,10 +399,10 @@ result = schema.loads(input_json)
 print(result)
 </code></pre>
 <p>As you can see in the code above, we create data classes for <code>Order</code> and <code>Person</code> with their respective fields and types. Then, we create schemas for each data class using marshmallow's Schema class and the appropriate field types.</p>
-<p>Finally, we deserialize the JSON data using the <code>PersonSchema</code> and print the result.</p></p>
-                <hr/>
+<p>Finally, we deserialize the JSON data using the <code>PersonSchema</code> and print the result.</p></div>
             
-                <p>Content: <p>To generate data classes and use the marshmallow library for deserialization, you'll first need to install the library by running:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate data classes and use the marshmallow library for deserialization, you'll first need to install the library by running:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Then you can create a Python script with the following code:</p>
@@ -455,8 +472,7 @@ print(customer_obj)
 <p>The <code>json_data</code> variable contains the JSON string you provided. We create a <code>CustomerSchema</code> instance and call <code>loads()</code> to deserialize the JSON string into a <code>Customer</code> object. The types for each field, such as <code>date</code>, <code>datetime</code>, and <code>Decimal</code>, are specified in the schemata using marshmallow fields.</p>
 <p>This script will output the deserialized <code>Customer</code> object:</p>
 <pre><code>Customer(first_name='Jane', last_name='Smith', date_of_birth=datetime.date(1977, 3, 16), orders=[Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00'))])
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

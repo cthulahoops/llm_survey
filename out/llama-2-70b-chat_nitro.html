@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/meta-llama/llama-2-70b-chat:nitro</h1>
             <p>Model: openrouter/meta-llama/llama-2-70b-chat:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Sure! Here's an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Sure! Here's an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
 <pre><code>from marshmallow import Schema, fields
 from marshmallow.validate import Range
 from datetime import datetime
@@ -300,10 +317,10 @@ print(person)
 </code></pre>
 <p>Note that the <code>date_of_birth</code> field is now a <code>date</code> object, and the <code>created</code> field in the <code>Order</code> class is now a <code>datetime</code> object. The <code>amount</code> field is still a <code>Decimal</code> object.</p>
 <p>Also, I've used the <code>fields.List</code> field to specify that the <code>orders</code> field in the <code>Person</code> class should be a list of <code>Order</code> objects.</p>
-<p>I hope this helps! Let me know if you have any questions.</p></p>
-                <hr/>
+<p>I hope this helps! Let me know if you have any questions.</p></div>
             
-                <p>Content: <p>Sure, here's an example of how you could use the Marshmallow library to generate data classes for the JSON data you provided:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Sure, here's an example of how you could use the Marshmallow library to generate data classes for the JSON data you provided:</p>
 <pre><code>from marshmallow importSchema, fields
 from marshmallow.decorators import timestamp
 from datetime import datetime
@@ -351,10 +368,10 @@ print(person)
 </code></pre>
 <p>Note that the <code>timestamp</code> parameter in the <code>fields.DateTime</code> field is used to specify the format of the <code>created</code> field in the JSON data. The <code>fields.Decimal</code> field is used to specify that the <code>amount</code> field should be a decimal number.</p>
 <p>Also, the <code>PersonSchema</code> class defines the structure of the person data, including the <code>orders</code> field, which is a list of <code>Order</code> objects. The <code>OrderSchema</code> class defines the structure of the order data, including the <code>created</code> and <code>amount</code> fields.</p>
-<p>The <code>load</code> method of the <code>PersonSchema</code> class is used to load the JSON data into a <code>Person</code> object.</p></p>
-                <hr/>
+<p>The <code>load</code> method of the <code>PersonSchema</code> class is used to load the JSON data into a <code>Person</code> object.</p></div>
             
-                <p>Content: <p>Sure! Here's an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Sure! Here's an example of how you could use the Marshmallow library to generate dataclasses for the JSON data you provided:</p>
 <pre><code>import marshmallow as mm
 
 class Person(mm.QLD):
@@ -382,8 +399,7 @@ Order(created=datetime.datetime(2024, 1, 25, 15, 0, 4), amount=Decimal('100.00')
 </code></pre>
 <p>Note that I've assumed that the <code>date_of_birth</code> field in the JSON data is a string in the format <code>MM/DD/YYYY</code>, and that the <code>created</code> field in the <code>orders</code> list is a string in the format <code>YYYY-MM-DDTHH:MM:SS</code>. The <code>datetime</code> and <code>decimal</code> modules are used to convert these strings to the appropriate data types.</p>
 <p>Also, I've used the <code>marshmallow.QLD</code> class to define the dataclasses, which stands for "Quantifiable, Listable, Dictable". This is a convenient way to define dataclasses that can be serialized to and deserialized from JSON.</p>
-<p>I hope this helps! Let me know if you have any questions.</p></p>
-                <hr/>
+<p>I hope this helps! Let me know if you have any questions.</p></div>
             
         </main>
     </body>

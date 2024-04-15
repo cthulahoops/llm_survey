@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo-0301</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo-0301</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To use the marshmallow library to generate dataclasses with the specified types, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To use the marshmallow library to generate dataclasses with the specified types, you can follow these steps:</p>
 <ol>
 <li>Import the required classes from marshmallow and typing libraries:</li>
 </ol>
@@ -306,10 +323,10 @@ class Person:
 
 person_dict = PersonSchema().load(json_data)
 person = Person(**person_dict)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>Here's how you can define the dataclasses and use the marshmallow library to generate them:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Here's how you can define the dataclasses and use the marshmallow library to generate them:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 from dataclasses import dataclass, field
@@ -367,10 +384,10 @@ print(customer)
 <p>This code defines the <code>Order</code> and <code>Customer</code> dataclasses and uses the <code>marshmallow</code> library to create the corresponding <code>OrderSchema</code> and <code>CustomerSchema</code>. These schemas define how to parse the JSON data into the dataclasses.</p>
 <p>The <code>created</code> field of the <code>Order</code> class is defined with a format metadata to indicate that the string should be parsed as a datetime. Similarly, the <code>date_of_birth</code> field of the <code>Customer</code> class is defined with a format metadata to indicate that it should be parsed as a date.</p>
 <p>The <code>post_load</code> decorator is used to create instances of the dataclasses from the parsed data. The <code>make_order</code> method of the <code>OrderSchema</code> creates an <code>Order</code> instance from the parsed data, and the <code>make_customer</code> method of the <code>CustomerSchema</code> creates a <code>Customer</code> instance from the parsed data.</p>
-<p>Finally, the <code>loads</code> method of the <code>CustomerSchema</code> is used to parse the JSON data and create a <code>Customer</code> instance. The resulting <code>customer</code> object can be printed to verify that it was parsed correctly.</p></p>
-                <hr/>
+<p>Finally, the <code>loads</code> method of the <code>CustomerSchema</code> is used to parse the JSON data and create a <code>Customer</code> instance. The resulting <code>customer</code> object can be printed to verify that it was parsed correctly.</p></div>
             
-                <p>Content: <p>First, you would need to create schema classes for each level of the JSON object. Here's an example implementation:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>First, you would need to create schema classes for each level of the JSON object. Here's an example implementation:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 from marshmallow import Schema, fields, post_load
@@ -422,8 +439,7 @@ json_data = {
 
 user = UserSchema().load(json_data)
 </code></pre>
-<p>After running the last line of code, <code>user</code> will contain an instance of the <code>User</code> dataclass with the values deserialized from the JSON object.</p></p>
-                <hr/>
+<p>After running the last line of code, <code>user</code> will contain an instance of the <code>User</code> dataclass with the values deserialized from the JSON object.</p></div>
             
         </main>
     </body>

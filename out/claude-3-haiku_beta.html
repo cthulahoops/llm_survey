@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/anthropic/claude-3-haiku:beta</h1>
             <p>Model: openrouter/anthropic/claude-3-haiku:beta</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To create dataclasses from the given JSON data using the Marshmallow library, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To create dataclasses from the given JSON data using the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Define the necessary Marshmallow schemas for the data.</li>
 <li>Use the <code>dataclasses</code> module in Python to create the dataclasses based on the Marshmallow schemas.</li>
@@ -323,10 +340,10 @@ print(person)
 <li>We define the <code>Order</code> and <code>Person</code> dataclasses to match the Marshmallow schemas.</li>
 <li>In the example usage, we load the JSON data using the <code>PersonSchema</code>, which automatically converts the <code>date_of_birth</code> and <code>created</code> fields to the appropriate data types (date and datetime, respectively) and the <code>amount</code> field to a Decimal.</li>
 </ol>
-<p>This approach allows you to define your data structures using Marshmallow schemas and then automatically create the corresponding dataclasses. The dataclasses provide a convenient way to work with the structured data, with the added benefit of type annotations and automatic initialization.</p></p>
-                <hr/>
+<p>This approach allows you to define your data structures using Marshmallow schemas and then automatically create the corresponding dataclasses. The dataclasses provide a convenient way to work with the structured data, with the added benefit of type annotations and automatic initialization.</p></div>
             
-                <p>Content: <p>To convert the given JSON data into Python dataclasses using the Marshmallow library, you can follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To convert the given JSON data into Python dataclasses using the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Define the dataclasses and their corresponding Marshmallow schemas:</li>
 </ol>
@@ -391,10 +408,10 @@ print(person)
 </code></pre>
 <p>In the above code, we first define the JSON data as a Python dictionary. Then, we create a <code>PersonSchema</code> instance and use its <code>load</code> method to deserialize the JSON data into a <code>Person</code> dataclass instance.</p>
 <p>The Marshmallow library handles the conversion of the fields according to the defined schemas. The <code>date_of_birth</code> field is converted to a <code>date</code> object, the <code>created</code> field is converted to a <code>datetime</code> object, and the <code>amount</code> field is converted to a <code>Decimal</code> object.</p>
-<p>You can further customize the schemas, such as adding validation rules, default values, or other transformations, as needed for your specific use case.</p></p>
-                <hr/>
+<p>You can further customize the schemas, such as adding validation rules, default values, or other transformations, as needed for your specific use case.</p></div>
             
-                <p>Content: <p>To achieve this using the Marshmallow library, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To achieve this using the Marshmallow library, you can follow these steps:</p>
 <ol>
 <li>Define the schema for the nested <code>Order</code> object.</li>
 <li>Define the schema for the main <code>Person</code> object.</li>
@@ -455,8 +472,7 @@ print(person.orders[0].amount)  # Output: Decimal('100.00')
 <li>We use the <code>PersonSchema().load()</code> method to deserialize the JSON data into a <code>Person</code> object.</li>
 <li>We can then access the deserialized data through the <code>person</code> object, which now has the correct data types for the fields.</li>
 </ol>
-<p>The Marshmallow library, combined with the <code>marshmallow_dataclass</code> extension, makes it easy to define schemas and deserialize JSON data into dataclasses with the appropriate data types.</p></p>
-                <hr/>
+<p>The Marshmallow library, combined with the <code>marshmallow_dataclass</code> extension, makes it easy to define schemas and deserialize JSON data into dataclasses with the appropriate data types.</p></div>
             
         </main>
     </body>

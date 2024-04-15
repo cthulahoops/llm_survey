@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-capybara-34b</h1>
             <p>Model: openrouter/nousresearch/nous-capybara-34b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the marshmallow library to generate Python dataclasses from the given JSON. Here's how you can do it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the marshmallow library to generate Python dataclasses from the given JSON. Here's how you can do it:</p>
 <ol>
 <li>First, install marshmallow if you haven't already:</li>
 </ol>
@@ -297,10 +314,10 @@ person_with_orders = person_with_orders_schema.load(data)
 <pre><code class="language-python">person = person_with_orders.person
 orders = person.orders
 </code></pre>
-<p>Now, you have created the desired dataclasses: <code>person</code> and <code>orders</code>.</p></p>
-                <hr/>
+<p>Now, you have created the desired dataclasses: <code>person</code> and <code>orders</code>.</p></div>
             
-                <p>Content: <p>To generate dataclasses from the given JSON using Marshmallow, you first need to define the schemas for each of the datatypes in your JSON. Here is an example of how you can do that:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses from the given JSON using Marshmallow, you first need to define the schemas for each of the datatypes in your JSON. Here is an example of how you can do that:</p>
 <pre><code class="language-python">import datetime
 import decimal
 from marshmallow import Schema, fields
@@ -337,10 +354,10 @@ data = PersonSchema().load(json.loads(json_data))
 <p>Make sure to install Marshmallow if you haven't already:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
-<p>Now, you can load the JSON string into a <code>PersonSchema</code> object and convert it into a dataclass instance.</p></p>
-                <hr/>
+<p>Now, you can load the JSON string into a <code>PersonSchema</code> object and convert it into a dataclass instance.</p></div>
             
-                <p>Content: <p>To create dataclasses using marshmallow, you first need to define your schemas. A schema is a blueprint for your data that defines how it should be structured. In your case, you have two complex objects: <code>Person</code> and <code>Order</code>. Let's define schemas for both:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create dataclasses using marshmallow, you first need to define your schemas. A schema is a blueprint for your data that defines how it should be structured. In your case, you have two complex objects: <code>Person</code> and <code>Order</code>. Let's define schemas for both:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 
 class OrderSchema(Schema):
@@ -391,8 +408,7 @@ order_schema = OrderSchema()
 
 person_dataclass = person_schema.load(json.loads(json_data))
 </code></pre>
-<p>Now, <code>person_dataclass</code> will be a <code>Person</code> instance with all the required attributes correctly parsed and converted to the appropriate types.</p></p>
-                <hr/>
+<p>Now, <code>person_dataclass</code> will be a <code>Person</code> instance with all the required attributes correctly parsed and converted to the appropriate types.</p></div>
             
         </main>
     </body>

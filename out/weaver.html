@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mancer/weaver</h1>
             <p>Model: openrouter/mancer/weaver</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here's how you can achieve that using Marshmallow library in Python:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here's how you can achieve that using Marshmallow library in Python:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields
 
 class PersonSchema(Schema):
@@ -279,19 +296,18 @@ person = person_schema.load(json_data)
 <pre><code class="language-python">from marshmallow import Marshal, marshal_object
 marshal_object(person, self.out, schema='auto')
 </code></pre>
-<p>This will output JSON in the same format as the input JSON.</p></p>
-                <hr/>
+<p>This will output JSON in the same format as the input JSON.</p></div>
             
-                <p>Content: <p>Jane Smith threw her hair back with an impatient sigh, trying to gauge what time it was. Her last order was made quite some time ago, but now that she's had some time to sit and think, she realized she needed a quick pick-me-up. 'Mhm,' she grumbled under her breath, contemplating whether it was worth risking another cold brew or if she should just buy something new to mix things up a bit. Her eyes landed on the clock - dashes of orange and blue blurring together as it ticked agitatedly. It was almost closing time at the local shop.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Jane Smith threw her hair back with an impatient sigh, trying to gauge what time it was. Her last order was made quite some time ago, but now that she's had some time to sit and think, she realized she needed a quick pick-me-up. 'Mhm,' she grumbled under her breath, contemplating whether it was worth risking another cold brew or if she should just buy something new to mix things up a bit. Her eyes landed on the clock - dashes of orange and blue blurring together as it ticked agitatedly. It was almost closing time at the local shop.</p>
 <p>"Alright, let's see what I can scrounge up," Jane mused, shuffling through her drawers and cabinets. She grabbed her keys, ready for the short walk as her stomach growled in protest. The crisp, winter air stung her cheeks as she stepped out of her cozy house and into the quiet street. The sound of her shoes clopping against the pavement echoed faintly in the darkness; an eerie but comforting soundtrack to her late-night escapade.</p>
 <p>Her heart leapt when she saw the familiar glow of the storefront in the distance. As she approached, she could hear the delicate clinking of glass bottles behind the safety of locked doors. A wave of relief washed over her as Mrs. Johnson emerged, keys jangling to unlock the door for her. "Hello there, Jane! What can I get for you tonight?" she asked with a warm smile, even though it was well past their usual hours.</p>
-<p>Jane glanced at the clock on the wall, noting it was now 11:59 pm. "Oh, uh, just a coffee please," she responded with a sheepish gig</p></p>
-                <hr/>
+<p>Jane glanced at the clock on the wall, noting it was now 11:59 pm. "Oh, uh, just a coffee please," she responded with a sheepish gig</p></div>
             
-                <p>Content: <p>Jane Smith: Looked quite cute with her shoulder-length hair swaying as she walked briskly through the park. A slight breeze caressed her cheeks, carrying with it the sweet fragrance of blooming cherry blossoms. The grass beneath her feet was soft and springy, perfectly complementing her pink converse sneakers. She was lost in thought, her earbuds keeping her company as soft melodies filled the air. Suddenly, a gust of wind blew through, scattering petals in every direction. Jane giggled and ducked her head as a few stray strands of hair escaped her ponytail, tickling her face.</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Jane Smith: Looked quite cute with her shoulder-length hair swaying as she walked briskly through the park. A slight breeze caressed her cheeks, carrying with it the sweet fragrance of blooming cherry blossoms. The grass beneath her feet was soft and springy, perfectly complementing her pink converse sneakers. She was lost in thought, her earbuds keeping her company as soft melodies filled the air. Suddenly, a gust of wind blew through, scattering petals in every direction. Jane giggled and ducked her head as a few stray strands of hair escaped her ponytail, tickling her face.</p>
 <p>The date on her driver's license flashed before her eyes when she stopped to tie her shoe: March 16th, 1975. She couldn't believe it had been that long since the day she was born. A tiny smile formed on her lips as she reached into her bag for a reddish-pink lollipop and popped it into her mouth, loving the way the chewy candy explored every corner of her mouth. Finishing with her shoe, she continued her stroll, feeling carefree and glad for the small adventure.</p>
-<p>Her phone buzzed in her pocket, and she pulled it out, glancing at the screen. An order confirmation! She took a screenshot before typing a quick "Thank you!" to the buyer. This was her side hustle - making and selling homemade lollipops online - and it was doing pretty well. March 25th, 1975... that was when she made that particular batch. She let out a happy sigh, feeling grateful for the small accomplishment.</p></p>
-                <hr/>
+<p>Her phone buzzed in her pocket, and she pulled it out, glancing at the screen. An order confirmation! She took a screenshot before typing a quick "Thank you!" to the buyer. This was her side hustle - making and selling homemade lollipops online - and it was doing pretty well. March 25th, 1975... that was when she made that particular batch. She let out a happy sigh, feeling grateful for the small accomplishment.</p></div>
             
         </main>
     </body>

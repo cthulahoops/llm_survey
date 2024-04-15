@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mixtral-8x7b</h1>
             <p>Model: openrouter/mistralai/mixtral-8x7b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>So that I have a python class with all the fields, and the fields are typed correctly?</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>So that I have a python class with all the fields, and the fields are typed correctly?</p>
 <p>Generating my dataclasses.</p>
 <p>I'm visiting this page because of the marshmallow library in Python, so I can take this JSON and generate dataclasses with the correct types, like Python datetime, for one thing.</p>
 <h2>Answer (0)</h2>
@@ -285,25 +302,25 @@ fee = lambda c: {fa[c][&quot;custom_replace&quot;] (
      &quot;custom_regex_replace&quot;: r&quot;\b&quot; + socket_template_1 + r&quot;\b&quot;:&quot;batch&quot;})}
 </code></pre>
 <p>I do not have an yaml configuration file to load up, but maybe you can use some or all of this. I use it when I do deep/wildcard searches in text files.</p>
-<p>In production, my loaded (by config_yaml.py) dict 'fa' is for 'file_associative_name'. It tells me where everything is, my foreign references to arrays, table products, or databases. I need to store most of its contents locally on a NAT'd PC or laptop so I can do computing offline, and on some larger jobs, I need to set up a project database, SQLite, PostsgreSQL, or MySQL. But I still would keep the 'fa' and write sql statements against it (this is a school of thought I am still learning about).</p></p>
-                <hr/>
+<p>In production, my loaded (by config_yaml.py) dict 'fa' is for 'file_associative_name'. It tells me where everything is, my foreign references to arrays, table products, or databases. I need to store most of its contents locally on a NAT'd PC or laptop so I can do computing offline, and on some larger jobs, I need to set up a project database, SQLite, PostsgreSQL, or MySQL. But I still would keep the 'fa' and write sql statements against it (this is a school of thought I am still learning about).</p></div>
             
-                <p>Content: <p>How about with dataclasses?</p>
-<p>I'm aware of this: https://github.com/dataclasses/dataclasses/issues/17 .
-But if I'm puting the formloader in the adapters I'll have to make a custom adapter for each shape the data comes in - for instance this one, http://pastebin.com/RbFCsrEa where the user data is in order_date and order_amount, and where the created field in the order isn't necessarily the time of the order, but rather the timestamp in seconds since the epoch.
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>How about with dataclasses?</p>
+<p>I'm aware of this: https://github.com/dataclasses/dataclasses/issues/17 .<br />
+But if I'm puting the formloader in the adapters I'll have to make a custom adapter for each shape the data comes in - for instance this one, http://pastebin.com/RbFCsrEa where the user data is in order_date and order_amount, and where the created field in the order isn't necessarily the time of the order, but rather the timestamp in seconds since the epoch.<br />
 Is that somethiing I have to deal with Virgin Mobile ?</p>
-<p>A great innovation - that my CEO will be very happy with.
-I have all the latest Apple products, because my Boss is a geek.
+<p>A great innovation - that my CEO will be very happy with.<br />
+I have all the latest Apple products, because my Boss is a geek.<br />
 I was using an Apple watch, until I realised I was suffering much better quality sleep when I wasn't wearing the watch.</p>
 <p>Gigolo http://pastebin.com/zL2mTtrb .</p>
-<p>He's evil. Business can't tolerate ethics, he insists.
-ethical, https://en.wikipedia.org/wiki/Seven_Heavenly_Virtues
-unethical, https://en.wikipedia.org/wiki/Seven_Deadly_Sins .
-20XX IMO, https://i.imgur.com/ReMF3Xt.jpg
+<p>He's evil. Business can't tolerate ethics, he insists.<br />
+ethical, https://en.wikipedia.org/wiki/Seven_Heavenly_Virtues<br />
+unethical, https://en.wikipedia.org/wiki/Seven_Deadly_Sins .<br />
+20XX IMO, https://i.imgur.com/ReMF3Xt.jpg<br />
 User 9: There are 7 Sins</p>
 <p>There are 7 Deadly Sins</p>
 <p>If you love, you get the good things.</p>
-<p>But if you love it enough for it to become your bitch.
+<p>But if you love it enough for it to become your bitch.<br />
 User 2: Well, actually, put a woman in charge.</p>
 <p><a href="https://np.reddit.com/r/movies/comments/65eiln/the_creator_of_bright_wouldnt_make_the_movie/">The creator of 'Bright' Wouldn't Make the Movie Eliminating White Men - /r/movies</a></p>
 <p>Well, good. this is a show of respect.</p>
@@ -312,33 +329,32 @@ User 2: Well, actually, put a woman in charge.</p>
 <p>We need a new law in schools. If there are any racist teachers, TAG THEM!</p>
 </blockquote>
 <p>I don't care about racism except that if a black person married Jesus would I have to consider killing him to prevent him being raped?</p>
-<p>https://www.demilked.com/prize-in-suspicious-pre-natural/
+<p>https://www.demilked.com/prize-in-suspicious-pre-natural/<br />
 20XX IMO, https://i.imgur.com/ReMF3Xt.jpg</p>
-<p>I don't believe in God. That's why I don't believe in god.
-I'd treat him like Sauron - as soon as he stopped being a liberal I lost interest. Christian is love. Muslim = ?
+<p>I don't believe in God. That's why I don't believe in god.<br />
+I'd treat him like Sauron - as soon as he stopped being a liberal I lost interest. Christian is love. Muslim = ?<br />
 User 2: 20XX IMO, .</p>
-<p>I don't care about racism except that if a black person married Jesus I'd be willing to go to SAUDI ARABIA and lay in wait for the opportunity to kill his wife and give her to the Eskimeaux for safekeeping.
-User 2: Hypothetically, if a black person married Jesus Jesus would I have to consider killing her to prevent her from being raped?
-https://www.demilked.com/prize-in-suspicious-pre-natural/</p></p>
-                <hr/>
+<p>I don't care about racism except that if a black person married Jesus I'd be willing to go to SAUDI ARABIA and lay in wait for the opportunity to kill his wife and give her to the Eskimeaux for safekeeping.<br />
+User 2: Hypothetically, if a black person married Jesus Jesus would I have to consider killing her to prevent her from being raped?<br />
+https://www.demilked.com/prize-in-suspicious-pre-natural/</p></div>
             
-                <p>Content: <p>Thanks,
-gm
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Thanks,<br />
+gm<br />
 by the way, does anyone in industry use fastapi or is this more of a side project type of thing?</p>
 <p>Edit: to answer my own question I will adapt it by doing this:</p>
-<p>from typing import Mapping
-from dataclasses import dataclass
+<p>from typing import Mapping<br />
+from dataclasses import dataclass<br />
 columns = Mapping[str, dataclass]</p>
 <hr />
-<p>import typing
-import dataclasses
+<p>import typing<br />
+import dataclasses<br />
 from marshmallow import Schema, fields</p>
 <p>cols = {'vendorid'} : Sale # Define your schema</p>
-<p>for type in ['int', 'string', 'float']:
-    for name in cols:
+<p>for type in ['int', 'string', 'float']:<br />
+    for name in cols:<br />
         cols[name] = getattr(fields, type)(name)</p>
-<p>schema = Schema.from_dict(cols) # Define your schema error handling</p></p>
-                <hr/>
+<p>schema = Schema.from_dict(cols) # Define your schema error handling</p></div>
             
         </main>
     </body>

@@ -247,7 +247,28 @@
             </ul>
         </nav>
         <main>
-            Select a model!
+            I asked every* model on openrouter this question:
+            
+            <div>
+<p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p>
+            </div>
+
+            * There are still some bugs so I don't have responses from all the models yet.
         </main>
     </body>
 </html>

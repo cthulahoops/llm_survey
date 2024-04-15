@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-capybara-7b:free</h1>
             <p>Model: openrouter/nousresearch/nous-capybara-7b:free</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To create dataclasses using the marshmallow library in Python, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To create dataclasses using the marshmallow library in Python, you can follow these steps:</p>
 <ol>
 <li>First, install the marshmallow library if you haven't already:</li>
 </ol>
@@ -279,10 +296,10 @@ class UserAmount(ma.Field):
         }
     }
 </code></pre>
-<p>Code updated</p></p>
-                <hr/>
+<p>Code updated</p></div>
             
-                <p>Content: <p>To use marshmallow to generate dataclasses from your JSON, you can define a custom encoder and decoder for the data. Here's an example of how you can do this:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To use marshmallow to generate dataclasses from your JSON, you can define a custom encoder and decoder for the data. Here's an example of how you can do this:</p>
 <p>First, install the marshmallow library:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -333,10 +350,10 @@ body = {
 # Create the custom encoder and decoder 
 encoder = CustomEncoder()
  see more
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To generate Dataclasses using Marshmallow, you can follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate Dataclasses using Marshmallow, you can follow these steps:</p>
 <ol>
 <li>Install the Marshmallow library using pip:</li>
 </ol>
@@ -395,10 +412,10 @@ print(customer.date_of_birth) # Prints '1977-03-16'
 print(customer.orders[0].created) # Prints '2024-01-25 15:00:04'
 print(customer.orders[0].amount) # Prints '100.00'
 </code></pre>
-<p>Now your JSON data has been converted into Dataclasses using Marshmallow validation.</p></p>
-                <hr/>
+<p>Now your JSON data has been converted into Dataclasses using Marshmallow validation.</p></div>
             
-                <p>Content: <p>To create the dataclasses using the marshmallow library, follow these steps:</p>
+                <p>Response 4.</p>
+                <div class="markdown-body"><p>To create the dataclasses using the marshmallow library, follow these steps:</p>
 <ol>
 <li>Install the marshmallow library if you haven't already. You can install it using pip:</li>
 </ol>
@@ -435,10 +452,10 @@ marshmallow_dataclasses.Customer.Schema().validate(customer)
 </code></pre>
 <p>In this example, I created two custom dataclasses for the <code>Order</code> and <code>Customer</code> objects. The <code>Order</code> dataclass includes <code>created</code>, <code>amount</code>, and a list of orders. The <code>Customer</code> dataclass includes <code>first_name</code>, <code>last_name</code>, <code>date_of_birth</code>, and a list of orders.</p>
 <p>Each dataclass uses <code>marshmallow.Schema</code>, which specifies the fields (with the desired type) and Decorator for defining the fields. The types include <code>marshmallow.str</code>, <code>marshmallow.Decimal</code>, and <code>marshmallow.DateTime</code> for the <code>created</code> field, which automatically converts the incoming JSON dates and datetime to the respective types.</p>
-<p>You can easily create a customer instance using the <code>Customer</code> dataclass and load data into it using the <code>Customer.load()</code> method. The JSON data in the example is then converted back into the dataclass without any issues.</p></p>
-                <hr/>
+<p>You can easily create a customer instance using the <code>Customer</code> dataclass and load data into it using the <code>Customer.load()</code> method. The JSON data in the example is then converted back into the dataclass without any issues.</p></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library, you will first need to install it using pip:</p>
+                <p>Response 5.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library, you will first need to install it using pip:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Once you have marshmallow installed, you can proceed to create the dataclasses. Here's an example using marshmallow:</p>
@@ -485,8 +502,7 @@ print(customer_data.date_of_birth)  # Outputs: datetime.datetime(2023, 3, 16, 0,
 print(customer_data.orders[0].created)  # Outputs: datetime.datetime(2024, 1, 25, 15, 0, 4)
 print(customer_data.orders[0].amount)  # Outputs: Decimal('100.00')
 </code></pre>
-<p>As you can see, the marshmallow library allows you to easily create dataclasses from JSON data and use them in your code.</p></p>
-                <hr/>
+<p>As you can see, the marshmallow library allows you to easily create dataclasses from JSON data and use them in your code.</p></div>
             
         </main>
     </body>

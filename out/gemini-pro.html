@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/gemini-pro</h1>
             <p>Model: openrouter/google/gemini-pro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields, validates, ValidationError
+                <p>Response 1.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Schema, fields, validates, ValidationError
 from datetime import datetime, date
 
 class OrderSchema(Schema):
@@ -295,10 +312,10 @@ except ValidationError as err:
 else:
     print(customer)
 </code></pre>
-<p>This code defines two dataclasses: <code>OrderSchema</code> and <code>CustomerSchema</code>. <code>OrderSchema</code> handles the <code>created</code> and <code>amount</code> fields, while <code>CustomerSchema</code> handles the entire customer object. The <code>validate_date_of_birth</code> method ensures that the <code>date_of_birth</code> field is in the correct format. Finally, the code loads the JSON data, validates it using the schema, and prints the validated data. </p></p>
-                <hr/>
+<p>This code defines two dataclasses: <code>OrderSchema</code> and <code>CustomerSchema</code>. <code>OrderSchema</code> handles the <code>created</code> and <code>amount</code> fields, while <code>CustomerSchema</code> handles the entire customer object. The <code>validate_date_of_birth</code> method ensures that the <code>date_of_birth</code> field is in the correct format. Finally, the code loads the JSON data, validates it using the schema, and prints the validated data. </p></div>
             
-                <p>Content: <pre><code class="language-python">from marshmallow import Schema, fields, validates, ValidationError
+                <p>Response 2.</p>
+                <div class="markdown-body"><pre><code class="language-python">from marshmallow import Schema, fields, validates, ValidationError
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -337,10 +354,10 @@ if __name__ == &quot;__main__&quot;:
 
 </code></pre>
 <p>This code defines two dataclasses, <code>OrderSchema</code> and <code>UserSchema</code>, using the marshmallow library. <code>OrderSchema</code> defines the nested order structure, while <code>UserSchema</code> defines the overall user structure. Each dataclass specifies the appropriate field types, which in this case includes <code>Datetime</code>, <code>Date</code>, and <code>Decimal</code>. </p>
-<p>Additionally, the code includes a validator function <code>validate_date_of_birth</code> to ensure the provided date is in the YYYY-MM-DD format.</p></p>
-                <hr/>
+<p>Additionally, the code includes a validator function <code>validate_date_of_birth</code> to ensure the provided date is in the YYYY-MM-DD format.</p></div>
             
-                <p>Content: <pre><code class="language-python">from datetime import date
+                <p>Response 3.</p>
+                <div class="markdown-body"><pre><code class="language-python">from datetime import date
 from decimal import Decimal
 from marshmallow import Schema, fields, ValidationError
 
@@ -382,8 +399,7 @@ except ValidationError as err:
 <p>The <code>fields.List</code> field is used to specify that the <code>orders</code> field should be a list of <code>Order</code> dataclasses.</p>
 <p>The <code>person_schema.load(data)</code> method is used to deserialize the JSON data into a <code>Person</code> dataclass.</p>
 <p>The <code>print(person)</code> statement prints the deserialized <code>Person</code> dataclass.</p>
-<p>If there are any validation errors, the <code>ValidationError</code> exception will be raised. The <code>err.messages</code> attribute will contain a dictionary of error messages.</p></p>
-                <hr/>
+<p>If there are any validation errors, the <code>ValidationError</code> exception will be raised. The <code>err.messages</code> attribute will contain a dictionary of error messages.</p></div>
             
         </main>
     </body>

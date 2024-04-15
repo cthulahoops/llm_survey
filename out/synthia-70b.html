@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/migtissera/synthia-70b</h1>
             <p>Model: openrouter/migtissera/synthia-70b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>In order to generate Python classes using the marshmallow library and deserialize the JSON data into objects, you can follow these steps:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>In order to generate Python classes using the marshmallow library and deserialize the JSON data into objects, you can follow these steps:</p>
 <ol>
 <li>Install the marshmallow library:</li>
 </ol>
@@ -291,43 +308,43 @@ class Order(ma.Schema):
         self.amount = amount
 </code></pre>
 <ol>
-<li>Create an instance of the JSON data and pass it through a marshmallow as_map method to obtain the desired result:
-```python
-user_dict = {
-    'first_name': 'Jane',
-    'last_name': 'Smith',
+<li>Create an instance of the JSON data and pass it through a marshmallow as_map method to obtain the desired result:<br />
+```python<br />
+user_dict = {<br />
+    'first_name': 'Jane',<br />
+    'last_name': 'Smith',<br />
     'date_of_birth': '03/16/1970</li>
-</ol></p>
-                <hr/>
+</ol></div>
             
-                <p>Content: <p>To generate dataclasses using the marshmallow library in Python, you can follow the steps below:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To generate dataclasses using the marshmallow library in Python, you can follow the steps below:</p>
 <ol>
 <li>
-<p>Install marshmallow package using pip:
-   <code>pip install marshmallow</code></p>
+<p>Install marshmallow package using pip:<br />
+<code>pip install marshmallow</code></p>
 </li>
 <li>
-<p>Import marshmallow and define the dataclasses:
-   ```python
+<p>Import marshmallow and define the dataclasses:<br />
+   ```python<br />
    from marshmallow import Schema, fields, post_load</p>
 </li>
 </ol>
-<p>class PersonSchema(Schema):
-       first_name = fields.Str()
-       last_name = fields.Str()
-       date_of_birth = fields.Date(data_key='date_of_birth')
+<p>class PersonSchema(Schema):<br />
+       first_name = fields.Str()<br />
+       last_name = fields.Str()<br />
+       date_of_birth = fields.Date(data_key='date_of_birth')<br />
        orders = fields.Nested("OrderSchema", many=True)</p>
-<p>class OrderSchema(Schema):
-       created = fields.DateTime(data_key='created')
+<p>class OrderSchema(Schema):<br />
+       created = fields.DateTime(data_key='created')<br />
        amount = fields.Decimal()</p>
-<p>class Person(Schema):
+<p>class Person(Schema):<br />
        class Meta: <br />
-           _schema = PersonSchema
-           strict = True
+           _schema = PersonSchema<br />
+           strict = True<br />
     ```</p>
 <ol>
-<li>Create a person object like this:
-   <code>python
+<li>Create a person object like this:<br />
+<code>python
    person = Person({
       'first_name': 'Jane',
       'last_name': 'Smith',
@@ -340,10 +357,10 @@ user_dict = {
 <p>Here is the explanation of the code:</p>
 <ul>
 <li>First, you import the relevant modules from the marshmallow library and create Person and Order schemas using Schema and the required fields. The fields.Str is for strings, fields.Date for dates,</li>
-</ul></p>
-                <hr/>
+</ul></div>
             
-                <p>Content: <p>To generate dataclasses from a JSON using marshmallow in Python, you can create a class and define dataclass fields for each key in the JSON along with their respective types. Here's an example:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To generate dataclasses from a JSON using marshmallow in Python, you can create a class and define dataclass fields for each key in the JSON along with their respective types. Here's an example:</p>
 <pre><code class="language-python">import datetime
 from marshmallow import Schema, fields
 
@@ -364,17 +381,16 @@ class OrderSchema(Schema):
 <blockquote>
 <blockquote>
 <blockquote>
-<p>from pymongo import MongoClient
-import pprint
-user = {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': datetime.datetime(2024, 1, 25, 15, 0, 4), 'amount': 100.00}]}
-user_schema = UserSchema()
-pprint(user_schema.loads(user)
-pprint(PrettyPrinter(dict)(person))
+<p>from pymongo import MongoClient<br />
+import pprint<br />
+user = {'first_name': 'Jane', 'last_name': 'Smith', 'date_of_birth': '03/16/1977', 'orders': [{'created': datetime.datetime(2024, 1, 25, 15, 0, 4), 'amount': 100.00}]}<br />
+user_schema = UserSchema()<br />
+pprint(user_schema.loads(user)<br />
+pprint(PrettyPrinter(dict)(person))<br />
 {'date_of_birth': datetime.date(2024, 1, 25), 'first_name': 'Jane', 'last_name': 'Smith', 'orders': [{'created': datetime.datetime(2024, 1, 25, 1</p>
 </blockquote>
 </blockquote>
-</blockquote></p>
-                <hr/>
+</blockquote></div>
             
         </main>
     </body>

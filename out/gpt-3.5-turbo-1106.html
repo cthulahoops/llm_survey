@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/openai/gpt-3.5-turbo-1106</h1>
             <p>Model: openrouter/openai/gpt-3.5-turbo-1106</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can achieve this using the marshmallow library in Python by defining dataclasses and using the marshmallow's fields and decorators to specify the data types for each attribute. Here's an example:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can achieve this using the marshmallow library in Python by defining dataclasses and using the marshmallow's fields and decorators to specify the data types for each attribute. Here's an example:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -292,10 +309,10 @@ json_data = {
 customer_obj, errors = CustomerSchema().load(json_data)
 print(customer_obj)
 </code></pre>
-<p>In this example, we define the Order and Customer dataclasses with the necessary data types using the marshmallow_dataclass decorator. We then create a schema using class_schema and use it to load the JSON data into the customer_obj dataclass object.</p></p>
-                <hr/>
+<p>In this example, we define the Order and Customer dataclasses with the necessary data types using the marshmallow_dataclass decorator. We then create a schema using class_schema and use it to load the JSON data into the customer_obj dataclass object.</p></div>
             
-                <p>Content: <p>You can create dataclasses for the given JSON using the <code>marshmallow</code> library in Python as follows:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can create dataclasses for the given JSON using the <code>marshmallow</code> library in Python as follows:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 from dataclasses import dataclass, field
@@ -338,10 +355,10 @@ try:
 except ValidationError as err:
     print(err.messages)
 </code></pre>
-<p>This code uses the <code>marshmallow_dataclass</code> library to automatically generate the schemas for the dataclasses and then uses the generated schemas to load the JSON data, handling the date, datetime, and decimal types as specified.</p></p>
-                <hr/>
+<p>This code uses the <code>marshmallow_dataclass</code> library to automatically generate the schemas for the dataclasses and then uses the generated schemas to load the JSON data, handling the date, datetime, and decimal types as specified.</p></div>
             
-                <p>Content: <p>Here's an example of how you could use the marshmallow library to define dataclasses for the given JSON structure:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's an example of how you could use the marshmallow library to define dataclasses for the given JSON structure:</p>
 <pre><code class="language-python">from marshmallow import Schema, fields, post_load
 from datetime import datetime, date
 from dataclasses import dataclass
@@ -395,8 +412,7 @@ customer = customer_schema.load(json_data)
 
 print(customer)
 </code></pre>
-<p>In this example, we defined the <code>Customer</code> and <code>Order</code> dataclasses, and then created <code>CustomerSchema</code> and <code>OrderSchema</code> to specify how the JSON data should be deserialized into the dataclasses. We then used the <code>load</code> method of the <code>CustomerSchema</code> to deserialize the JSON data into a <code>Customer</code> dataclass instance.</p></p>
-                <hr/>
+<p>In this example, we defined the <code>Customer</code> and <code>Order</code> dataclasses, and then created <code>CustomerSchema</code> and <code>OrderSchema</code> to specify how the JSON data should be deserialized into the dataclasses. We then used the <code>load</code> method of the <code>CustomerSchema</code> to deserialize the JSON data into a <code>Customer</code> dataclass instance.</p></div>
             
         </main>
     </body>

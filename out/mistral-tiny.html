@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mistral-tiny</h1>
             <p>Model: openrouter/mistralai/mistral-tiny</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>To achieve this using Marshmallow library in Python, you'll first need to define your data classes and their corresponding schema classes. Here's how you can do it:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>To achieve this using Marshmallow library in Python, you'll first need to define your data classes and their corresponding schema classes. Here's how you can do it:</p>
 <ol>
 <li>Define the data classes:</li>
 </ol>
@@ -310,10 +327,10 @@ json_person_data = PersonSchema().dump(person_data).data
 
 print(json_person_data)
 </code></pre>
-<p>This way, you can use Marshmallow library to define your data classes and their corresponding JSON schema classes, making it easier to serialize and deserialize data while maintaining strong type hints.</p></p>
-                <hr/>
+<p>This way, you can use Marshmallow library to define your data classes and their corresponding JSON schema classes, making it easier to serialize and deserialize data while maintaining strong type hints.</p></div>
             
-                <p>Content: <p>To create dataclasses with Marshmallow that meet your requirements, follow these steps:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To create dataclasses with Marshmallow that meet your requirements, follow these steps:</p>
 <p>First, install Marshmallow using pip:</p>
 <pre><code class="language-bash">pip install marshmallow marshmallow-enum marshmallow-datetimes
 </code></pre>
@@ -360,10 +377,10 @@ class PersonSchema(Schema):
 
 person_schema = PersonSchema()
 loaded_person = person_schema.load(person_data)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>To create dataclasses using Marshmallow in Python with the specified data types for <code>date_of_birth</code>, <code>created</code>, and <code>amount</code>, follow these steps:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create dataclasses using Marshmallow in Python with the specified data types for <code>date_of_birth</code>, <code>created</code>, and <code>amount</code>, follow these steps:</p>
 <ol>
 <li>Install the required libraries: You need Marshmallow, Marshmallow-dataclasses, and Decimal (python-decimal) packages. You can install them using pip:</li>
 </ol>
@@ -416,12 +433,11 @@ print(person.last_name)     # 'Smith'
 print(person.date_of_birth) # datetime.date(1977, 3, 16)
 print(person.orders)        # [Order(created=datetime.datetime(2024, 1, 25, 15, 0, tzinfo=&lt;DstTzInfo 'EST' EST-5:00&gt;, amount=Decimal('100.00')))]
 </code></pre>
-<p>In this example:
-- We created two classes <code>OrderSchema</code> and <code>Person</code> using dataclasses mixin (<code>BaseModel</code> from <code>pydantic</code>).
-- <code>OrderSchema</code> handles the lists of orders as lists of <code>OrderSchema</code> instances.
-- <code>PersonSchema</code> is used for loading JSON data into the Python dataclasses using Marshmallow.
-- Additionally, the <code>make_person</code> method in the <code>Person</code> class converts <code>amount</code> to a Decimal object after loading the data.</p></p>
-                <hr/>
+<p>In this example:<br />
+- We created two classes <code>OrderSchema</code> and <code>Person</code> using dataclasses mixin (<code>BaseModel</code> from <code>pydantic</code>).<br />
+- <code>OrderSchema</code> handles the lists of orders as lists of <code>OrderSchema</code> instances.<br />
+- <code>PersonSchema</code> is used for loading JSON data into the Python dataclasses using Marshmallow.<br />
+- Additionally, the <code>make_person</code> method in the <code>Person</code> class converts <code>amount</code> to a Decimal object after loading the data.</p></div>
             
         </main>
     </body>

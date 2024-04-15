@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/mistralai/mixtral-8x7b-instruct:nitro</h1>
             <p>Model: openrouter/mistralai/mixtral-8x7b-instruct:nitro</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>First, you need to install the marshmallow library if you haven't already. You can do this by running:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>First, you need to install the marshmallow library if you haven't already. You can do this by running:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Next, you can create the necessary DataClass schemas and field definitions using the marshmallow library. Here's how you can define the DataClass schemas for the given JSON.</p>
@@ -292,10 +309,10 @@ user_dict = user_schema.load(json_data)
 # Log the user dictionary for demonstration
 pprint(user_dict)
 </code></pre>
-<p>With this code, you've defined DataClass schemas using the marshmallow library. The date_of_birth field is a date, and the created field is a datetime, and the amount is a decimal. Make sure the JSON input provided has the correct format.</p></p>
-                <hr/>
+<p>With this code, you've defined DataClass schemas using the marshmallow library. The date_of_birth field is a date, and the created field is a datetime, and the amount is a decimal. Make sure the JSON input provided has the correct format.</p></div>
             
-                <p>Content: <p>First, you need to install the marshmallow library. You can do this by running the following command in your terminal:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>First, you need to install the marshmallow library. You can do this by running the following command in your terminal:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
 <p>Next, you can define your dataclasses and schema as follows:</p>
@@ -344,10 +361,10 @@ json_data = user_schema.dump(user_data)
 # Print the JSON data
 print(json_data)
 </code></pre>
-<p>This will output the JSON data with the <code>created</code> and <code>date_of_birth</code> fields as strings, and the <code>amount</code> field as a decimal number. To convert these fields back to their respective types, we can use the <code>load</code> method of the <code>Schema</code> class, as shown above.</p></p>
-                <hr/>
+<p>This will output the JSON data with the <code>created</code> and <code>date_of_birth</code> fields as strings, and the <code>amount</code> field as a decimal number. To convert these fields back to their respective types, we can use the <code>load</code> method of the <code>Schema</code> class, as shown above.</p></div>
             
-                <p>Content: <p>To create the required dataclasses using the marshmallow library in Python, you would first need to import the necessary classes and define the schema. Here is an example of how the schema and the corresponding Python classes can be created for your JSON:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>To create the required dataclasses using the marshmallow library in Python, you would first need to import the necessary classes and define the schema. Here is an example of how the schema and the corresponding Python classes can be created for your JSON:</p>
 <pre><code class="language-python">import json
 from datetime import datetime
 from decimal import Decimal
@@ -395,8 +412,7 @@ if __name__ == '__main__':
     pprint(result)
 </code></pre>
 <p>This example demonstrates the creation of the <code>User</code> and <code>Order</code> classes, as well as the corresponding <code>UserSchema</code> and <code>OrderSchema</code>. The <code>User</code> class has an <code>__init__</code> method that initializes the object with the required attributes. The <code>UserSchema</code> class has the <code>fields</code> keys that map to the attributes of the <code>User</code> class. The <code>datetime.strptime</code> function is used to convert the <code>date_of_birth</code> string to a <code>datetime</code> object. The <code>Order</code> class has an <code>__init__</code> method that initializes the object with the required attributes. The <code>OrderSchema</code> class has the <code>fields</code> keys that map to the attributes of the <code>Order</code> class. The <code>Order</code> class is wrapped in the <code>lambda</code> function and passed to the <code>Nested</code> field in the <code>OrderSchema</code> class to make it a nested schema. The <code>as_string=True</code> argument is used for the <code>Decimal</code> field to convert it to a string.</p>
-<p>In the main block, the <code>json.loads</code> function is used to convert the JSON string to a Python dictionary. The <code>UserSchema</code> is used to deserialize the data, and the <code>User</code> object is created. The <code>User</code> object is then serialized back to a JSON string using the <code>UserSchema.dump</code> method. The <code>pprint</code> function is used for pretty printing the serialized output.</p></p>
-                <hr/>
+<p>In the main block, the <code>json.loads</code> function is used to convert the JSON string to a Python dictionary. The <code>UserSchema</code> is used to deserialize the data, and the <code>User</code> object is created. The <code>User</code> object is then serialized back to a JSON string using the <code>UserSchema.dump</code> method. The <code>pprint</code> function is used for pretty printing the serialized output.</p></div>
             
         </main>
     </body>

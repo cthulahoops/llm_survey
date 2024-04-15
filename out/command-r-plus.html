@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/cohere/command-r-plus</h1>
             <p>Model: openrouter/cohere/command-r-plus</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Here's how you can create dataclasses and schemas using the <code>marshmallow</code> library to serialize and deserialize the provided JSON:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Here's how you can create dataclasses and schemas using the <code>marshmallow</code> library to serialize and deserialize the provided JSON:</p>
 <p>First, make sure you have the <code>marshmallow</code> library installed:</p>
 <pre><code class="language-bash">pip install marshmallow
 </code></pre>
@@ -326,10 +343,10 @@ person = PersonDataclassSchema().load(json_data)
 json_result = PersonDataclassSchema().dump(person)
 
 print(json_result)
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>Sure, to do this, we can use the <code>marshmallow</code> library in Python to create data classes and define the fields and their types. Here's how you can create the dataclasses for the given JSON:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Sure, to do this, we can use the <code>marshmallow</code> library in Python to create data classes and define the fields and their types. Here's how you can create the dataclasses for the given JSON:</p>
 <pre><code class="language-python">from datetime import date, datetime
 from decimal import Decimal
 from dataclasses import dataclass
@@ -368,10 +385,10 @@ class Person:
 <p>The code defines two dataclasses, <code>Order</code> and <code>Person</code>, and their corresponding schemas, <code>OrderSchema</code> and <code>PersonSchema</code>, using the <code>marshmallow</code> library.</p>
 <p>The <code>Order</code> dataclass has two attributes: <code>created</code> (a <code>datetime</code> object) and <code>amount</code> (a <code>Decimal</code> object). The <code>OrderSchema</code> class is used to validate the <code>created</code> and <code>amount</code> fields when loading data. It also includes a validation (<code>@validates_schema</code>) to ensure that the <code>created</code> date is not in the future.</p>
 <p>The <code>Person</code> dataclass represents a person's information and has attributes for first name, last name, date of birth, and a list of orders. The <code>PersonSchema</code> class is used to validate the person's data, including the orders nested within it.</p>
-<p>You can use the <code>PersonSchema</code> to load and validate data from the given JSON and obtain a <code>Person</code> object with the correct types for the fields.</p></p>
-                <hr/>
+<p>You can use the <code>PersonSchema</code> to load and validate data from the given JSON and obtain a <code>Person</code> object with the correct types for the fields.</p></div>
             
-                <p>Content: <p>Here's an example of how you can use the Marshmallow library in Python to create data classes from the given JSON:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Here's an example of how you can use the Marshmallow library in Python to create data classes from the given JSON:</p>
 <pre><code class="language-python">from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
@@ -430,8 +447,7 @@ Last name: Smith
 Date of birth: 1977-03-16
 Order created: 2024-01-25 15:00:04
 Order amount: 100.00
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
         </main>
     </body>

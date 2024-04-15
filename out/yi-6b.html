@@ -247,87 +247,103 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/01-ai/yi-6b</h1>
             <p>Model: openrouter/01-ai/yi-6b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Combining schemas.
-Adding fields.
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Combining schemas.<br />
+Adding fields.<br />
 Replacing certain fields.</p>
 <p>I replaced fields in the datatypes here:</p>
-<p>How do I use the json here to define some dataclasses?
+<p>How do I use the json here to define some dataclasses?<br />
 It seems the fields used newly defined have to be defined in the "JSON Schema Object" [view source], right? But then how would I remove any fields that are already there from the field definitions?</p>
 <p>I replaced fields on this set:</p>
 <p>import json</p>
 <p>from marshmallow import Schema, fields</p>
-<p>from datetime import datetime
+<p>from datetime import datetime<br />
 from decimal import Decimal</p>
-<p>class ProductionRequestSchema(Schema):
-    first_name = fields.String()
-    last_name = fields.String()
-    date_of_birth = fields.Date(format=fields.Date().format)
+<p>class ProductionRequestSchema(Schema):<br />
+    first_name = fields.String()<br />
+    last_name = fields.String()<br />
+    date_of_birth = fields.Date(format=fields.Date().format)<br />
     orders = fields.List(fields.Nested(OrderSchema()))</p>
-<p>ordersSchema = Schema(many=True)
-ordersSchema(title='Order',
-             description='Describes a single order',
-             fields=ordersSchema.fields &amp;~ fields.Dict(...),
+<p>ordersSchema = Schema(many=True)<br />
+ordersSchema(title='Order',<br />
+             description='Describes a single order',<br />
+             fields=ordersSchema.fields &amp;~ fields.Dict(...),<br />
              alphabetical_fields=False)</p>
 <p>jsonString =</p>
-<p>{
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  orders: [
-    {
-     'created': '2024-01-25T15:00:04',
-     'amount': '100.00'
-    }
-  ]
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+     'created': '2024-01-25T15:00:04',<br />
+     'amount': '100.00'<br />
+    }<br />
+  ]<br />
   }</p>
 <p>Since JsonSchema has no str method, I made an Enum for my dates because I will need to marshal Date objects into a json object where the key is the format used. This is handy since once I make a Date object and serialize the object fully, I need that data.</p>
-<p>class Date(Enum):
+<p>class Date(Enum):<br />
     YEAR_FULL = '%Y'</p>
 <p>As an aside:</p>
-<p>By convention a ForeignKey is added to a model class when implementing ForeignKey in that model class, which conforms to the autodiscover convention of Django.
+<p>By convention a ForeignKey is added to a model class when implementing ForeignKey in that model class, which conforms to the autodiscover convention of Django.<br />
 Here's the dialogue:</p>
 <p>fn.create_parent_objects &lt;- [ ...</p>
-<p>prod_r -&gt; P
-prod_r -&gt; J
-prod_r -&gt; C
+<p>prod_r -&gt; P<br />
+prod_r -&gt; J<br />
+prod_r -&gt; C<br />
 prod_r -&gt; A</p>
 <p>and A, B, and C are foreign keys towards prod_r which are strings and then I get the connection manager.</p>
-<p>def fn.create_parent_objects(obj, mgr):
-    parent_class = obj.klass()
+<p>def fn.create_parent_objects(obj, mgr):<br />
+    parent_class = obj.klass()<br />
     parent_classa = parent_class</p>
 <pre><code>parent_classa.objects.create(...)
 ...
 </code></pre>
-<p>B.objects.create(...)
-C.objects.create(...)
+<p>B.objects.create(...)<br />
+C.objects.create(...)<br />
 ;</p>
 <p>After addition and deletion of foreign keys as needed by models, these calls become:</p>
-<p>D.objects.create(...)
-E.objects.create(...)
-F.objects.create(...)
+<p>D.objects.create(...)<br />
+E.objects.create(...)<br />
+F.objects.create(...)<br />
 ...</p>
 <p>I need to write a production receipt class, and have to deal with drop down selection lists which are date totals, of course, and have to deal with the back end server set up.</p>
 <p>As you see, I am using a json formatted dict with keys 'first_name' and 'last_name' and have nested keys in the 'orders' field, in which nested keys are references via json and may include date time and monetary values.</p>
 <p>I need to convert this dict to class methods.</p>
 <p>Still, the class is the top most level of my organization.</p>
-<p>The class Sequential has been used by Django in my host applications tests, but I am wondering more generally if anything is named, elements, and anything of the same name (Military formations would have the various elements they comprise, and they would last for, say, a year of the leader's control, then change formation.
+<p>The class Sequential has been used by Django in my host applications tests, but I am wondering more generally if anything is named, elements, and anything of the same name (Military formations would have the various elements they comprise, and they would last for, say, a year of the leader's control, then change formation.<br />
 Anyhoo.</p>
-<p>Question:
-How can I get naming convention, object-orientation, and functional programming to mesh in such a way that I don't have 250 variations of my class, and they all have a 'last_name' field, and if there are variations I only have to deal with it in 1 place?</p></p>
-                <hr/>
+<p>Question:<br />
+How can I get naming convention, object-orientation, and functional programming to mesh in such a way that I don't have 250 variations of my class, and they all have a 'last_name' field, and if there are variations I only have to deal with it in 1 place?</p></div>
             
-                <p>Content: <p>A way with/without a datatclass?</p></p>
-                <hr/>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>A way with/without a datatclass?</p></div>
             
-                <p>Content: <p><issue_comment>username_1: The example first shows you how to write dataclasses:</p>
-<p>https://github.com/marshmallow-code/marshmallow/blob/master/marshmallow/validate.py#L756
+                <p>Response 3.</p>
+                <div class="markdown-body"><p><issue_comment>username_1: The example first shows you how to write dataclasses:</p>
+<p>https://github.com/marshmallow-code/marshmallow/blob/master/marshmallow/validate.py#L756<br />
 <issue_comment>username_0: First of all, thank you so much for your response! Fantastic. I used to have you rewritten as dataclasses.I've been sticking with marshmallow for a while now. The 'first_name' example worked for me and i'm able to continue futher with the questions from the class.</p>
-<p>Thanks again.<issue_closed></p></p>
-                <hr/>
+<p>Thanks again.<issue_closed></p></div>
             
         </main>
     </body>

@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/nousresearch/nous-hermes-2-mistral-7b-dpo</h1>
             <p>Model: openrouter/nousresearch/nous-hermes-2-mistral-7b-dpo</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can create a set of <code>dataclasses</code> and then a <code>Schema</code> in Marshmallow to serialize and deserialize these classes. First, create a <code>dataclass</code> for each entry in the JSON:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can create a set of <code>dataclasses</code> and then a <code>Schema</code> in Marshmallow to serialize and deserialize these classes. First, create a <code>dataclass</code> for each entry in the JSON:</p>
 <pre><code class="language-python">from datetime import datetime
 from dateutil.parser import parse
 from decimal import Decimal
@@ -321,10 +338,10 @@ assert loaded_person.first_name == 'Jane'
 dumped_json = schema.dump(person)
 assert dumped_json == json_input
 </code></pre>
-<p>This will allow you to handle the specific data types required in your json.</p></p>
-                <hr/>
+<p>This will allow you to handle the specific data types required in your json.</p></div>
             
-                <p>Content: <p>To achieve this, you can use Marshmallow's <code>post_load</code> hook to parse date and datetime strings upon deserialization and Marshmallow-Enum plugin to work with enums. First, you need to install Marshmallow-Enum plugin using <code>pip install marshmallow-enum</code>.</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>To achieve this, you can use Marshmallow's <code>post_load</code> hook to parse date and datetime strings upon deserialization and Marshmallow-Enum plugin to work with enums. First, you need to install Marshmallow-Enum plugin using <code>pip install marshmallow-enum</code>.</p>
 <p>Here's an example of how to parse date_of_birth and amount, and use Marshmallow-Enum for OrderStatus:</p>
 <pre><code class="language-python">from datetime import datetime
 from decimal import Decimal
@@ -370,10 +387,10 @@ print(loaded_data.orders[0].created)
 print(loaded_data.orders[0].status)
 </code></pre>
 <p>In this example, the <code>make_person</code> function will parse 'date_of_birth' into a <code>datetime.date</code> object and then create a <code>Person</code> instance with this data. The <code>classOrderStatus</code> serves to work with <code>OrderStatus</code> enum in <code>Person.orders</code> list.</p>
-<p>You might have to adjust the code based on your actual data structure and requirements, but this should give you a general idea of how to use Marshmallow for this task.</p></p>
-                <hr/>
+<p>You might have to adjust the code based on your actual data structure and requirements, but this should give you a general idea of how to use Marshmallow for this task.</p></div>
             
-                <p>Content: <p>You can use the Marshmallow library along with Python's built-in <code>datetime</code> and <code>decimal</code> modules to accomplish this. First, install the marshmallow library if you haven't already:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the Marshmallow library along with Python's built-in <code>datetime</code> and <code>decimal</code> modules to accomplish this. First, install the marshmallow library if you haven't already:</p>
 <pre><code class="language-python">pip install marshmallow
 </code></pre>
 <p>Then, create a data class for the main person object:</p>
@@ -422,8 +439,7 @@ data = {
 
 schema = Person(**data)
 </code></pre>
-<p>If the JSON is valid, <code>schema</code> will be an instance of your <code>Person</code> class. Please be aware that this code assumes your 'date_of_birth' is in the format MM/DD/YYYY, and you may need to adjust the parsing accordingly.</p></p>
-                <hr/>
+<p>If the JSON is valid, <code>schema</code> will be an instance of your <code>Person</code> class. Please be aware that this code assumes your 'date_of_birth' is in the format MM/DD/YYYY, and you may need to adjust the parsing accordingly.</p></div>
             
         </main>
     </body>

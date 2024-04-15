@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/recursal/eagle-7b</h1>
             <p>Model: openrouter/recursal/eagle-7b</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>schema_model</code> decorator from marshmallow library in Python to generate dataclasses, field annotation for date of birth, datetime for created and decimal for amount. Here's an example:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>schema_model</code> decorator from marshmallow library in Python to generate dataclasses, field annotation for date of birth, datetime for created and decimal for amount. Here's an example:</p>
 <pre><code class="language-python">from typing import List
 import datetime
 from marshmallow import Schema, fields, pre_load, post_load, validate
@@ -341,25 +358,25 @@ class DateSession(object):
 
     def __get__(self, *args...
 
-</code></pre></p>
-                <hr/>
+</code></pre></div>
             
-                <p>Content: <p>{
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': datetime.datetime(1977, 3, 16),
-  'orders': [
-    Order(amount=100.00, created=datetime.datetime(2024, 2, 7)),
-    Order(amount=50.00, created=datetime.datetime(1998, 5, 3)),
-  ]
-}
-def to_dataclass(obj):
-    def _from_dict(d: dict) -&gt; 'Amount':
-        if isinstance(d, slice):
-            d = d[0]
-        return Amount(
-            amount=d['amount'],
-            created=d.get('created') or datetime.datetime.min,
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': datetime.datetime(1977, 3, 16),<br />
+  'orders': [<br />
+    Order(amount=100.00, created=datetime.datetime(2024, 2, 7)),<br />
+    Order(amount=50.00, created=datetime.datetime(1998, 5, 3)),<br />
+  ]<br />
+}<br />
+def to_dataclass(obj):<br />
+    def _from_dict(d: dict) -&gt; 'Amount':<br />
+        if isinstance(d, slice):<br />
+            d = d[0]<br />
+        return Amount(<br />
+            amount=d['amount'],<br />
+            created=d.get('created') or datetime.datetime.min,<br />
         )</p>
 <pre><code>def _to_dict(o: object) -&gt; dict:
     return getattr(o, 'data', {
@@ -399,47 +416,47 @@ class Order:
 <p>print([to_dataclass(i) for i in in data['orders']]</p>
 <p>print({order._data.<strong>dict</strong> for order in data['orders'] })</p>
 <p>)</p>
-<p>{{"created": datetime.datetime(2024L, 2L),
- "amount": Decimal('100.')}}
-{"adf_union": {"amount": Decimal('100.')}}{'adf_union': {"amount": Decimal('199.')}}</p></p>
-                <hr/>
+<p>{{"created": datetime.datetime(2024L, 2L),<br />
+ "amount": Decimal('100.')}}<br />
+{"adf_union": {"amount": Decimal('100.')}}{'adf_union': {"amount": Decimal('199.')}}</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow-jsonfield</code> library to generate dataclasses for your JSON field.
-Here's an example code for that:
-```python
-from datetime import date
-from marshmallow import Schema, fields, pre_load, ValidationError
-from dateparser.search import parse
-from datetime import datetime as dt
-import pytz
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow-jsonfield</code> library to generate dataclasses for your JSON field.<br />
+Here's an example code for that:<br />
+```python<br />
+from datetime import date<br />
+from marshmallow import Schema, fields, pre_load, ValidationError<br />
+from dateparser.search import parse<br />
+from datetime import datetime as dt<br />
+import pytz<br />
 import json</p>
 <h1>Define a schema for the JSON field</h1>
-<p>class Dated(Schema):
-    created = fields.Date(required=True)
+<p>class Dated(Schema):<br />
+    created = fields.Date(required=True)<br />
     amount = fields.Decimal(required=True)</p>
 <h1>Define a schema for the root object</h1>
-<p>class Order(Schema):
-    order_id = fields.Int(required=True)
-    ordered_at = fields.Datetime(required=True)
+<p>class Order(Schema):<br />
+    order_id = fields.Int(required=True)<br />
+    ordered_at = fields.Datetime(required=True)<br />
     credit_card_number = fields.String(required=True)</p>
 <h1>Define the base class for the root object and its fields, and override the to_dict method to include them in the json field serialization as dataclasses</h1>
-<p>class Root(object):
-    def <strong>init</strong>(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+<p>class Root(object):<br />
+    def <strong>init</strong>(self, **kwargs):<br />
+        for key, value in kwargs.items():<br />
+            setattr(self, key, value)<br />
         super().<strong>init</strong>()</p>
 <h1>Define the root object and its fields</h1>
-<p>class RootJSONField(Root):
-    """The root object for the root of the schema."""
-    <strong>root</strong> = True
-    date_of_birth = Dated(required=True)
-    orders = ArrayField(fields=Order(required=True))
-    def <strong>init</strong>(self, <strong>kwargs):
-        super().<strong>init</strong>(</strong>kwargs)
-        self._ordered_at = None
+<p>class RootJSONField(Root):<br />
+    """The root object for the root of the schema."""<br />
+<strong>root</strong> = True<br />
+    date_of_birth = Dated(required=True)<br />
+    orders = ArrayField(fields=Order(required=True))<br />
+    def <strong>init</strong>(self, <strong>kwargs):<br />
+        super().<strong>init</strong>(</strong>kwargs)<br />
+        self._ordered_at = None<br />
         self._credit_card_number = None</p>
 <h1>Define a deserializer for the root JSON field of an order to include it as a dataclass in its keys of a dictionary (with their values wrapped in dict() if needed). So, e.g., {'orders': [{...}, {'...}, ...], 'date_of_birth': SomeDateObject() } instead of {'orders': [{..., 'date_of_birth': ..., ...}] } which would cause error when you try to access _ordered_at on Incargo because it won't work without date part.</h1>
-<p>@RootJSONField.register_dataclass()
+<p>@RootJSONField.register_dataclass()<br />
 class OrderDataclassMixin:</p>
 <pre><code>def _parse(self, raw):
     self.__root__['_ordered_at'] = parse(raw['orderedAt'], validate='iso8601', strip=False).date()
@@ -452,25 +469,24 @@ class OrderDataclassMixin:</p>
 <li>distinguish each field of a schema from each other since Marshmallow usually doesn't have concept of data classes inside any class scope (expecting only tags like @Schema()), but we need dataclasses inside each field scope so we add one more level with "dataclass", indicating that it is really mandatory for required field either we use tag (<strong>name</strong>) or something else (:name:) right before Required Char(20), Birthday etc... Note: this will always raise error on additional name we pass to required(). But Just like OptionField , we can use @optional() overriding other cases by in precedence with just @if options so that you can use additional keyword using Name() and similars within __isDependsOnScopeConfig() i.e., @optional()(either with Name(), IncludeTag(), JsonPath(), Predicate()) ) too..</li>
 </ul>
 <p>from marshmallow import Schema, post, fields, DataType</p>
-<p>@dataclass(eq=False)
-class ReservedItem:
+<p>@dataclass(eq=False)<br />
+class ReservedItem:<br />
     name: str = None  # Don't allow accessing other reserved items by name directly since it is created from auto-prefix of other reserved items since all fields has attribute reservedItem iimitions so except name if you do that outside of this class then you will be getting whole list <strong>reservedItems</strong>. Libyans are not drunk yet :)</p>
 <p>ConfirmationCode = 911</p>
 <p>EstimateOptionsBadNumberOrReplacedOrAmountOrTimeoutRequiredDayDelivery = 920</p>
-<p>ApprovePaymentProcessOptionsBadbankOrOwnerAccountIdSlowPaymentReviewOrDepunavateExt requirementForConcept &amp;&amp; Organization || PurchaseConfirmOrderPaymentMoreThanOneMinutesAfterPaymentConfirmedNSAFormet || COmpanyOfferedSaleSmartphoneDatacentersAIPVA || createCompanyNewCustomerAccountTimeShowPricesTransferredQuantity || StatusIsOnHoldService || CreateCompanyNewCustomerAccountByPayment || CreateCompanyNewVendorProductapOrganizerIDEscapeRouteRoute || MyAccountPaymentAccountPayment || CreateOptionRiskyManagementPaymentAccountFulfillerAnycase || CreateCompanyCreatedBankInvoiceLV || CreateCompanyNewVendorAdjustmentsValuedAFischCheckoutDevice || PurchaseCompanyNewGuyBankAccounts || CreateCompanyManagementObjectVenuesBeRecognizedTaxVerifcation || CancelRemotelyPurchaseOrder || CancelSubSetProducts || BuySellingTradeProductsActiveMktStockPlanPartnerAssociatePartnerStatusesPromotedWebsiteId MoxieSearchPresaleLotCommissionAuctionBidWinHalfRandomUpOfferFlowoverallBidsFormatCompleteLatelyEspersProductPurchTrend || BuyCombinedLtaRateGuaranteePlatformsBuyInternationalVisitorNameOnlyPurchRateRomeEducateExclusiveBuyerSession PartnerBelongStyleBuyerSumTrustedD NotifiedEuropeanResellingEventSell &amp;&amp; DeliveryOptions ErrorCreateTotalRates &amp;&amp; Deliver BalanceExpictOpenTransactionTypeBasic  or NorthAmericanOrSouthamericanAcceptableUsageCalculateWithCasesFromSelfieDeliveredGlobal 
+<p>ApprovePaymentProcessOptionsBadbankOrOwnerAccountIdSlowPaymentReviewOrDepunavateExt requirementForConcept &amp;&amp; Organization || PurchaseConfirmOrderPaymentMoreThanOneMinutesAfterPaymentConfirmedNSAFormet || COmpanyOfferedSaleSmartphoneDatacentersAIPVA || createCompanyNewCustomerAccountTimeShowPricesTransferredQuantity || StatusIsOnHoldService || CreateCompanyNewCustomerAccountByPayment || CreateCompanyNewVendorProductapOrganizerIDEscapeRouteRoute || MyAccountPaymentAccountPayment || CreateOptionRiskyManagementPaymentAccountFulfillerAnycase || CreateCompanyCreatedBankInvoiceLV || CreateCompanyNewVendorAdjustmentsValuedAFischCheckoutDevice || PurchaseCompanyNewGuyBankAccounts || CreateCompanyManagementObjectVenuesBeRecognizedTaxVerifcation || CancelRemotelyPurchaseOrder || CancelSubSetProducts || BuySellingTradeProductsActiveMktStockPlanPartnerAssociatePartnerStatusesPromotedWebsiteId MoxieSearchPresaleLotCommissionAuctionBidWinHalfRandomUpOfferFlowoverallBidsFormatCompleteLatelyEspersProductPurchTrend || BuyCombinedLtaRateGuaranteePlatformsBuyInternationalVisitorNameOnlyPurchRateRomeEducateExclusiveBuyerSession PartnerBelongStyleBuyerSumTrustedD NotifiedEuropeanResellingEventSell &amp;&amp; DeliveryOptions ErrorCreateTotalRates &amp;&amp; Deliver BalanceExpictOpenTransactionTypeBasic  or NorthAmericanOrSouthamericanAcceptableUsageCalculateWithCasesFromSelfieDeliveredGlobal <br />
 || CreateCompanyNewRepHandlingAgentsApprenticesAgentContactPersonEquityInvestorsRuralContactsAgentInvestmentsPortfolioMarketingHotPartnerManagerProvidene * or TibetianTraditionOr EastAsiaExchangeDateOf CreationDeathChancellorOfStateLanguageaBigCountryBooksVettori  || CapitalArbitraryProblemsNonprofitOrganizationsOrCorporationslistsOfPeopleTwitterSudanOrSportsMatchInEquitableLocationUpgradeOpenHouseExpiredFieldsAgreements TransactionAuthenticationMerchantCardVisaEventTicketsOrUnlimitedOfTogetherWithOtherPrintStreamSupplierNoteSelectConnectionWithForgerSignedByUserOfferUserProfileMobilePhoneNumberPicoTollClientIntegrationBankingSystemFrontLabelReservedHellRateEtc )  || IndianProgrammationSocialIntroScentrishePricingServerSideTechnologyPlatformBrilliantMarketingStrategyWebBrowserApplicationSoftwareIndexesClientDashAdProductsRevenueAndChtch ChinseFluffyIntentGovTJapanCanhersEpicAlibabaAmazonAmazonOnlinebookstorepingPoupouKeruugetToyRobotExperimentDataStoreCredentialZapPayPeggyRibboninki RyanRocketMailGoogleQrTrackerTorUserBytesheartedUnitedStates CopyrightFreeWallpaperRegisteredMigrationIDwayTodistributeDesignersAndFashionistasAndHaveWorkFestival SendPackagesDeactivatedUserTodayFeedbackDescriptionAndBanner AndNotifyAllPostMarion HitlessManufacturerRibetariageSendMailSurchargePlusWriteRoughdraftsimultaneouslyTranslationToListningViaTechnicalSemticAndConfigurationDisclaimerAndRequireConGeneralistEg Gradstudent 2ndRedOctoberRemoveRootFolderMakeBytecodeRshareableResourceFileLikemp3Mp3SongsMp3audioPlayWindowsAPIWindowsMediaPlayerMidlweldtunCantCamQualityWillStabYouUItestchanges utest 2hrdelay Ferworksharpeenterprisesforfederalgovernmentproblematicuserinteraction UseFullNameOfPersonWhoStartedBuildingNuclearReactorCutOffStronglyEncrypttoutegrityRiskyShippingAddressesSecurelyAllegrettoNextStaticallyProceduralUnionSealingDecomposingCarcierFamilyBusinessDirectorDigestWithNoHtmlRetireCV PrepistyleviewanyoneWhoWantroundtrippingAccessManagementtypeaheadSearchlocalizationAsyncRegistration . DocumentsRepresentationReadyFormalDocument|Apaq|AgreementAddition|ComposePassword|CompromisedEmployeeLemmaman|ConditionalRequest|Contractor|ConstructionWatchJobPointOfSaleHelper|ContractedCallCenter|ContractorSubcontractor|Dsts|DocumentsWhatIsDocumentEngineverifyContractorContractorRetailMagistrate|PrintCertificateLevelScanner|DBMSUploadFileAnalysis|DriveTheftPreventionSolutionXMLFileArchiveRetrieveResultsExpertProvider|FileSenderLicenseClientSignedBySignature|FerryFileUploadRemoteOfficeHelpAnonymousUser|FetchDataPartlicalFileDataFilesAttachmentsFromSingleBucketFileContentReaderProcessorDownloadExporterZipNagyFileStorageAlternateCoolerSourceStringCailocationServiceNotificationDoubleAmandaShangnEmailClientClawbackRetractingIncidentProtectionServiceGeneralManagerEmailClientReminderNotificationBeneficiariedFirmCreditCardPrimaryUserLinuxInitiatedPreComputedPrecomputeingComputerMistakeComputerSchtzdorfDrugInformationBoardCyberPlexTechnologyVirusTeleologicalTransferenceInadvertenuousUserRegistrationUserAssuranceSymmetricMessageHashAcceleratingAuthenticatedFunctionRetrieveNonDecodeReactManyLectureUsersIdentifyInfoEncryptMichaelTetwananSinha |UsedIteratorvectorizedstreamsrootslesswidthBCwitnessesMiscellaneousBillingSerializeSearchingStuffingbeateganSuccinctnessBroadReachIncreasingWordIndexAutomatedAssessmentTriangularMatrixValuesMadeEasyConsistentMultiplexHardwareAcceleratedAntiDerivativesPropertyDeclarationOfRoleRegistryLockupKeyValueShellExecutableApplicationProgramDeclaredRestoredStateoversEarlierRotationVersioLogicGateSystemVentingCommentarySequencingSwitchesInterdictionMarriedpairhumanDensityPromptedSquiggleTrendAnalytesInTypeScriptTransportProtocolFormalLanguage涵 collisionDetectionMertensfactorialFunctionNrosNaturalnumbersnaturMathematicCalculatorFunArgs ArgumentAggregatesSolarSystemStochasticJobsFeedVastnessviewstatementofRespondingFocationVariableValueOptimizeWarningQmconvergentSeriesVolueDistributio completesetModuleImportConflictInstallationAutomotographyStrategiesAlgorithmBlowOutFunctionGraphAlgebraGenderLimitationsRejectionReasonLinkageSubstitutionSubnormalDistributionDefineIdentifierTypedeclarationAtomizeFunctionComplementGeneratrixEaseMeasureQuiescentDigitalUnitsFiniteDifferenceParsePlanrssfeederWebAudioHttpRequestLessStatisticalModel MemoryRemessageQueueTensorLoadBalance ClassimizerMax ЛюхайпрограммаСерийныйКонтрольСортировкаShapeOctagonPolygonRectangleSquareDiamondCrossCircle SquareRootTriangle Нецелы ееУравнения swoopHerzugsVersuchВис<jupyter_text>So finally using Typescript's Options API we are able to do this process it seems:<jupyter_code>IMAGES="m1m2"</p>
 <p>IMAGES[0] = "ImgInfo{firstName='Crimson', lastName='Crawford', dateOfBirth='Mar 27 1998', image='Cmmn/cargonimated/400/scr04.jpg'}" # This doesn't support ttl yet ! (Wrong precision or something similar tho...)</p>
 <p>IMAGES[1] = "ImgInfo{firstName='Harry', lastName='Potter', dateOfBirth='Jan 02 1997', image='Cmmn/cursedcomrades/415/img01sdfMovieCharacterInfo.webp'}"  <br />
 IMAGES[2] = "ImgInfo{firstName='cum', lastName='cuncheltoad', dateOfBirth='Jan 01 2012', image='''cp/img0355 chars/bgm051.png' ''}"</p>
-<p>imgBookImage : CargoInfo? {
+<p>imgBookImage : CargoInfo? {<br />
   bookinfo: CargoBookInfo</p>
-<p>For each flightInfoIndex {"genbookFrir": true} in IMAGES {
-      cargoBookImage :! CargoBookInfo? {
-          image :!UploadedGenreImage FrirBook
-          FIGMDataGuideline :!FlightInfo Book["pge"] GuideLine
-              or!(
-                  gen</p></p>
-                <hr/>
+<p>For each flightInfoIndex {"genbookFrir": true} in IMAGES {<br />
+      cargoBookImage :! CargoBookInfo? {<br />
+          image :!UploadedGenreImage FrirBook<br />
+          FIGMDataGuideline :!FlightInfo Book["pge"] GuideLine<br />
+              or!(<br />
+                  gen</p></div>
             
         </main>
     </body>

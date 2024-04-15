@@ -247,129 +247,145 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/google/palm-2-chat-bison-32k</h1>
             <p>Model: openrouter/google/palm-2-chat-bison-32k</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>```python
-from dataclasses import dataclass
-from datetime import date, datetime
-from decimal import Decimal
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>```python<br />
+from dataclasses import dataclass<br />
+from datetime import date, datetime<br />
+from decimal import Decimal<br />
 import marshmallow_dataclass</p>
 <h1>Creating a dataclass to represent the JSON data</h1>
-<p>@dataclass
-class Person:
-  first_name: str
-  last_name: str
-  date_of_birth: date
+<p>@dataclass<br />
+class Person:<br />
+  first_name: str<br />
+  last_name: str<br />
+  date_of_birth: date<br />
   orders: list['Order']</p>
 <h1>Creating a dataclass to represent the orders within the JSON data</h1>
-<p>@dataclass
-class Order:
-  created: datetime
+<p>@dataclass<br />
+class Order:<br />
+  created: datetime<br />
   amount: Decimal</p>
 <h1>Creating a marshmallow schema to serialize and deserialize the dataclass</h1>
-<p>class PersonSchema(marshmallow_dataclass.DataclassSchema):
-  class Meta:
+<p>class PersonSchema(marshmallow_dataclass.DataclassSchema):<br />
+  class Meta:<br />
     dataclass = Person</p>
 <pre><code># Specifying custom conversion for the date and datetime fields
 datetimeformat = '%Y-%m-%dT%H:%M:%S'
 </code></pre>
 <h1>Serializing the JSON data into a dictionary using the marshmallow schema</h1>
-<p>person_dict = PersonSchema().load({
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  'orders': [
-    {
-      'created': '2024-01-25T15:00:04',
-      'amount': '100.00'
-    }
-  ]
+<p>person_dict = PersonSchema().load({<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  'orders': [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+  ]<br />
 })</p>
 <h1>Deserializing the dictionary back into the dataclass</h1>
-<p>person_obj = PersonSchema().load(person_dict)
-```</p></p>
-                <hr/>
+<p>person_obj = PersonSchema().load(person_dict)<br />
+```</p></div>
             
-                <p>Content: <p>```python
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>```python<br />
 from marshmallow import Schema, fields</p>
-<p>class OrderSchema(Schema):
-    created = fields.DateTime()
+<p>class OrderSchema(Schema):<br />
+    created = fields.DateTime()<br />
     amount = fields.Decimal(as_string=True)</p>
-<p>class UserSchema(Schema):
-    first_name = fields.String()
-    last_name = fields.String()
-    date_of_birth = fields.Date()
+<p>class UserSchema(Schema):<br />
+    first_name = fields.String()<br />
+    last_name = fields.String()<br />
+    date_of_birth = fields.Date()<br />
     orders = fields.Nested(OrderSchema, many=True)</p>
-<p>json_data = {
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  orders: [
-    {
-      'created': '2024-01-25T15:00:04',
-      'amount': '100.00'
-    }
-  ]
+<p>json_data = {<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+  ]<br />
 }</p>
-<p>schema = UserSchema()
+<p>schema = UserSchema()<br />
 user = schema.load(json_data).data</p>
-<p>for order in user.orders:
-    print(order.created)
+<p>for order in user.orders:<br />
+    print(order.created)<br />
     print(order.amount)</p>
-<p>```</p></p>
-                <hr/>
+<p>```</p></div>
             
-                <p>Content: <p>```python
-from dataclasses import dataclass
-from datetime import date, datetime
-from decimal import Decimal
-import marshmallow_dataclass
-import marshmallow
-from marshmallow import fields
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>```python<br />
+from dataclasses import dataclass<br />
+from datetime import date, datetime<br />
+from decimal import Decimal<br />
+import marshmallow_dataclass<br />
+import marshmallow<br />
+from marshmallow import fields<br />
 import json</p>
-<p>json_data = json.loads("""
-{
-  'first_name': 'Jane',
-  'last_name': 'Smith',
-  'date_of_birth': '03/16/1977',
-  orders: [
-    {
-      'created': '2024-01-25T15:00:04',
-      'amount': '100.00'
-    }
-]}
+<p>json_data = json.loads("""<br />
+{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}<br />
 """)</p>
-<p>@dataclass
-class Order:
-  created: datetime
+<p>@dataclass<br />
+class Order:<br />
+  created: datetime<br />
   amount: Decimal</p>
-<p>@dataclass
-class User:
-  first_name: str
-  last_name: str
-  date_of_birth: date
+<p>@dataclass<br />
+class User:<br />
+  first_name: str<br />
+  last_name: str<br />
+  date_of_birth: date<br />
   orders: list[Order]</p>
-<p>class DateField(fields.Field):
-  def _deserialize(self, value, **kwargs):
+<p>class DateField(fields.Field):<br />
+  def _deserialize(self, value, **kwargs):<br />
     return datetime.strptime(value, '%m/%d/%Y').date()</p>
-<p>class DateTimeField(fields.Field):
-  def _deserialize(self, value, **kwargs):
+<p>class DateTimeField(fields.Field):<br />
+  def _deserialize(self, value, **kwargs):<br />
     return datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')</p>
-<p>class DecimalField(fields.Field):
-  def _deserialize(self, value, **kwargs):
+<p>class DecimalField(fields.Field):<br />
+  def _deserialize(self, value, **kwargs):<br />
     return Decimal(value)</p>
-<p>UserSchema = marshmallow_dataclass.class_schema(User)
-UserSchema.Meta.datefields = ['date_of_birth']
-UserSchema.Meta.fields['date_of_birth'] = DateField()
-UserSchema.Meta.fields['created'] = DateTimeField()
+<p>UserSchema = marshmallow_dataclass.class_schema(User)<br />
+UserSchema.Meta.datefields = ['date_of_birth']<br />
+UserSchema.Meta.fields['date_of_birth'] = DateField()<br />
+UserSchema.Meta.fields['created'] = DateTimeField()<br />
 UserSchema.Meta.fields['amount'] = DecimalField()</p>
-<p>user_schema = UserSchema()
-user = user_schema.load(json_data)
-print(user)
-```</p></p>
-                <hr/>
+<p>user_schema = UserSchema()<br />
+user = user_schema.load(json_data)<br />
+print(user)<br />
+```</p></div>
             
         </main>
     </body>

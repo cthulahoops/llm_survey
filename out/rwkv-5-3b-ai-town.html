@@ -247,42 +247,58 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/recursal/rwkv-5-3b-ai-town</h1>
             <p>Model: openrouter/recursal/rwkv-5-3b-ai-town</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:
-1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.
-2. Initialize an empty list to store the <code>orders</code>.
-3. Loop through the dictionary, for each <code>person</code>:
-   a. Get the <code>id</code> and <code>first_name</code>.
-   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").
-      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).
-      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").
-      d'.</p></p>
-                <hr/>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:<br />
+1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.<br />
+2. Initialize an empty list to store the <code>orders</code>.<br />
+3. Loop through the dictionary, for each <code>person</code>:<br />
+   a. Get the <code>id</code> and <code>first_name</code>.<br />
+   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").<br />
+      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).<br />
+      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").<br />
+      d'.</p></div>
             
-                <p>Content: <p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:
-1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.
-2. Initialize an empty list to store the <code>orders</code>.
-3. Loop through the dictionary, for each <code>person</code>:
-   a. Get the <code>id</code> and <code>first_name</code>.
-   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").
-      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).
-      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").
-      d'.</p></p>
-                <hr/>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:<br />
+1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.<br />
+2. Initialize an empty list to store the <code>orders</code>.<br />
+3. Loop through the dictionary, for each <code>person</code>:<br />
+   a. Get the <code>id</code> and <code>first_name</code>.<br />
+   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").<br />
+      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).<br />
+      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").<br />
+      d'.</p></div>
             
-                <p>Content: <p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:
-1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.
-2. Initialize an empty list to store the <code>orders</code>.
-3. Loop through the dictionary, for each <code>person</code>:
-   a. Get the <code>id</code> and <code>first_name</code>.
-   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").
-      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).
-      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").
-      d'.</p></p>
-                <hr/>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Sure, here's how you can generate some data with the <code>marshmallow</code> library in Python:<br />
+1. Create a dictionary of <code>person</code> objects, where each person has a unique <code>id</code> and <code>first_name</code>.<br />
+2. Initialize an empty list to store the <code>orders</code>.<br />
+3. Loop through the dictionary, for each <code>person</code>:<br />
+   a. Get the <code>id</code> and <code>first_name</code>.<br />
+   b. Get the number of days since their birth (e.g., "2023-01-03" becomes "2023-01-03").<br />
+      c. Generate a random number within 0 to 9 (e.g., "5" becomes "5" or "6" if needed).<br />
+      d. Add the number of days to the ordered list of dictionaries (e.g., "orders" becomes "orders" + "2023-01-03").<br />
+      d'.</p></div>
             
         </main>
     </body>

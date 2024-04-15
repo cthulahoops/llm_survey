@@ -247,11 +247,28 @@
             </ul>
         </nav>
         <main>
-            <h1>openrouter/perplexity/sonar-small-online</h1>
             <p>Model: openrouter/perplexity/sonar-small-online</p>
 
+            <p>Prompt</p>
+            <div class="markdown-body"><p>I need to take this json:</p>
+<p>{<br />
+  'first_name': 'Jane',<br />
+  'last_name': 'Smith',<br />
+  'date_of_birth': '03/16/1977',<br />
+  orders: [<br />
+    {<br />
+      'created': '2024-01-25T15:00:04',<br />
+      'amount': '100.00'<br />
+    }<br />
+]}</p>
+<p>And generate some dataclasses.</p>
+<p>date_of_birth needs to be a date.<br />
+created is a datetime.<br />
+amount is a decimal.</p>
+<p>How would I do this using the marshmallow library in python?</p></div>
             
-                <p>Content: <p>You can use the <code>marshmallow-dataclass</code> library to automatically generate marshmallow schemas from your dataclasses. First, install the library using pip:</p>
+                <p>Response 1.</p>
+                <div class="markdown-body"><p>You can use the <code>marshmallow-dataclass</code> library to automatically generate marshmallow schemas from your dataclasses. First, install the library using pip:</p>
 <pre><code class="language-bash">pip install marshmallow-dataclass
 </code></pre>
 <p>Then, import the <code>dataclass</code> module, define your dataclass, and use the marshmallow schema. Here is an example:</p>
@@ -276,10 +293,10 @@ schema = Person.Schema()
 data = schema.dump(person)
 print(data)  # Output: {'first_name': 'Jane', ...
 </code></pre>
-<p>In this example, the <code>Order</code> class represents an order with a <code>created</code> datetime and <code>amount</code> decimal field. The <code>Person</code> class represents a person with a <code>date_of_birth</code> date field and a list of orders. The <code>person</code> instance is then serialized using the schema, which generates a dictionary containing the values of the fields specified in the dataclass.</p></p>
-                <hr/>
+<p>In this example, the <code>Order</code> class represents an order with a <code>created</code> datetime and <code>amount</code> decimal field. The <code>Person</code> class represents a person with a <code>date_of_birth</code> date field and a list of orders. The <code>person</code> instance is then serialized using the schema, which generates a dictionary containing the values of the fields specified in the dataclass.</p></div>
             
-                <p>Content: <p>You can generate the dataclasses you need using the <code>marshmallow-dataclass</code> library. Here's how you can do it:</p>
+                <p>Response 2.</p>
+                <div class="markdown-body"><p>You can generate the dataclasses you need using the <code>marshmallow-dataclass</code> library. Here's how you can do it:</p>
 <p>First, you need to install the necessary package. If you're using pip, you can do this by running:</p>
 <pre><code class="language-bash">pip3 install marshmallow-dataclass[enum,union]
 </code></pre>
@@ -311,10 +328,10 @@ class PersonSchema(Schema):
 </code></pre>
 <p>This will give you six dataclasses: <code>Person</code>, <code>Order</code>, and their respective schemas. The <code>Person</code> class has a <code>date_of_birth</code> attribute that is a <code>datetime.date</code>, and the <code>ordered</code> fields are converted to an OrderedDict in the resulting YAML. The <code>Person.orders</code> attribute is a <code>List[Order]</code>, and the <code>Order.created</code> attribute is a <code>datetime</code>, which is a date.</p>
 <p>The <code>OrderSchema.Sequence(fields.Integer())</code> ensures that the order in the JSON objects is preserved when uploaded or retrieved. The <code>Order.amount</code> attribute is a decimal that allows float precision down to two decimal places.</p>
-<p>The <code>struct</code> package is no longer included in Python 3.9 onwards. Instead, <code>typing.Any</code> should be used as it has the same meaning.</p></p>
-                <hr/>
+<p>The <code>struct</code> package is no longer included in Python 3.9 onwards. Instead, <code>typing.Any</code> should be used as it has the same meaning.</p></div>
             
-                <p>Content: <p>Using the <code>marshmallow-dataclass</code> library, you can generate dataclasses for your JSON data. Here's how you can do it:</p>
+                <p>Response 3.</p>
+                <div class="markdown-body"><p>Using the <code>marshmallow-dataclass</code> library, you can generate dataclasses for your JSON data. Here's how you can do it:</p>
 <p>First, install the necessary libraries:</p>
 <pre><code class="language-bash">pip install marshmallow-dataclass[enum,union]
 </code></pre>
@@ -354,8 +371,7 @@ class DataclassSchema:
     python_data = Schema.load(json_data)
 </code></pre>
 <p>In this code snippet, we import the necessary imports at the beginning, define a <code>DataclassSchema</code> class, and provide an example of how you can load your JSON data into the <code>python_data</code> variable. To load complex types like <code>Decimal</code> or <code>Enum</code> in your JSON data, you can use the <code>post_load</code> method to handle these conversions.</p>
-<p>Make sure to replace your class definitions and other necessary code within the <code>DataclassSchema</code> class.</p></p>
-                <hr/>
+<p>Make sure to replace your class definitions and other necessary code within the <code>DataclassSchema</code> class.</p></div>
             
         </main>
     </body>
