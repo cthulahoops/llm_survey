@@ -8,12 +8,16 @@
         <nav>
             <ul>
                 {% for model in models %}
-                <li><a href="{{ model }}.html">{{ model }}</a></li>
+                <li>
+                    <a {% if model.name == model_name %}class="current"{% endif %} href="{{model.file}}">
+                        {{ model.name }}
+                    </a>
+                </li>
                 {% endfor %}
             </ul>
         </nav>
         <main>
-            <p>Model: {{ model }}</p>
+            <p>Model: {{ model_name }}</p>
 
             <p>Prompt</p>
             <div class="markdown-body">{{ prompt|safe }}</div>

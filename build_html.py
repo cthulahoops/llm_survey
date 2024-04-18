@@ -1,9 +1,14 @@
+from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import markdown
 import json
 from collections import defaultdict
 
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
+
+
+OUTPUT_DIR = Path("out")
 
 
 def main():
@@ -17,7 +22,13 @@ def main():
     template = environment.get_template("templates/model.html.j2")
 
     data = read_model_data()
-    models = sorted(model_name(model) for model in data.keys())
+    models = sorted(
+        (
+            {"name": model_name(model), "file": model_file(model)}
+            for model in data.keys()
+        ),
+        key=lambda x: x["name"],
+    )
 
     prompt = open("prompt.md").read()
     prompt = markdown.convert(prompt)
@@ -31,17 +42,22 @@ def main():
         items = [markdown.convert(item["content"]) for item in items]
         rendered_html = template.render(
             items=items,
-            model=model,
+            model_name=model_name(model),
             models=models,
             prompt=prompt,
         )
 
-        with open(f"out/{model_name(model)}.html", "w") as outfile:
+        with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
 
 
 def model_name(model):
-    return model.split("/")[-1].replace(":", "_")
+    return model[model.find("/") + 1 :]
+
+
+def model_file(model):
+    name = model_name(model)
+    return name[name.find("/") + 1 :].replace(":", "_").replace("/", "_") + ".html"
 
 
 def read_model_data():
@@ -59,7 +75,8 @@ def read_model_data():
                 continue
 
             item = {"model": data["model"], "content": last_message["content"]}
-            result[data["model"]].append(item)
+            if len(result[data["model"]]) < 3:
+                result[data["model"]].append(item)
     return result
 
 

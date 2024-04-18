@@ -30,6 +30,7 @@ nav ul {
 nav li {
     border: 1px solid black;
     border-radius: 0.25rem;
+    background-color: #06447d;
 }
 
 nav a {
@@ -37,6 +38,21 @@ nav a {
     padding: 0.25rem;
     min-width: 100%;
     min-height: 100%;
+    text-decoration: none;
+    color: white;
+    &:hover {
+        text-decoration: underline;
+        backdrop-filter: brightness(1.5);
+    }
+
+    &:visited {
+        color: color-mix(in srgb, white 30%, #76b5c5);
+    }
+}
+
+nav a.current {
+    background-color: #76b5c5;
+    color: black;
 }
 
 .markdown-body {

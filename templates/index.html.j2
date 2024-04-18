@@ -8,7 +8,7 @@
         <nav>
             <ul>
                 {% for model in models %}
-                <li><a href="{{ model }}.html">{{ model }}</a></li>
+                <li><a href="{{ model.file }}">{{ model.name }}</a></li>
                 {% endfor %}
             </ul>
         </nav>
