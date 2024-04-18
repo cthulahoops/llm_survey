@@ -13,9 +13,9 @@ nav {
     overflow-y: scroll;
 }
 
-nav > ul {
+ul.model-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20ch, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(20ch, 1fr));
     list-style-type: none;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -27,13 +27,18 @@ nav ul {
     margin: 0;
 }
 
+nav > ul > li {
+    margin-block: 0.5rem;
+}
+
 nav li {
-    border: 1px solid black;
-    border-radius: 0.25rem;
-    background-color: #06447d;
 }
 
 nav a {
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    background-color: #06447d;
+
     display: inline-block;
     padding: 0.25rem;
     min-width: 100%;

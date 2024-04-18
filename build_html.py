@@ -24,16 +24,26 @@ def main():
     data = read_model_data()
     models = sorted(
         (
-            {"name": model_name(model), "file": model_file(model)}
+            {
+                "name": model_name(model),
+                "file": model_file(model),
+                "model_name": model_name(model).split("/", 1)[1],
+            }
             for model in data.keys()
         ),
         key=lambda x: x["name"],
     )
 
+    companies = groupby(models, key=lambda x: x["name"].split("/")[0])
+
     prompt = open("prompt.md").read()
     prompt = markdown.convert(prompt)
 
-    rendered_html = index_template.render(models=models, prompt=prompt)
+    rendered_html = index_template.render(
+        models=models,
+        prompt=prompt,
+        companies=companies,
+    )
 
     with open("out/index.html", "w") as outfile:
         outfile.write(rendered_html)
@@ -45,10 +55,18 @@ def main():
             model_name=model_name(model),
             models=models,
             prompt=prompt,
+            companies=companies,
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
+
+
+def groupby(data, key):
+    result = defaultdict(list)
+    for item in data:
+        result[key(item)].append(item)
+    return result
 
 
 def model_name(model):
@@ -62,7 +80,7 @@ def model_file(model):
 
 def read_model_data():
     result = defaultdict(list)
-    with open(".chatcli.log") as f:
+    with open("llm_log.jsonl") as f:
         for line in f:
             data = json.loads(line)
 
