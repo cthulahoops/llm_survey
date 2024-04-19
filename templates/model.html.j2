@@ -13,7 +13,7 @@
                     <ul class="model-list">
                         {% for model in models %}
                             <li>
-                                <a {% if model.name == model_name %}id="current"{% endif %} href="{{model.file}}#current">
+                                <a {% if model.name == model_name %}id="current"{% endif %} href="{{model.file}}">
                                     {{ model.model_name }}
                                 </a>
                             </li>
