@@ -1,3 +1,8 @@
+:root {
+    --primary-color: #06447d;
+    --spacing: 0.25rem;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -16,15 +21,22 @@ nav {
 ul.model-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20ch, 1fr));
-    list-style-type: none;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-nav ul {
+nav > ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+
+.company-name {
+    background-color: var(--primary-color);
+    padding: var(--spacing);
+    margin-block: var(--spacing);
+    color: white;
+    border: 1px solid black;
 }
 
 nav > ul > li {
@@ -35,27 +47,19 @@ nav li {
 }
 
 nav a {
-    border: 1px solid black;
-    border-radius: 0.25rem;
-    background-color: #06447d;
-
     display: inline-block;
-    padding: 0.25rem;
-    min-width: 100%;
-    min-height: 100%;
     text-decoration: none;
-    color: white;
+    color: black;
     &:hover {
         text-decoration: underline;
-        backdrop-filter: brightness(1.5);
     }
 
     &:visited {
-        color: color-mix(in srgb, white 30%, #76b5c5);
+        color: color-mix(in srgb, black 30%, #76b5c5);
     }
 }
 
-nav a.current {
+nav a#current {
     background-color: #76b5c5;
     color: black;
 }
