@@ -8,6 +8,39 @@
 }
 
 
+th {
+    white-space: nowrap;
+    text-align: left;
+}
+
+thead {
+    display: block;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+
+}
+
+.row-header {
+    height: 25rem;
+    width: 4ch;
+}
+
+.row-header > div {
+    outline: 1px solid black;
+    text-align: left;
+    position: absolute;
+    transform-origin: left;
+    transform: 
+        translate(2ch, calc(25rem / 2 - 1rem))
+        rotate(-70deg);
+    width: 25rem;
+    padding-inline: 0.5rem;
+}
+
 body {
     margin: 0 auto;
 }

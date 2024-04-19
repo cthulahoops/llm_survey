@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LLM Survey</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for item in data %}
+                            <th class="row-header">
+                                <div>
+                                    <a>{{ item["model"] }}</a>
+                                </div>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                {% for item in data %}
+                    <tr>
+                        <th>{{ item["model"] }}</th>
+                        {% for similarity in item["similarities"] %}
+                            <td>{{ "%.2f"|format(similarity) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </body>
+</html>
