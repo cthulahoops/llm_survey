@@ -9,17 +9,18 @@ markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2
 
 
 OUTPUT_DIR = Path("out")
+TEMPLATE_DIR = Path("templates")
 
 
 def main():
     # Set up Jinja2 environment
     environment = Environment(
-        loader=FileSystemLoader("."), autoescape=select_autoescape([])
+        loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape([])
     )
 
-    index_template = environment.get_template("templates/index.html.j2")
+    index_template = environment.get_template("index.html.j2")
 
-    template = environment.get_template("templates/model.html.j2")
+    template = environment.get_template("model.html.j2")
 
     data = read_model_data()
     models = sorted(

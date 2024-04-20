@@ -1,0 +1,18 @@
+<nav>
+    <ul>
+        {% for company_name, models in companies.items() %}
+        <li>
+        <div class="company-name">{{ company_name }}</div>
+        <ul class="model-list">
+            {% for model in models %}
+              <li>
+                <a {% if model.name == model_name %}id="current"{% endif %} href="{{model.file}}">
+                    {{ model.model_name }}
+                </a>
+              </li>
+            {% endfor %}
+        </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
