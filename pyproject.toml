@@ -10,6 +10,7 @@ packages = [{include = "llm_survey"}]
 python = "^3.10"
 jinja2 = "^3.1.3"
 markdown = "^3.6"
+numpy = "^1.26.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.0"
