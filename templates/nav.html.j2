@@ -16,3 +16,14 @@
         {% endfor %}
     </ul>
 </nav>
+
+<script>
+    function scrollToCurrent() {
+        var current = document.getElementById('current');
+        console.log(current);
+        if (current) {
+            current.scrollIntoView();
+        }
+    }
+    document.addEventListener('DOMContentLoaded', scrollToCurrent);
+</script>
