@@ -13,31 +13,56 @@ th {
     text-align: left;
 }
 
-thead {
-    display: block;
+td[data-bucket="1.0"] {
+    background-color: hsl(120, 100%, 40%);
 }
-
-th {
-    position: sticky;
-    top: 0;
-    background-color: white;
-
+td[data-bucket="0.9"] {
+    background-color: hsl(100, 100%, 60%);
+}
+td[data-bucket="0.8"] {
+    background-color: hsl(80, 100%, 70%);
+}
+td[data-bucket="0.7"] {
+    background-color: hsl(60, 100%, 70%);
+}
+td[data-bucket="0.6"] {
+    background-color: hsl(50, 100%, 70%);
+}
+td[data-bucket="0.5"] {
+    background-color: hsl(40, 100%, 70%);
+}
+td[data-bucket="0.4"] {
+    background-color: hsl(30, 100%, 70%);
+}
+td[data-bucket="0.3"] {
+    background-color: hsl(20, 100%, 70%);
+}
+td[data-bucket="0.2"] {
+    background-color: hsl(10, 100%, 70%);
+}
+td[data-bucket="0.1"] {
+    background-color: hsl(0, 100%, 70%);
+}
+td[data-bucket="0.0"] {
+    background-color: hsl(0, 100%, 70%);
+}
+td[data-bucket="-0.0"] {
+    background-color: hsl(0, 100%, 70%);
 }
 
 .row-header {
-    height: 25rem;
-    width: 4ch;
+    height: 15rem;
+    position: relative;
 }
 
 .row-header > div {
-    outline: 1px solid black;
     text-align: left;
     position: absolute;
+    bottom: 0;
+    left: 50%;
     transform-origin: left;
     transform: 
-        translate(2ch, calc(25rem / 2 - 1rem))
         rotate(-70deg);
-    width: 25rem;
     padding-inline: 0.5rem;
 }
 

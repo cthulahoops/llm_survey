@@ -5,6 +5,8 @@ import markdown
 import json
 from collections import defaultdict
 
+import similar
+
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
 
 
@@ -61,6 +63,8 @@ def main():
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
+
+    similar.main()
 
 
 def groupby(data, key):

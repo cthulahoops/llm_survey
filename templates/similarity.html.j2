@@ -7,23 +7,21 @@
     <body>
         <main>
             <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        {% for item in data %}
-                            <th class="row-header">
-                                <div>
-                                    <a>{{ item["model"] }}</a>
-                                </div>
-                            </th>
-                        {% endfor %}
-                    </tr>
-                </thead>
+                <tr>
+                    <th></th>
+                    {% for item in data %}
+                        <th class="row-header">
+                            <div>
+                                <a>{{ item["model"] }}</a>
+                            </div>
+                        </th>
+                    {% endfor %}
+                </tr>
                 {% for item in data %}
                     <tr>
                         <th>{{ item["model"] }}</th>
                         {% for similarity in item["similarities"] %}
-                            <td>{{ "%.2f"|format(similarity) }}</td>
+                        <td data-bucket={{"%.1f"|format(similarity)}}>{{ "%.2f"|format(similarity) }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}

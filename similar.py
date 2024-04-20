@@ -1,5 +1,6 @@
 import json
 import numpy as np
+from collections import defaultdict
 
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -8,6 +9,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 def load_data():
     for line in open("embeddings.jsonl"):
         data = json.loads(line)
+        data["model"] = data["model"].split("/")[-1]
         data["embedding"] = np.array(data["embedding"])
         yield data
 
@@ -23,7 +25,7 @@ def generate_similarity_matrix():
     for item in data:
         item["similarities"] = [
             {
-                "model2": item2["model"],
+                "model": item2["model"],
                 "similarity": similarity(item["embedding"], item2["embedding"]),
             }
             for item2 in data
@@ -32,8 +34,38 @@ def generate_similarity_matrix():
     return data
 
 
+def unique_by(data, key):
+    seen = set()
+    result = []
+    for item in data:
+        if key(item) in seen:
+            continue
+        seen.add(key(item))
+        result.append(item)
+    return result
+
+
+def groupby(data, key):
+    result = defaultdict(list)
+    for item in data:
+        result[key(item)].append(item)
+    return result
+
+
+def sum_each_model(data):
+    grouped = groupby(data, key=lambda x: x["model"])
+
+    result = []
+    for model, group in grouped.items():
+        result.append(
+            {"model": model, "embedding": sum(item["embedding"] for item in group)}
+        )
+    return result
+
+
 def main():
     data = list(load_data())
+    data = sum_each_model(data)
     data = sorted(data, key=lambda x: x["model"])
 
     for item in data:
