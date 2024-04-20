@@ -1,5 +1,6 @@
 :root {
     --primary-color: #06447d;
+    --background-color: #fff;
     --spacing: 0.25rem;
 }
 
@@ -50,12 +51,25 @@ td[data-bucket="-0.0"] {
     background-color: hsl(0, 100%, 70%);
 }
 
-.row-header {
+tr.header-row {
+    position: sticky;
+    top: 0;
+    background: var(--background-color);
+}
+
+th:first-child {
+    background: var(--background-color);
+    position: sticky;
+    left: 0;
+    z-index: 2;
+}
+
+.column-header {
     height: 15rem;
     position: relative;
 }
 
-.row-header > div {
+.column-header > div {
     text-align: left;
     position: absolute;
     bottom: 0;
