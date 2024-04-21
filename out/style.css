@@ -51,9 +51,11 @@ td[data-bucket="-0.0"] {
     background-color: hsl(0, 100%, 70%);
 }
 
-tr.header-row {
+tr.header-row,
+thead tr {
     position: sticky;
     top: 0;
+    z-index: 3;
     background: var(--background-color);
 }
 
