@@ -1,41 +1,34 @@
-from pathlib import Path
-
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-import markdown
 import json
 from collections import defaultdict
+from pathlib import Path
+
+import markdown
 
 import similar
+from llm_survey.data import groupby, load_data
+from llm_survey.templating import environment
 
+OUTPUT_DIR = Path("out")
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
 
 
-OUTPUT_DIR = Path("out")
-TEMPLATE_DIR = Path("templates")
-
-
 def main():
-    # Set up Jinja2 environment
-    environment = Environment(
-        loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape([])
-    )
-
     index_template = environment.get_template("index.html.j2")
-
     template = environment.get_template("model.html.j2")
 
-    data = read_model_data()
-    models = sorted(
-        (
-            {
-                "name": model_name(model),
-                "file": model_file(model),
-                "model_name": model_name(model).split("/", 1)[1],
-            }
-            for model in data.keys()
-        ),
-        key=lambda x: x["name"],
+    data = load_data()
+    data = groupby(data, key=lambda x: x.model)
+
+    models = (
+        {
+            "name": model_name(model),
+            "file": model_file(model),
+            "model_name": model_name(model).split("/", 1)[1],
+        }
+        for model in data.keys()
     )
+
+    models = sorted(models, key=lambda x: x["name"])
 
     companies = groupby(models, key=lambda x: x["name"].split("/")[0])
 
@@ -52,7 +45,7 @@ def main():
         outfile.write(rendered_html)
 
     for model, items in data.items():
-        items = [markdown.convert(item["content"]) for item in items]
+        items = [markdown.convert(item.content) for item in items]
         rendered_html = template.render(
             items=items,
             model_name=model_name(model),
@@ -65,13 +58,6 @@ def main():
             outfile.write(rendered_html)
 
     similar.main()
-
-
-def groupby(data, key):
-    result = defaultdict(list)
-    for item in data:
-        result[key(item)].append(item)
-    return result
 
 
 def model_name(model):

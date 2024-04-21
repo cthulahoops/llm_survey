@@ -12,14 +12,16 @@
                     {% for item in data %}
                         <th class="column-header">
                             <div>
-                                <a>{{ item["model"] }}</a>
+                                {{item["model"] | model_link}}
                             </div>
                         </th>
                     {% endfor %}
                 </tr>
                 {% for item in data %}
                     <tr>
-                        <th>{{ item["model"] }}</th>
+                        <th>
+                            {{item["model"] | model_link}}
+                        </th>
                         {% for similarity in item["similarities"] %}
                         <td data-bucket={{"%.1f"|format(similarity)}}>{{ "%.2f"|format(similarity) }}</td>
                         {% endfor %}

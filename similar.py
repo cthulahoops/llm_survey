@@ -3,13 +3,12 @@ import numpy as np
 from collections import defaultdict
 
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from llm_survey.templating import environment
 
 
 def load_data():
     for line in open("embeddings.jsonl"):
         data = json.loads(line)
-        data["model"] = data["model"].split("/")[-1]
         data["embedding"] = np.array(data["embedding"])
         yield data
 
@@ -73,11 +72,7 @@ def main():
             similarity(item["embedding"], item2["embedding"]) for item2 in data
         ]
 
-    environment = Environment(
-        loader=FileSystemLoader("."), autoescape=select_autoescape([])
-    )
-
-    template = environment.get_template("templates/similarity.html.j2")
+    template = environment.get_template("similarity.html.j2")
 
     rendered_html = template.render(data=data)
 
