@@ -1,0 +1,5 @@
+out/*.html
+.chatcli.log
+.envrc
+workspace.sh
+__pycache__/
