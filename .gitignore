@@ -2,4 +2,5 @@ out/*.html
 .chatcli.log
 .envrc
 workspace.sh
-__pycache__/
+**/__pycache__
+.pyflyby
