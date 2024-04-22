@@ -1,16 +1,9 @@
 import json
 import numpy as np
-from collections import defaultdict
 
 
 from llm_survey.templating import environment
-
-
-def load_data():
-    for line in open("embeddings.jsonl"):
-        data = json.loads(line)
-        data["embedding"] = np.array(data["embedding"])
-        yield data
+from llm_survey.data import load_data, groupby
 
 
 def similarity(a, b):
@@ -33,31 +26,13 @@ def generate_similarity_matrix():
     return data
 
 
-def unique_by(data, key):
-    seen = set()
-    result = []
-    for item in data:
-        if key(item) in seen:
-            continue
-        seen.add(key(item))
-        result.append(item)
-    return result
-
-
-def groupby(data, key):
-    result = defaultdict(list)
-    for item in data:
-        result[key(item)].append(item)
-    return result
-
-
 def sum_each_model(data):
-    grouped = groupby(data, key=lambda x: x["model"])
+    grouped = groupby(data, key=lambda x: x.model)
 
     result = []
     for model, group in grouped.items():
         result.append(
-            {"model": model, "embedding": sum(item["embedding"] for item in group)}
+            {"model": model, "embedding": sum(item.embedding for item in group)}
         )
     return result
 
