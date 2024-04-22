@@ -59,12 +59,22 @@ def main():
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
 
+    costs = average_costs(data)
     similarities = similarity_matrix(data)
 
     consistency_page(data)
     similarity_page(data, similarities)
 
-    rankings_page(data, similarities, "openrouter/anthropic/claude-3-opus:beta")
+    rankings_page(data, similarities, "openrouter/anthropic/claude-3-opus:beta", costs)
+
+
+def average_costs(data):
+    result = {}
+    for model, items in data.items():
+        costs = [item.usage["total_cost"] for item in items]
+        cost = sum(costs) / len(costs)
+        result[model] = cost
+    return result
 
 
 def sum_each_model(grouped):
@@ -89,7 +99,7 @@ def similarity_matrix(data):
     }
 
 
-def rankings_page(data, similarities, reference_model):
+def rankings_page(data, similarities, reference_model, costs):
     render_to_file(
         "rankings.html.j2",
         "out/rankings.html",
@@ -98,6 +108,7 @@ def rankings_page(data, similarities, reference_model):
         ),
         similarities=similarities,
         reference_model=reference_model,
+        costs=costs,
     )
 
 

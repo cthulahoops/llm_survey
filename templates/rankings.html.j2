@@ -20,6 +20,9 @@
                                 {{ "%.2f"|format(similarity) }}
                             </td>
                         {% endwith %}
+                        <td>
+                            ${{ "%.4f"|format(costs[model]) }}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
