@@ -1,13 +1,6 @@
-import json
-import numpy as np
-
-
+from llm_survey.data import groupby, load_data
+from llm_survey.embeddings import similarity
 from llm_survey.templating import environment
-from llm_survey.data import load_data, groupby
-
-
-def similarity(a, b):
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
 def generate_similarity_matrix():

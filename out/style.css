@@ -129,8 +129,14 @@ code {
 main {
 }
 
+.columns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20ch, 1fr));
+    gap: 1rem;
+}
+
 @media (min-width: calc(20ch / 0.3)) {
-    body {
+    body:has(nav) {
         display: grid;
         grid-template-columns: minmax(auto, 30%) minmax(0, 1fr);
         gap: 1rem;

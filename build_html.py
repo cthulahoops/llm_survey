@@ -6,6 +6,7 @@ import markdown
 
 import similar
 from llm_survey.data import groupby, load_data
+from llm_survey.embeddings import consistency_grid, consistency_measure
 from llm_survey.templating import environment
 
 OUTPUT_DIR = Path("out")
@@ -45,19 +46,33 @@ def main():
         outfile.write(rendered_html)
 
     for model, items in data.items():
-        items = [markdown.convert(item.content) for item in items]
+        markdown_items = [markdown.convert(item.content) for item in items]
         rendered_html = template.render(
-            items=items,
+            items=markdown_items,
             model_name=model_name(model),
             models=models,
             prompt=prompt,
             companies=companies,
+            consistency=consistency_grid(items),
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
 
     similar.main()
+    consistency_page(data)
+
+
+def consistency_page(data):
+    template = environment.get_template("consistency.html.j2")
+
+    data = sorted(data.items(), key=lambda x: consistency_measure(x[1]), reverse=True)
+    data = [(model, consistency_grid(items)) for model, items in data]
+
+    rendered_html = template.render(data=data)
+
+    with open("out/consistency.html", "w") as outfile:
+        outfile.write(rendered_html)
 
 
 def model_name(model):

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LLM Survey</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <main>
+        <div class="columns-grid">
+            {% for model, consistency in data %}
+                <div>
+                    <p>{{model | model_link }}</p>
+
+                <table>
+                    {% for i in range(3) %}
+                        <tr>
+                            {% for j in range(3) %}
+                            <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            {% endfor %}
+        </div>
+        </main>
+    </body>
+</html>
