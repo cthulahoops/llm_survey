@@ -9,21 +9,25 @@
             <table>
                 <tr class="header-row">
                     <th></th>
-                    {% for item in data %}
+                    {% for model in models %}
                         <th class="column-header">
                             <div>
-                                {{item["model"] | model_link}}
+                                {{model | model_link}}
                             </div>
                         </th>
                     {% endfor %}
                 </tr>
-                {% for item in data %}
+                {% for model in models %}
                     <tr>
                         <th>
-                            {{item["model"] | model_link}}
+                            {{model | model_link}}
                         </th>
-                        {% for similarity in item["similarities"] %}
-                            <td style="--data-value: {{ similarity }}">{{ "%.2f"|format(similarity) }}</td>
+                        {% for model2 in models %}
+                            {% with similarity = similarities[(model, model2)] %}
+                                <td style="--data-value: {{ similarity }}">
+                                    {{ "%.2f"|format(similarity) }}
+                                </td>
+                            {% endwith %}
                         {% endfor %}
                     </tr>
                 {% endfor %}

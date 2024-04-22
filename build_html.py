@@ -4,10 +4,9 @@ from pathlib import Path
 
 import markdown
 
-import similar
 from llm_survey.data import groupby, load_data
-from llm_survey.embeddings import consistency_grid, consistency_measure
-from llm_survey.templating import environment
+from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
+from llm_survey.templating import environment, render_to_file
 
 OUTPUT_DIR = Path("out")
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
@@ -60,8 +59,55 @@ def main():
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
 
-    similar.main()
+    similarities = similarity_matrix(data)
+
     consistency_page(data)
+    similarity_page(data, similarities)
+
+    rankings_page(data, similarities, "openrouter/anthropic/claude-3-opus:beta")
+
+
+def sum_each_model(grouped):
+    result = []
+    for model, group in grouped.items():
+        result.append(
+            {"model": model, "embedding": sum(item.embedding for item in group)}
+        )
+    return result
+
+
+def similarity_matrix(data):
+    data = sum_each_model(data)
+
+    return {
+        (item1["model"], item2["model"]): similarity(
+            item1["embedding"],
+            item2["embedding"],
+        )
+        for item1 in data
+        for item2 in data
+    }
+
+
+def rankings_page(data, similarities, reference_model):
+    render_to_file(
+        "rankings.html.j2",
+        "out/rankings.html",
+        models=sorted(
+            data.keys(), key=lambda x: similarities[x, reference_model], reverse=True
+        ),
+        similarities=similarities,
+        reference_model=reference_model,
+    )
+
+
+def similarity_page(data, similarities):
+    render_to_file(
+        "similarity.html.j2",
+        "out/similarity.html",
+        models=sorted(data.keys()),
+        similarities=similarities,
+    )
 
 
 def consistency_page(data):

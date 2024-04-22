@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LLM Survey</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <main>
+            <table>
+                {% for model in models %}
+                    <tr>
+                        <td>
+                            {{ model | model_company }}
+                        </td>
+                        <td>
+                            {{ model | model_link }}
+                        </td>
+                        {% with similarity = similarities[(model, reference_model)] %}
+                            <td style="--data-value: {{ similarity }}">
+                                {{ "%.2f"|format(similarity) }}
+                            </td>
+                        {% endwith %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </body>
+</html>
