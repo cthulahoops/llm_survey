@@ -54,6 +54,7 @@ def main():
             prompt=prompt,
             companies=companies,
             consistency=consistency_grid(items),
+            GRID_SIZE=3,
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
@@ -67,9 +68,9 @@ def consistency_page(data):
     template = environment.get_template("consistency.html.j2")
 
     data = sorted(data.items(), key=lambda x: consistency_measure(x[1]), reverse=True)
-    data = [(model, consistency_grid(items)) for model, items in data]
+    grids = [(model, consistency_grid(items)) for model, items in data]
 
-    rendered_html = template.render(data=data)
+    rendered_html = template.render(data=grids, GRID_SIZE=3)
 
     with open("out/consistency.html", "w") as outfile:
         outfile.write(rendered_html)
