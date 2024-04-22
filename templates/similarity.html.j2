@@ -23,7 +23,7 @@
                             {{item["model"] | model_link}}
                         </th>
                         {% for similarity in item["similarities"] %}
-                        <td data-bucket={{"%.1f"|format(similarity)}}>{{ "%.2f"|format(similarity) }}</td>
+                            <td style="--data-value: {{ similarity }}">{{ "%.2f"|format(similarity) }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}

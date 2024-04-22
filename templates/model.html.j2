@@ -10,6 +10,18 @@
         <main>
             <p>Model: {{ model_name }}</p>
 
+            <p>Model Consistency</p>
+
+            <table>
+                {% for i in range(3) %}
+                    <tr>
+                        {% for j in range(3) %}
+                        <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
             <p>Prompt</p>
             <div class="markdown-body">{{ prompt|safe }}</div>
             {% for item in items %}
