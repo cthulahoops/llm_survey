@@ -7,6 +7,13 @@
     <body>
         <main>
             <table>
+                <tr>
+                    <th>Company</th>
+                    <th>Model</th>
+                    <th>Claudiness</th>
+                    <th>Cost</th>
+                    <th>Consistency</th>
+                </tr>
                 {% for model in models %}
                     <tr>
                         <td>
@@ -23,6 +30,11 @@
                         <td>
                             ${{ "%.4f"|format(costs[model]) }}
                         </td>
+                        {% with consistency = consistencies[model] %}
+                            <td style="--data-value: {{ consistency }}">
+                                {{ "%.2f"|format(consistency) }}
+                            </td>
+                        {% endwith %}
                     </tr>
                 {% endfor %}
             </table>

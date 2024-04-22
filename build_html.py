@@ -61,11 +61,23 @@ def main():
 
     costs = average_costs(data)
     similarities = similarity_matrix(data)
+    consistencies = {model: consistency_measure(items) for model, items in data.items()}
 
     consistency_page(data)
     similarity_page(data, similarities)
 
-    rankings_page(data, similarities, "openrouter/anthropic/claude-3-opus:beta", costs)
+    reference_model = "openrouter/anthropic/claude-3-opus:beta"
+    render_to_file(
+        "rankings.html.j2",
+        "out/rankings.html",
+        models=sorted(
+            data.keys(), key=lambda x: similarities[x, reference_model], reverse=True
+        ),
+        similarities=similarities,
+        reference_model=reference_model,
+        costs=costs,
+        consistencies=consistencies,
+    )
 
 
 def average_costs(data):
@@ -97,19 +109,6 @@ def similarity_matrix(data):
         for item1 in data
         for item2 in data
     }
-
-
-def rankings_page(data, similarities, reference_model, costs):
-    render_to_file(
-        "rankings.html.j2",
-        "out/rankings.html",
-        models=sorted(
-            data.keys(), key=lambda x: similarities[x, reference_model], reverse=True
-        ),
-        similarities=similarities,
-        reference_model=reference_model,
-        costs=costs,
-    )
 
 
 def similarity_page(data, similarities):
