@@ -7,13 +7,25 @@
     <body>
         {% include "nav.html.j2" %}
         <main>
-            I asked every* model on openrouter this question:
+            <p>
+            I asked every<a href="#footnote-1">[1]</a> model on openrouter this question:
+            </p>
 
             <div class="markdown-body">
 {{ prompt }}
             </div>
 
-            * There are still some bugs so I don't have responses from all the models yet.
+            <ul>
+                <li><a href="/similarity.html">Similarity</a></li>
+                <li><a href="/consistency.html">Consistency</a></li>
+                <li><a href="/rankings.html">Rankings</a></li>
+            </ul>
+
+            <footer>
+                <p id="footnote-1">
+                    [1] There are still some bugs so I don't have responses from all the models yet.
+                </p>
+            </footer>
         </main>
     </body>
 </html>
