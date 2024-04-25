@@ -26,7 +26,16 @@
             <div class="markdown-body">{{ prompt|safe }}</div>
             {% for item in items %}
                 <p id="response-{{loop.index}}">Response {{ loop.index }}.</p>
-                <div class="markdown-body">{{ item|safe }}</div>
+                <div class="markdown-body">{{ item.content | to_markdown | safe }}</div>
+
+                <p>Score: {{ item.score }}</p>
+
+                {% if item.evaluation %}
+                    <p>GPT-4-Turbo says:</p>
+                    <div class="markdown-body">
+                        {{ item.evaluation | to_markdown | safe }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </main>
     </body>

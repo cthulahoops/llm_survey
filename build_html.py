@@ -6,17 +6,28 @@ import markdown
 
 from llm_survey.data import groupby, load_data
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
-from llm_survey.templating import environment, model_company, model_file, render_to_file
+from llm_survey.templating import (
+    environment,
+    model_company,
+    model_file,
+    render_to_file,
+    template_filter,
+)
 
 OUTPUT_DIR = Path("out")
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
+
+
+@template_filter()
+def to_markdown(text):
+    return markdown.convert(text)
 
 
 def main():
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 
-    data = load_data("embeddings.jsonl")
+    data = load_data("evaluation.jsonl")
     data = groupby(data, key=lambda x: x.model)
 
     models = sorted(data.keys())
@@ -36,9 +47,11 @@ def main():
         outfile.write(rendered_html)
 
     for model, items in data.items():
-        markdown_items = [markdown.convert(item.content) for item in items]
+        for x in items:
+            if x.evaluation:
+                print(model)
         rendered_html = template.render(
-            items=markdown_items,
+            items=items,
             current_model=model,
             models=models,
             prompt=prompt,
@@ -71,19 +84,23 @@ def main():
     solutions = load_data("solution.jsonl")
     reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
 
+    scores = score_each_model(data)
+
     render_to_file(
         "rankings.html.j2",
         "out/rankings.html",
         models=sorted(
             data.keys(),
-            key=lambda x: similarity(summed_models[x], reference_model),
+            key=lambda x: scores[x] or 0,
             reverse=True,
         ),
         similarities=similarities,
         reference_model=reference_model,
         summed_models=summed_models,
+        scores=score_each_model(data),
         costs=average_costs(data),
         consistencies=consistencies,
+        data=data,
     )
 
 
@@ -104,6 +121,17 @@ def average_costs(data):
 def sum_each_model(grouped):
     return {
         model: sum(item.embedding for item in group) for model, group in grouped.items()
+    }
+
+
+def score_each_model(grouped):
+    return {
+        model: (
+            sum(item.score for item in group if item.score)
+            if any(item.score for item in group)
+            else None
+        )
+        for model, group in grouped.items()
     }
 
 

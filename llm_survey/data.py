@@ -1,4 +1,5 @@
 import json
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict
@@ -13,6 +14,15 @@ class ModelOutput:
     embedding: np.array
     model: str
     usage: Dict = None
+    evaluation: str = None
+
+    @property
+    def score(self):
+        if not self.evaluation:
+            return None
+
+        if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
+            return float(match.group(1))
 
 
 class NumpyArray(marshmallow.fields.Field):
@@ -28,6 +38,7 @@ class ModelOutputSchema(marshmallow.Schema):
     embedding = NumpyArray()
     model = marshmallow.fields.Str()
     usage = marshmallow.fields.Dict()
+    evaluation = marshmallow.fields.Str(required=False, allow_none=True)
 
     @marshmallow.post_load
     def make_model_output(self, data, **kwargs):
@@ -40,6 +51,13 @@ def load_data(filename):
             data = json.loads(line)
             schema = ModelOutputSchema()
             yield schema.load(data)
+
+
+def save_data(filename, data):
+    schema = ModelOutputSchema()
+    with open(filename, "w") as f:
+        for item in data:
+            f.write(json.dumps(schema.dump(item)) + "\n")
 
 
 def groupby(data, key):
