@@ -68,8 +68,8 @@ def main():
         GRID_SIZE=3,
     )
 
-    solutions = load_data("solution.json")
-    reference_model = next(solutions).embedding
+    solutions = load_data("solution.jsonl")
+    reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
 
     render_to_file(
         "rankings.html.j2",

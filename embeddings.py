@@ -48,16 +48,19 @@ def embed_content(content, model="text-embedding-3-small"):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, default="text-embedding-3-small")
-    parser.add_argument("input", type=Path)
-    parser.add_argument("output", type=Path, nargs="?")
+    parser.add_argument("output", type=Path)
+    parser.add_argument("input", type=Path, nargs="+")
     args = parser.parse_args()
 
     # If input is markdown:
-    if args.input.suffix == ".md":
-        with open(args.input) as f:
-            content = f.read()
+    results = []
+
+    for input_file in args.input:
+        if input_file.suffix == ".md":
+            with input_file.open() as f:
+                content = f.read()
             embedding = embed_content(content, model=args.model)
-            output = json.dumps(
+            results.append(
                 {
                     "content": content,
                     "model": "human",
@@ -65,11 +68,9 @@ def main():
                 }
             )
 
-            if args.output:
-                with open(args.output, "w") as f:
-                    f.write(output)
-            else:
-                print(output)
+    with args.output.open("w") as f:
+        for result in results:
+            f.write(json.dumps(result) + "\n")
 
 
 if __name__ == "__main__":
