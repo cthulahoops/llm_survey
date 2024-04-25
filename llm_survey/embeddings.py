@@ -1,6 +1,9 @@
 import numpy as np
 
+from llm_survey.templating import template_filter
 
+
+@template_filter()
 def similarity(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 

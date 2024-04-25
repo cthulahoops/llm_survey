@@ -23,7 +23,7 @@
                             {{model | model_link}}
                         </th>
                         {% for model2 in models %}
-                            {% with similarity = similarities[(model, model2)] %}
+                            {% with similarity = summed_models[model] | similarity(summed_models[model2]) %}
                                 <td style="--data-value: {{ similarity }}">
                                     {{ "%.2f"|format(similarity) }}
                                 </td>

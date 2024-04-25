@@ -6,7 +6,7 @@ import markdown
 
 from llm_survey.data import groupby, load_data
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
-from llm_survey.templating import environment, render_to_file
+from llm_survey.templating import environment, model_company, model_file, render_to_file
 
 OUTPUT_DIR = Path("out")
 markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
@@ -16,21 +16,12 @@ def main():
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 
-    data = load_data()
+    data = load_data("embeddings.jsonl")
     data = groupby(data, key=lambda x: x.model)
 
-    models = (
-        {
-            "name": model_name(model),
-            "file": model_file(model),
-            "model_name": model_name(model).split("/", 1)[1],
-        }
-        for model in data.keys()
-    )
+    models = sorted(data.keys())
 
-    models = sorted(models, key=lambda x: x["name"])
-
-    companies = groupby(models, key=lambda x: x["name"].split("/")[0])
+    companies = groupby(models, key=model_company)
 
     prompt = open("prompt.md").read()
     prompt = markdown.convert(prompt)
@@ -48,7 +39,7 @@ def main():
         markdown_items = [markdown.convert(item.content) for item in items]
         rendered_html = template.render(
             items=markdown_items,
-            model_name=model_name(model),
+            current_model=model,
             models=models,
             prompt=prompt,
             companies=companies,
@@ -59,25 +50,46 @@ def main():
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
             outfile.write(rendered_html)
 
-    costs = average_costs(data)
-    similarities = similarity_matrix(data)
+    summed_models = sum_each_model(data)
+    similarities = similarity_matrix(summed_models)
     consistencies = {model: consistency_measure(items) for model, items in data.items()}
 
-    consistency_page(data)
-    similarity_page(data, similarities)
+    render_to_file(
+        "similarity.html.j2",
+        "out/similarity.html",
+        models=models,
+        summed_models=summed_models,
+    )
 
-    reference_model = "openrouter/anthropic/claude-3-opus:beta"
+    render_to_file(
+        "consistency.html.j2",
+        "out/consistency.html",
+        data=per_model_consistency(data),
+        GRID_SIZE=3,
+    )
+
+    solutions = load_data("solution.json")
+    reference_model = next(solutions).embedding
+
     render_to_file(
         "rankings.html.j2",
         "out/rankings.html",
         models=sorted(
-            data.keys(), key=lambda x: similarities[x, reference_model], reverse=True
+            data.keys(),
+            key=lambda x: similarity(summed_models[x], reference_model),
+            reverse=True,
         ),
         similarities=similarities,
         reference_model=reference_model,
-        costs=costs,
+        summed_models=summed_models,
+        costs=average_costs(data),
         consistencies=consistencies,
     )
+
+
+def per_model_consistency(data):
+    data = sorted(data.items(), key=lambda x: consistency_measure(x[1]), reverse=True)
+    return [(model, consistency_grid(items)) for model, items in data]
 
 
 def average_costs(data):
@@ -90,55 +102,17 @@ def average_costs(data):
 
 
 def sum_each_model(grouped):
-    result = []
-    for model, group in grouped.items():
-        result.append(
-            {"model": model, "embedding": sum(item.embedding for item in group)}
-        )
-    return result
-
-
-def similarity_matrix(data):
-    data = sum_each_model(data)
-
     return {
-        (item1["model"], item2["model"]): similarity(
-            item1["embedding"],
-            item2["embedding"],
-        )
-        for item1 in data
-        for item2 in data
+        model: sum(item.embedding for item in group) for model, group in grouped.items()
     }
 
 
-def similarity_page(data, similarities):
-    render_to_file(
-        "similarity.html.j2",
-        "out/similarity.html",
-        models=sorted(data.keys()),
-        similarities=similarities,
-    )
-
-
-def consistency_page(data):
-    template = environment.get_template("consistency.html.j2")
-
-    data = sorted(data.items(), key=lambda x: consistency_measure(x[1]), reverse=True)
-    grids = [(model, consistency_grid(items)) for model, items in data]
-
-    rendered_html = template.render(data=grids, GRID_SIZE=3)
-
-    with open("out/consistency.html", "w") as outfile:
-        outfile.write(rendered_html)
-
-
-def model_name(model):
-    return model[model.find("/") + 1 :]
-
-
-def model_file(model):
-    name = model_name(model)
-    return name[name.find("/") + 1 :].replace(":", "_").replace("/", "_") + ".html"
+def similarity_matrix(embeddings):
+    return {
+        (model1, model2): similarity(embedding1, embedding2)
+        for model1, embedding1 in embeddings.items()
+        for model2, embedding2 in embeddings.items()
+    }
 
 
 def read_model_data():

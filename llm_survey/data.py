@@ -6,8 +6,6 @@ from typing import Dict
 import marshmallow
 import numpy as np
 
-DATAFILE = "embeddings.jsonl"
-
 
 @dataclass
 class ModelOutput:
@@ -36,8 +34,8 @@ class ModelOutputSchema(marshmallow.Schema):
         return ModelOutput(**data)
 
 
-def load_data():
-    with open(DATAFILE) as f:
+def load_data(filename):
+    with open(filename) as f:
         for line in f:
             data = json.loads(line)
             schema = ModelOutputSchema()

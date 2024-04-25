@@ -6,8 +6,8 @@
         <ul class="model-list">
             {% for model in models %}
               <li>
-                <a {% if model.name == model_name %}id="current"{% endif %} href="{{model.file}}">
-                    {{ model.model_name }}
+                <a {% if model == current_model %}id="current"{% endif %} href="{{model | model_file}}">
+                    {{ model | model_name }}
                 </a>
               </li>
             {% endfor %}

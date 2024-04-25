@@ -10,7 +10,7 @@
                 <tr>
                     <th>Company</th>
                     <th>Model</th>
-                    <th>Claudiness</th>
+                    <th>Goodness</th>
                     <th>Cost</th>
                     <th>Consistency</th>
                 </tr>
@@ -22,7 +22,7 @@
                         <td>
                             {{ model | model_link }}
                         </td>
-                        {% with similarity = similarities[(model, reference_model)] %}
+                        {% with similarity = summed_models[model] | similarity(reference_model) %}
                             <td style="--data-value: {{ similarity }}">
                                 {{ "%.2f"|format(similarity) }}
                             </td>
