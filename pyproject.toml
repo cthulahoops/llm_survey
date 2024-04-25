@@ -16,6 +16,7 @@ marshmallow = "^3.21.1"
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.0"
 ruff = "^0.4.1"
+openai = "^1.23.6"
 
 [build-system]
 requires = ["poetry-core"]
