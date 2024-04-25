@@ -17,12 +17,15 @@ th {
 table {
     --start-hue: 0;
     --end-hue: 120;
+    --start-lightness: 70%;
+    --end-lightness: 30%;
 }
 
 td {
     background-color: hsl(
         calc(var(--start-hue) + var(--data-value) * (var(--end-hue) - var(--start-hue))),
-        100%, calc(70% - var(--data-value) * var(--data-value) * var(--data-value) * 40%));
+        100%,
+        calc(var(--start-lightness) + pow(var(--data-value), 3) * (var(--end-lightness) - var(--start-lightness))));
 }
 
 tr.header-row,
