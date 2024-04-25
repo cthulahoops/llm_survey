@@ -4,3 +4,4 @@ out/*.html
 workspace.sh
 **/__pycache__
 .pyflyby
+.chatcli.*
