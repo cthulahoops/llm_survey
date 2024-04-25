@@ -25,7 +25,7 @@
             <p>Prompt</p>
             <div class="markdown-body">{{ prompt|safe }}</div>
             {% for item in items %}
-                <p>Response {{ loop.index }}.</p>
+                <p id="response-{{loop.index}}">Response {{ loop.index }}.</p>
                 <div class="markdown-body">{{ item|safe }}</div>
             {% endfor %}
         </main>
