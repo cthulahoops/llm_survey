@@ -47,9 +47,6 @@ def main():
         outfile.write(rendered_html)
 
     for model, items in data.items():
-        for x in items:
-            if x.evaluation:
-                print(model)
         rendered_html = template.render(
             items=items,
             current_model=model,
@@ -61,7 +58,23 @@ def main():
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
+
             outfile.write(rendered_html)
+
+    solutions = list(load_data("solution.jsonl"))
+    reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
+
+    render_to_file(
+        template,
+        "out/human.html",
+        items=solutions,
+        current_model="human",
+        models=models,
+        prompt=prompt,
+        companies=companies,
+        consistency=consistency_grid(solutions),
+        GRID_SIZE=len(solutions),
+    )
 
     summed_models = sum_each_model(data)
     similarities = similarity_matrix(summed_models)
@@ -80,9 +93,6 @@ def main():
         data=per_model_consistency(data),
         GRID_SIZE=3,
     )
-
-    solutions = load_data("solution.jsonl")
-    reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
 
     scores = score_each_model(data)
 
