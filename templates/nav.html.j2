@@ -1,4 +1,6 @@
-<nav>
+{% include "primary_nav.html.j2" %}
+
+<nav aria-label="sidebar">
     <ul>
         {% for company_name, models in companies.items() %}
         <li>
