@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+import click
 import markdown
 
 from llm_survey.data import groupby, load_data
@@ -23,7 +24,8 @@ def to_markdown(text):
     return markdown.convert(text)
 
 
-def main():
+@click.group()
+def build():
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 

@@ -1,11 +1,6 @@
 import functools
 import json
-import os
 import sqlite3
-
-import openai
-
-from llm_survey.data import load_data, save_data
 
 
 def sqlite_cache(db_file):
@@ -39,48 +34,19 @@ def sqlite_cache(db_file):
     return cache_decorator
 
 
-client = openai.Client(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.environ.get("OPENROUTER_API_KEY"),
-)
+# client = openai.Client(
+#     base_url="https://openrouter.ai/api/v1",
+#     api_key=os.environ.get("OPENROUTER_API_KEY"),
+# )
+client = None
 
 
 @sqlite_cache("evaluation_cache.db")
-def get_evaluation(model, prompt, response_to_evaluate):
-    print("Calling out to :", model)
+def get_completion(model, prompt):
     completion = client.chat.completions.create(
         model=model,
         messages=[
-            {"role": "user", "content": prompt + response_to_evaluate},
+            {"role": "user", "content": prompt},
         ],
     )
-    try:
-        return completion.choices[0].message.content
-    except Exception:
-        print(completion)
-        raise
-
-
-def main():
-    data = load_data("embeddings.jsonl")
-
-    prompt = open("evaluation.md").read()
-
-    data = list(data)
-
-    count = 0
-    for item in data:
-        print("#", count, " - ", item.model)
-
-        content = get_evaluation("openai/gpt-4-turbo", prompt, item.content)
-        item.evaluation = content
-
-        count += 1
-        if count % 3 == 0:
-            save_data("evaluation.jsonl", data)
-
-    save_data("evaluation.jsonl", data)
-
-
-if __name__ == "__main__":
-    main()
+    return completion.choices[0].message.content
