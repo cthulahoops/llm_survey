@@ -23,16 +23,16 @@
             </table>
 
             <p>Prompt</p>
-            <div class="markdown-body">{{ prompt|safe }}</div>
+            <div class="markdown-body prompt">{{ prompt|safe }}</div>
             {% for item in items %}
                 <p id="response-{{loop.index}}">Response {{ loop.index }}.</p>
-                <div class="markdown-body">{{ item.content | to_markdown | safe }}</div>
+                <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
 
                 <p>Score: {{ item.score }}</p>
 
                 {% if item.evaluation %}
                     <p>GPT-4-Turbo says:</p>
-                    <div class="markdown-body">
+                    <div class="markdown-body evaluation">
                         {{ item.evaluation | to_markdown | safe }}
                     </div>
                 {% endif %}
