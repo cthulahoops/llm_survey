@@ -1,11 +1,10 @@
 import click
 
-from llm_survey.data import SurveyDb
-from llm_survey.query import get_models
-
 from .build import build
 from .embeddings import embeddings
 from .evaluate import evaluate
+from .models import models
+from .prompts import prompts
 from .run import run
 
 
@@ -18,16 +17,8 @@ cli.add_command(embeddings)
 cli.add_command(run)
 cli.add_command(evaluate)
 cli.add_command(build)
-
-
-@cli.command
-def models():
-    survey = SurveyDb()
-    survey.create_tables()
-
-    models = get_models()
-    for model in sorted(models, key=lambda x: x.id):
-        survey.save_model(model)
+cli.add_command(models)
+cli.add_command(prompts)
 
 
 if __name__ == "__main__":

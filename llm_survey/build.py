@@ -24,7 +24,7 @@ def build():
 
     companies = groupby(models, key=model_company)
 
-    prompt = open("prompt.md").read()
+    prompt = survey.get_prompt("marshmallow")
 
     rendered_html = index_template.render(
         models=models,

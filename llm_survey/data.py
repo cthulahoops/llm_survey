@@ -32,6 +32,13 @@ class SurveyDb:
             pricing TEXT
         )"""
         )
+
+        self.sqlite.execute(
+            """CREATE TABLE IF NOT EXISTS prompts (
+            id TEXT PRIMARY KEY,
+            content TEXT
+        )"""
+        )
         self.sqlite.commit()
 
     def save_model(self, model):
@@ -53,6 +60,16 @@ class SurveyDb:
         )
         self.sqlite.commit()
 
+    def save_prompt(self, prompt_id, content):
+        self.sqlite.execute(
+            """INSERT INTO prompts VALUES (?, ?)
+            on conflict(id) do update set
+            content = excluded.content
+            """,
+            (prompt_id, content),
+        )
+        self.sqlite.commit()
+
     def get_model(self, model_id):
         cursor = self.sqlite.execute("SELECT * FROM models WHERE id=?", (model_id,))
         cursor.row_factory = sqlite3.Row
@@ -67,6 +84,15 @@ class SurveyDb:
             context_length=row["context_length"],
             pricing=json.loads(row["pricing"]),
         )
+
+    def get_prompt(self, prompt_id):
+        cursor = self.sqlite.execute("SELECT * FROM prompts WHERE id=?", (prompt_id,))
+        cursor.row_factory = sqlite3.Row
+        row = cursor.fetchone()
+        if row is None:
+            return None
+
+        return row["content"]
 
 
 @dataclass
