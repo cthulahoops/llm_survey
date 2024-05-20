@@ -1,11 +1,72 @@
 import json
 import re
+import sqlite3
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict
 
 import marshmallow
 import numpy as np
+
+
+@dataclass
+class Model:
+    id: str
+    name: str
+    description: str
+    context_length: int
+    pricing: Dict
+
+
+class SurveyDb:
+    def __init__(self):
+        self.sqlite = sqlite3.connect("survey.db")
+
+    def create_tables(self):
+        self.sqlite.execute(
+            """CREATE TABLE IF NOT EXISTS models (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            description TEXT,
+            context_length INTEGER,
+            pricing TEXT
+        )"""
+        )
+        self.sqlite.commit()
+
+    def save_model(self, model):
+        self.sqlite.execute(
+            """INSERT INTO models VALUES (?, ?, ?, ?, ?)
+            on conflict(id) do update set
+            name = excluded.name,
+            description = excluded.description,
+            context_length = excluded.context_length,
+            pricing = excluded.pricing
+            """,
+            (
+                model.id,
+                model.name,
+                model.description,
+                model.context_length,
+                json.dumps(model.pricing),
+            ),
+        )
+        self.sqlite.commit()
+
+    def get_model(self, model_id):
+        cursor = self.sqlite.execute("SELECT * FROM models WHERE id=?", (model_id,))
+        cursor.row_factory = sqlite3.Row
+        row = cursor.fetchone()
+        if row is None:
+            return None
+
+        return Model(
+            id=row["id"],
+            name=row["name"],
+            description=row["description"],
+            context_length=row["context_length"],
+            pricing=json.loads(row["pricing"]),
+        )
 
 
 @dataclass

@@ -8,7 +8,16 @@
     <body>
         {% include "nav.html.j2" %}
         <main>
-            <p>Model: {{ current_model }}</p>
+            <p>Model Name: {{ model_info.name }}</p>
+
+            {% if model_info %}
+            <p>Description</p>
+            
+            <div class="markdown-body">
+                {{ model_info.description | to_markdown | safe }}
+            </div>
+
+            {% endif %}
 
             <p>Model Consistency</p>
 
@@ -23,7 +32,7 @@
             </table>
 
             <p>Prompt</p>
-            <div class="markdown-body prompt">{{ prompt|safe }}</div>
+            <div class="markdown-body prompt">{{ prompt | to_markdown |safe }}</div>
             {% for item in items %}
                 <p id="response-{{loop.index}}">Response {{ loop.index }}.</p>
                 <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>

@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 TEMPLATE_DIR = Path("templates")
@@ -7,6 +8,9 @@ TEMPLATE_DIR = Path("templates")
 environment = Environment(
     loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape([])
 )
+
+
+markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
 
 
 def template_filter(name=None):
@@ -44,3 +48,8 @@ def model_file(model):
 @template_filter()
 def model_link(model):
     return f"<a href='{model_file(model)}'>{model_name(model)}</a>"
+
+
+@template_filter()
+def to_markdown(text):
+    return markdown.convert(text)

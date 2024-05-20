@@ -3,29 +3,17 @@ from collections import defaultdict
 from pathlib import Path
 
 import click
-import markdown
 
-from llm_survey.data import groupby, load_data
+from llm_survey.data import SurveyDb, groupby, load_data
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
-from llm_survey.templating import (
-    environment,
-    model_company,
-    model_file,
-    render_to_file,
-    template_filter,
-)
+from llm_survey.templating import environment, model_company, model_file, render_to_file
 
 OUTPUT_DIR = Path("out")
-markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
-
-
-@template_filter()
-def to_markdown(text):
-    return markdown.convert(text)
 
 
 @click.command()
 def build():
+    survey = SurveyDb()
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 
@@ -37,7 +25,6 @@ def build():
     companies = groupby(models, key=model_company)
 
     prompt = open("prompt.md").read()
-    prompt = markdown.convert(prompt)
 
     rendered_html = index_template.render(
         models=models,
@@ -52,6 +39,7 @@ def build():
         rendered_html = template.render(
             items=items,
             current_model=model,
+            model_info=survey.get_model(model[len("openrouter/") :]),
             models=models,
             prompt=prompt,
             companies=companies,
@@ -71,6 +59,7 @@ def build():
         "out/human.html",
         items=solutions,
         current_model="human",
+        model_info=None,
         models=models,
         prompt=prompt,
         companies=companies,

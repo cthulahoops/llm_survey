@@ -1,6 +1,14 @@
 import functools
 import json
+import os
 import sqlite3
+
+import openai
+
+client = openai.Client(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
+)
 
 
 def sqlite_cache(db_file):
@@ -34,13 +42,6 @@ def sqlite_cache(db_file):
     return cache_decorator
 
 
-# client = openai.Client(
-#     base_url="https://openrouter.ai/api/v1",
-#     api_key=os.environ.get("OPENROUTER_API_KEY"),
-# )
-client = None
-
-
 @sqlite_cache("evaluation_cache.db")
 def get_completion(model, prompt):
     completion = client.chat.completions.create(
@@ -53,4 +54,4 @@ def get_completion(model, prompt):
 
 
 def get_models():
-    return client.models.list()
+    return client.models.list().data
