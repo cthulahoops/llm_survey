@@ -50,3 +50,7 @@ def get_completion(model, prompt):
         ],
     )
     return completion.choices[0].message.content
+
+
+def get_models():
+    return client.models.list()

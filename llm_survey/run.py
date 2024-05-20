@@ -1,6 +1,6 @@
 import click
 
-from llm_survey.data import groupby, load_data
+from llm_survey.data import ModelOutput, groupby, load_data, save_data
 from llm_survey.query import get_completion
 
 
@@ -14,4 +14,10 @@ def run():
 
     for model in models:
         for _ in range(3 - len(data[model])):
-            get_completion(model, prompt)
+            completion = get_completion(model, prompt)
+
+            model_output = ModelOutput(completion=completion, model=model)
+
+            data.append(model_output)
+
+    save_data("evaluation.jsonl", data)

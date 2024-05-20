@@ -24,7 +24,7 @@ def to_markdown(text):
     return markdown.convert(text)
 
 
-@click.group()
+@click.command()
 def build():
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
@@ -173,7 +173,3 @@ def read_model_data():
             if len(result[data["model"]]) < 3:
                 result[data["model"]].append(item)
     return result
-
-
-if __name__ == "__main__":
-    main()
