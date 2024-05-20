@@ -17,7 +17,7 @@ def build():
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 
-    data = load_data("evaluation.jsonl")
+    data = survey.model_outputs()
     data = groupby(data, key=lambda x: x.model)
 
     models = sorted(data.keys())
@@ -39,7 +39,7 @@ def build():
         rendered_html = template.render(
             items=items,
             current_model=model,
-            model_info=survey.get_model(model[len("openrouter/") :]),
+            model_info=survey.get_model(model),
             models=models,
             prompt=prompt,
             companies=companies,

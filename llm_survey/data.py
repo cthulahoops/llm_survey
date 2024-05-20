@@ -18,6 +18,23 @@ class Model:
     pricing: Dict
 
 
+@dataclass
+class ModelOutput:
+    content: str
+    embedding: np.array
+    model: str
+    usage: Dict = None
+    evaluation: str = None
+
+    @property
+    def score(self):
+        if not self.evaluation:
+            return None
+
+        if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
+            return float(match.group(1))
+
+
 class SurveyDb:
     def __init__(self):
         self.sqlite = sqlite3.connect("survey.db")
@@ -39,6 +56,18 @@ class SurveyDb:
             content TEXT
         )"""
         )
+
+        self.sqlite.execute(
+            """CREATE TABLE IF NOT EXISTS model_outputs (
+            id INTEGER PRIMARY KEY,
+            content TEXT,
+            embedding BLOB,
+            model TEXT,
+            usage TEXT,
+            evaluation TEXT
+        )"""
+        )
+
         self.sqlite.commit()
 
     def save_model(self, model):
@@ -70,6 +99,22 @@ class SurveyDb:
         )
         self.sqlite.commit()
 
+    def save_model_output(self, model_output):
+        self.sqlite.execute(
+            """INSERT INTO model_outputs
+            (content, embedding, model, usage, evaluation)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                model_output.content,
+                model_output.embedding,
+                model_output.model,
+                json.dumps(model_output.usage),
+                model_output.evaluation,
+            ),
+        )
+        self.sqlite.commit()
+
     def get_model(self, model_id):
         cursor = self.sqlite.execute("SELECT * FROM models WHERE id=?", (model_id,))
         cursor.row_factory = sqlite3.Row
@@ -94,22 +139,17 @@ class SurveyDb:
 
         return row["content"]
 
-
-@dataclass
-class ModelOutput:
-    content: str
-    embedding: np.array
-    model: str
-    usage: Dict = None
-    evaluation: str = None
-
-    @property
-    def score(self):
-        if not self.evaluation:
-            return None
-
-        if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
-            return float(match.group(1))
+    def model_outputs(self):
+        cursor = self.sqlite.execute("SELECT * FROM model_outputs")
+        cursor.row_factory = sqlite3.Row
+        for row in cursor:
+            yield ModelOutput(
+                content=row["content"],
+                embedding=np.frombuffer(row["embedding"]),
+                model=row["model"],
+                usage=json.loads(row["usage"]),
+                evaluation=row["evaluation"],
+            )
 
 
 class NumpyArray(marshmallow.fields.Field):

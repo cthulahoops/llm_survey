@@ -1,23 +1,25 @@
 import click
 
-from llm_survey.data import ModelOutput, groupby, load_data, save_data
-from llm_survey.query import get_completion
+from llm_survey.data import SurveyDb, load_data
 
 
 @click.command()
 def run():
-    models = open("models", "r").read().splitlines()
+    outputs = load_data("evaluation.jsonl")
 
-    data = groupby(load_data("evaluation.jsonl"), lambda x: x.model)
+    survey = SurveyDb()
 
-    prompt = open("prompt.md").read()
+    for output in outputs:
+        output.model = output.model[len("openrouter/"):]
+        survey.save_model_output(output)
+    # prompt = open("prompt.md").read()
 
-    for model in models:
-        for _ in range(3 - len(data[model])):
-            completion = get_completion(model, prompt)
+    # for model in models:
+    #     for _ in range(3 - len(data[model])):
+    #         completion = get_completion(model, prompt)
 
-            model_output = ModelOutput(completion=completion, model=model)
+    #         model_output = ModelOutput(completion=completion, model=model)
 
-            data.append(model_output)
+    #         data.append(model_output)
 
-    save_data("evaluation.jsonl", data)
+    # save_data("evaluation.jsonl", data)
