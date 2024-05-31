@@ -5,10 +5,12 @@ import sqlite3
 
 import openai
 
-client = openai.Client(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.environ.get("OPENROUTER_API_KEY"),
-)
+
+def get_client():
+    return openai.Client(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.environ.get("OPENROUTER_API_KEY"),
+    )
 
 
 def sqlite_cache(db_file):
@@ -43,7 +45,7 @@ def sqlite_cache(db_file):
 
 
 def get_completion(model, prompt):
-    return client.chat.completions.create(
+    return get_client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt},
@@ -58,4 +60,4 @@ def get_model_response(model, prompt):
 
 
 def get_models():
-    return client.models.list().data
+    return get_client.models.list().data

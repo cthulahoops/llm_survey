@@ -9,10 +9,6 @@ from llm_survey.data import SurveyDb
 from llm_survey.query import sqlite_cache
 from llm_survey.templating import template_filter
 
-client = openai.Client(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
-
 
 @click.command()
 @click.option("--model", "-m", default="text-embedding-3-small")
@@ -35,6 +31,10 @@ def embeddings(model):
 
 @sqlite_cache("embedding_cache.db")
 def embed_content(content, model="text-embedding-3-small"):
+    client = openai.Client(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+    )
+
     response = client.embeddings.create(
         model=model,
         input=content,
