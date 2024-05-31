@@ -1,11 +1,16 @@
-import json
+import os
 
 import click
 import numpy as np
+import openai
 
-from llm_survey.data import load_data
-from llm_survey.query import client, sqlite_cache
+from llm_survey.data import SurveyDb
+from llm_survey.query import sqlite_cache
 from llm_survey.templating import template_filter
+
+client = openai.Client(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
 
 
 @sqlite_cache("embedding_cache.db")
@@ -14,32 +19,20 @@ def embed_content(content, model="text-embedding-3-small"):
         model=model,
         input=content,
     )
-    return response.data[0].embedding
+    return np.array(response.data[0].embedding)
 
 
 @click.command()
 @click.option("--model", "-m", default="text-embedding-3-small")
 def embeddings(model):
-    data = load_data("embeddings.jsonl")
+    survey = SurveyDb()
 
-    raise ValueError(model)
-
-    for input_file in args.input:
-        if input_file.suffix == ".md":
-            with input_file.open() as f:
-                content = f.read()
-            embedding = embed_content(content, model=args.model)
-            results.append(
-                {
-                    "content": content,
-                    "model": "human",
-                    "embedding": embedding,
-                }
-            )
-
-    with args.output.open("w") as f:
-        for result in results:
-            f.write(json.dumps(result) + "\n")
+    for output in survey.model_outputs():
+        if output.embedding is not None:
+            continue
+        print("Generate embedding for: ", output.id, output.model)
+        output.embedding = embed_content(output.content, model=model)
+        survey.save_model_output(output)
 
 
 @template_filter()

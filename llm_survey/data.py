@@ -31,9 +31,10 @@ class Model:
 
 @dataclass
 class ModelOutput:
-    content: str
-    embedding: np.array
+    id: int
     model: str
+    content: str
+    embedding: np.array = None
     usage: Dict = None
     evaluation: str = None
 
@@ -157,22 +158,41 @@ class SurveyDb:
         self.sqlite.commit()
 
     def save_model_output(self, model_output):
-        self.sqlite.execute(
-            """INSERT INTO model_outputs
-            (content, embedding, model, usage, evaluation)
-            VALUES (?, ?, ?, ?, ?)
-            """,
-            (
-                model_output.content,
-                model_output.embedding,
-                model_output.model,
-                json.dumps(model_output.usage),
-                model_output.evaluation,
-            ),
-        )
+        if model_output.id is not None:
+            self.sqlite.execute(
+                """UPDATE model_outputs
+                SET content = ?,
+                embedding = ?,
+                model = ?,
+                usage = ?,
+                evaluation = ?
+                WHERE id = ?
+                """,
+                (
+                    model_output.content,
+                    model_output.embedding,
+                    model_output.model,
+                    json.dumps(model_output.usage, cls=DecimalEncoder),
+                    model_output.evaluation,
+                    model_output.id,
+                ),
+            )
+        else:
+            self.sqlite.execute(
+                """INSERT INTO model_outputs
+                (content, embedding, model, usage, evaluation)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    model_output.content,
+                    model_output.embedding,
+                    model_output.model,
+                    json.dumps(model_output.usage, cls=DecimalEncoder),
+                    model_output.evaluation,
+                ),
+            )
         self.sqlite.commit()
 
-    @property
     def models(self):
         for row in self.query("SELECT * FROM models"):
             yield Model.from_row(row)
@@ -215,7 +235,7 @@ class ModelOutputSchema(marshmallow.Schema):
 
     @marshmallow.post_load
     def make_model_output(self, data, **kwargs):
-        return ModelOutput(**data)
+        return ModelOutput(id=None, **data)
 
 
 def load_data(filename):
