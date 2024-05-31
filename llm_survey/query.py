@@ -43,7 +43,7 @@ def sqlite_cache(db_file):
 
 
 @sqlite_cache("evaluation_cache.db")
-def get_completion(model, prompt):
+def get_model_response(model, prompt):
     completion = client.chat.completions.create(
         model=model,
         messages=[

@@ -1,11 +1,11 @@
 import click
 
 from llm_survey.data import load_data, save_data
-from llm_survey.query import get_completion
+from llm_survey.query import get_model_response
 
 
 def get_evaluation(model, prompt, response_to_evaluate):
-    return get_completion(model, prompt + response_to_evaluate)
+    return get_model_response(model, prompt + response_to_evaluate)
 
 
 @click.group()
