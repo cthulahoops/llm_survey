@@ -3,6 +3,7 @@ import re
 import sqlite3
 from collections import defaultdict
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Dict
 
 import marshmallow
@@ -47,12 +48,43 @@ class ModelOutput:
     @classmethod
     def from_row(cls, row):
         return cls(
+            id=row["id"],
             content=row["content"],
-            embedding=np.frombuffer(row["embedding"]),
+            embedding=np.frombuffer(row["embedding"]) if row["embedding"] else None,
             model=row["model"],
             usage=json.loads(row["usage"]),
             evaluation=row["evaluation"],
         )
+
+    @classmethod
+    def from_completion(cls, completion, model):
+        assert model.id == completion.model
+
+        message = completion.choices[0].message
+        usage = completion.usage
+        pricing = model.pricing
+
+        return cls(
+            id=None,
+            content=message.content,
+            model=completion.model,
+            usage={
+                "prompt_tokens": usage.prompt_tokens,
+                "completion_tokens": usage.completion_tokens,
+                "total_tokens": usage.completion_tokens,
+                "total_cost": (
+                    usage.prompt_tokens * Decimal(pricing["prompt"])
+                    + usage.completion_tokens * Decimal(pricing["completion"])
+                ),
+            },
+        )
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return str(obj)
+        return super().default(obj)
 
 
 class SurveyDb:

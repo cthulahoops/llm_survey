@@ -1,5 +1,6 @@
 import json
 from collections import defaultdict
+from decimal import Decimal
 from pathlib import Path
 
 import click
@@ -115,7 +116,7 @@ def average_costs(data):
     result = {}
     for model, items in data.items():
         costs = [item.usage["total_cost"] for item in items]
-        cost = sum(costs) / len(costs)
+        cost = sum(Decimal(str(cost)) for cost in costs) / len(costs)
         result[model] = cost
     return result
 
