@@ -4,6 +4,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import click
+from tqdm import tqdm
 
 from llm_survey.data import SurveyDb, groupby, load_data
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
@@ -36,7 +37,7 @@ def build():
     with open("out/index.html", "w") as outfile:
         outfile.write(rendered_html)
 
-    for model, items in data.items():
+    for model, items in tqdm(list(data.items())):
         rendered_html = template.render(
             items=items,
             current_model=model,

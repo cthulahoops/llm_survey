@@ -33,9 +33,9 @@ def sqlite_cache(db_file):
                     return result[0]
 
                 result = func(*args, **kwargs)
-                c.execute("INSERT INTO cache VALUES (?, ?)", (jsoned_args, str(result)))
+                c.execute("INSERT INTO cache VALUES (?, ?)", (jsoned_args, result))
                 conn.commit()
-                return str(result)
+                return result
 
         return wrapper
 

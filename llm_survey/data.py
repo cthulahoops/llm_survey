@@ -158,6 +158,10 @@ class SurveyDb:
         self.sqlite.commit()
 
     def save_model_output(self, model_output):
+        if model_output.embedding is not None:
+            assert isinstance(model_output.embedding, np.ndarray), type(
+                model_output.embedding
+            )
         if model_output.id is not None:
             self.sqlite.execute(
                 """UPDATE model_outputs
