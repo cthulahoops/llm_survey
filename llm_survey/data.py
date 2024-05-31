@@ -17,6 +17,16 @@ class Model:
     context_length: int
     pricing: Dict
 
+    @classmethod
+    def from_row(cls, row):
+        return cls(
+            id=row["id"],
+            name=row["name"],
+            description=row["description"],
+            context_length=row["context_length"],
+            pricing=json.loads(row["pricing"]),
+        )
+
 
 @dataclass
 class ModelOutput:
@@ -34,10 +44,25 @@ class ModelOutput:
         if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
             return float(match.group(1))
 
+    @classmethod
+    def from_row(cls, row):
+        return cls(
+            content=row["content"],
+            embedding=np.frombuffer(row["embedding"]),
+            model=row["model"],
+            usage=json.loads(row["usage"]),
+            evaluation=row["evaluation"],
+        )
+
 
 class SurveyDb:
     def __init__(self):
         self.sqlite = sqlite3.connect("survey.db")
+
+    def query(self, query, *args):
+        cursor = self.sqlite.execute(query, args)
+        cursor.row_factory = sqlite3.Row
+        return cursor
 
     def create_tables(self):
         self.sqlite.execute(
@@ -115,24 +140,21 @@ class SurveyDb:
         )
         self.sqlite.commit()
 
+    @property
+    def models(self):
+        for row in self.query("SELECT * FROM models"):
+            yield Model.from_row(row)
+
     def get_model(self, model_id):
-        cursor = self.sqlite.execute("SELECT * FROM models WHERE id=?", (model_id,))
-        cursor.row_factory = sqlite3.Row
+        cursor = self.query("SELECT * FROM models WHERE id=?", model_id)
         row = cursor.fetchone()
         if row is None:
             return None
 
-        return Model(
-            id=row["id"],
-            name=row["name"],
-            description=row["description"],
-            context_length=row["context_length"],
-            pricing=json.loads(row["pricing"]),
-        )
+        return Model.from_row(row)
 
     def get_prompt(self, prompt_id):
-        cursor = self.sqlite.execute("SELECT * FROM prompts WHERE id=?", (prompt_id,))
-        cursor.row_factory = sqlite3.Row
+        cursor = self.query("SELECT * FROM prompts WHERE id=?", prompt_id)
         row = cursor.fetchone()
         if row is None:
             return None
@@ -140,16 +162,8 @@ class SurveyDb:
         return row["content"]
 
     def model_outputs(self):
-        cursor = self.sqlite.execute("SELECT * FROM model_outputs")
-        cursor.row_factory = sqlite3.Row
-        for row in cursor:
-            yield ModelOutput(
-                content=row["content"],
-                embedding=np.frombuffer(row["embedding"]),
-                model=row["model"],
-                usage=json.loads(row["usage"]),
-                evaluation=row["evaluation"],
-            )
+        for row in self.query("SELECT * FROM model_outputs"):
+            yield ModelOutput.from_row(row)
 
 
 class NumpyArray(marshmallow.fields.Field):
