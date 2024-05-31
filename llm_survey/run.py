@@ -1,25 +1,32 @@
 import click
+from tqdm import tqdm
 
-from llm_survey.data import SurveyDb, load_data
+from llm_survey.data import ModelOutput, SurveyDb, groupby
+from llm_survey.query import get_completion
 
 
 @click.command()
-def run():
-    outputs = load_data("evaluation.jsonl")
-
+@click.option("--count", default=3)
+def run(count=3):
     survey = SurveyDb()
 
-    for output in outputs:
-        output.model = output.model[len("openrouter/"):]
-        survey.save_model_output(output)
-    # prompt = open("prompt.md").read()
+    outputs = survey.model_outputs()
+    grouped_outputs = groupby(outputs, key=lambda x: x.model)
 
-    # for model in models:
-    #     for _ in range(3 - len(data[model])):
-    #         completion = get_completion(model, prompt)
+    prompt = survey.get_prompt("marshmallow")
 
-    #         model_output = ModelOutput(completion=completion, model=model)
+    models_needing_work = [
+        (model, n + 1)
+        for model in survey.models()
+        for n in range(count - len(grouped_outputs[model.id]))
+    ]
 
-    #         data.append(model_output)
+    it = tqdm(models_needing_work, unit="models", postfix={"model": "", "n": ""})
+    for model, n in it:
+        it.set_postfix(model=model.id, n=n)
+        it.write(f"{model.id} {n}")
 
-    # save_data("evaluation.jsonl", data)
+        completion = get_completion(model.id, prompt)
+
+        model_output = ModelOutput.from_completion(completion, model)
+        survey.save_model_output(model_output)

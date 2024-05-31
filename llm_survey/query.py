@@ -42,14 +42,18 @@ def sqlite_cache(db_file):
     return cache_decorator
 
 
-@sqlite_cache("evaluation_cache.db")
-def get_model_response(model, prompt):
-    completion = client.chat.completions.create(
+def get_completion(model, prompt):
+    return client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt},
         ],
     )
+
+
+@sqlite_cache("evaluation_cache.db")
+def get_model_response(model, prompt):
+    completion = get_completion(model, prompt)
     return completion.choices[0].message.content
 
 
