@@ -44,7 +44,7 @@ def build():
             prompt=prompt,
             companies=companies,
             consistency=consistency_grid(items),
-            GRID_SIZE=3,
+            GRID_SIZE=len(items),
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
@@ -82,6 +82,7 @@ def build():
         "consistency.html.j2",
         "out/consistency.html",
         data=per_model_consistency(data),
+        outputs=data,
         GRID_SIZE=3,
     )
 
