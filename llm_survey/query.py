@@ -45,7 +45,7 @@ def sqlite_cache(db_file):
 
 
 def get_completion(model, prompt):
-    return get_client.chat.completions.create(
+    return get_client().chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt},
@@ -60,4 +60,4 @@ def get_model_response(model, prompt):
 
 
 def get_models():
-    return get_client.models.list().data
+    return get_client().models.list().data

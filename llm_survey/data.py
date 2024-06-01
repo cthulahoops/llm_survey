@@ -89,8 +89,8 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 class SurveyDb:
-    def __init__(self):
-        self.sqlite = sqlite3.connect("survey.db")
+    def __init__(self, filename="survey.db"):
+        self.sqlite = sqlite3.connect(filename)
 
     def query(self, query, *args):
         cursor = self.sqlite.execute(query, args)
@@ -181,11 +181,13 @@ class SurveyDb:
                     model_output.id,
                 ),
             )
+            output_id = model_output.id
         else:
-            self.sqlite.execute(
+            cursor = self.sqlite.execute(
                 """INSERT INTO model_outputs
                 (content, embedding, model, usage, evaluation)
                 VALUES (?, ?, ?, ?, ?)
+                RETURNING id
                 """,
                 (
                     model_output.content,
@@ -195,7 +197,17 @@ class SurveyDb:
                     model_output.evaluation,
                 ),
             )
+            (output_id,) = cursor.fetchone()
         self.sqlite.commit()
+        return output_id
+
+    def get_model_output(self, output_id):
+        cursor = self.query("SELECT * FROM model_outputs WHERE id=?", output_id)
+        row = cursor.fetchone()
+        if row is None:
+            return None
+
+        return ModelOutput.from_row(row)
 
     def models(self):
         for row in self.query("SELECT * FROM models"):

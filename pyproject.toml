@@ -18,6 +18,8 @@ tqdm = "^4.66.4"
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.0"
 ruff = "^0.4.1"
+pytest = "^8.2.1"
+hypothesis = {extras = ["numpy"], version = "^6.103.0"}
 
 [build-system]
 requires = ["poetry-core"]
