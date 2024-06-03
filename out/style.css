@@ -133,6 +133,7 @@ main {
 }
 
 main footer {
+    max-width: 80ch;
     margin-top: 5rem;
 }
 
