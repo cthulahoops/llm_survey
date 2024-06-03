@@ -11,13 +11,13 @@
                 <tr>
                     <th>Company</th>
                     <th>Model</th>
-                    <th>Human-like</th>
-                    <th>Cost</th>
-                    <th>Consistency</th>
+                    <th>Human-like <a href="#human-like">*</a></th>
+                    <th>Cost <a href="#cost">*</a></th>
+                    <th>Consistency <a href="#consistency">*</a></th>
                     <th>Score 1</th>
                     <th>Score 2</th>
                     <th>Score 3</th>
-                    <th>Total</th>
+                    <th>Total <a href="#score">*</a></th>
                 </tr>
                 {% for model in models %}
                     <tr>
@@ -63,6 +63,38 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            <footer>
+                <ul>
+                    <li id="human-like">
+                       Human-like: How similar<a href="#similarity">*</a> the average response from the model
+                       is to the <a href="/human.html">human written responses</a>.                    </li>
+                    <li id="cost">Cost: The average (mean) cost of one query.</li>
+                    <li id="consistency">
+                        Consistency:
+
+Consistency is computed in this way:
+
+<ol>
+    <li>
+    Get the embedding from each of a model's responses
+    </li><li>
+    Compute the similarity<a href="#similarity">*</a> between each of those and
+    the average of those embeddings.
+    </li><li>
+    Average the result of those comparisons
+    </li>
+</ol>
+                    </li>
+                    <li id="score">Score: The score is computed by asking gpt-4-turbo to evaluate each of the model responses against a <a href="/marking.html">marking scheme</a> and summing the results.</li>
+                    <li id="similarity">Similarity: The <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similiarity</a> between the embeddings.
+                    </li>
+                    <li id="embedding">
+                        Embedding: The <a href="https://en.wikipedia.org/wiki/Sentence_embedding">embedding</a> is a
+                         vector which encodes the semantic content of a text.
+                    </li>
+                </ul>
+            </footer>
         </main>
     </body>
 </html>
