@@ -14,7 +14,13 @@ OUTPUT_DIR = Path("out")
 
 
 @click.command()
-def build():
+@click.option(
+    "--pages",
+    "-p",
+    multiple=True,
+    default=["index", "models", "human", "similarity", "consistency", "rankings"],
+)
+def build(pages):
     survey = SurveyDb()
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
@@ -37,21 +43,22 @@ def build():
     with open("out/index.html", "w") as outfile:
         outfile.write(rendered_html)
 
-    for model, items in tqdm(list(data.items())):
-        rendered_html = template.render(
-            items=items,
-            current_model=model,
-            model_info=survey.get_model(model),
-            models=models,
-            prompt=prompt,
-            companies=companies,
-            consistency=consistency_grid(items),
-            GRID_SIZE=len(items),
-        )
+    if "models" in pages:
+        for model, items in tqdm(list(data.items())):
+            rendered_html = template.render(
+                items=items,
+                current_model=model,
+                model_info=survey.get_model(model),
+                models=models,
+                prompt=prompt,
+                companies=companies,
+                consistency=consistency_grid(items),
+                GRID_SIZE=len(items),
+            )
 
-        with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
+            with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
 
-            outfile.write(rendered_html)
+                outfile.write(rendered_html)
 
     solutions = list(load_data("solution.jsonl"))
     reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
