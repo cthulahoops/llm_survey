@@ -8,7 +8,8 @@ from llm_survey.query import get_completion
 
 @click.command()
 @click.option("--count", default=3)
-def run(count=3):
+@click.option("--dry-run", "-n", is_flag=True)
+def run(dry_run=False, count=3):
     survey = SurveyDb()
 
     outputs = survey.model_outputs()
@@ -28,7 +29,10 @@ def run(count=3):
         it.set_postfix(model=model.id, n=n)
         it.write(f"{model.id} {n}")
 
-        completion = get_completion(model.id, prompt)
+        if dry_run:
+            continue
+
+        completion = get_completion(model.id, prompt.prompt)
 
         if hasattr(completion, "error"):
             print(completion.error)
