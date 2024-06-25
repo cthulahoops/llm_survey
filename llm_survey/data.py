@@ -81,6 +81,19 @@ class ModelOutput:
         )
 
 
+@dataclass
+class Prompt:
+    id: str
+    prompt: str = None
+    marking_prompt: str = None
+
+    @classmethod
+    def from_row(cls, row):
+        return cls(
+            id=row["id"], prompt=row["prompt"], marking_prompt=row["marking_prompt"]
+        )
+
+
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Decimal):
@@ -111,7 +124,8 @@ class SurveyDb:
         self.sqlite.execute(
             """CREATE TABLE IF NOT EXISTS prompts (
             id TEXT PRIMARY KEY,
-            content TEXT
+            prompt TEXT
+            marking_prompt TEXT
         )"""
         )
 
@@ -147,13 +161,14 @@ class SurveyDb:
         )
         self.sqlite.commit()
 
-    def save_prompt(self, prompt_id, content):
+    def save_prompt(self, prompt):
         self.sqlite.execute(
-            """INSERT INTO prompts VALUES (?, ?)
+            """INSERT INTO prompts (id, prompt, marking_prompt) VALUES (?, ?, ?)
             on conflict(id) do update set
-            content = excluded.content
+            prompt = excluded.prompt,
+            marking_prompt = excluded.marking_prompt
             """,
-            (prompt_id, content),
+            (prompt.id, prompt.prompt, prompt.marking_prompt),
         )
         self.sqlite.commit()
 
@@ -227,11 +242,15 @@ class SurveyDb:
         if row is None:
             return None
 
-        return row["content"]
+        return Prompt.from_row(row)
 
     def model_outputs(self):
         for row in self.query("SELECT * FROM model_outputs"):
             yield ModelOutput.from_row(row)
+
+    def prompts(self):
+        for row in self.query("SELECT * FROM prompts"):
+            yield Prompt.from_row(row)
 
 
 class NumpyArray(marshmallow.fields.Field):
