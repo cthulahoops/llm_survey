@@ -21,6 +21,9 @@ ruff = "^0.4.1"
 pytest = "^8.2.1"
 hypothesis = {extras = ["numpy"], version = "^6.103.0"}
 
+[tool.poetry.scripts]
+llm_survey = "llm_survey.__main__:cli"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
