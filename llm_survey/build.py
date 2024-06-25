@@ -8,7 +8,12 @@ from tqdm import tqdm
 
 from llm_survey.data import SurveyDb, groupby, load_data
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
-from llm_survey.templating import environment, model_company, model_file, render_to_file
+from llm_survey.templating import (
+    get_environment,
+    model_company,
+    model_file,
+    render_to_file,
+)
 
 OUTPUT_DIR = Path("out")
 
@@ -22,6 +27,7 @@ OUTPUT_DIR = Path("out")
 )
 def build(pages):
     survey = SurveyDb()
+    environment = get_environment()
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 

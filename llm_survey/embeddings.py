@@ -1,8 +1,6 @@
 import os
 
 import click
-import numpy as np
-import openai
 from tqdm import tqdm
 
 from llm_survey.data import SurveyDb
@@ -13,6 +11,8 @@ from llm_survey.templating import template_filter
 @click.command()
 @click.option("--model", "-m", default="text-embedding-3-small")
 def embeddings(model):
+    import numpy as np
+
     survey = SurveyDb()
 
     it = tqdm(list(survey.model_outputs()), unit="outputs")
@@ -31,6 +31,9 @@ def embeddings(model):
 
 @sqlite_cache("embedding_cache.db")
 def embed_content(content, model="text-embedding-3-small"):
+    import numpy as np
+    import openai
+
     client = openai.Client(
         api_key=os.environ.get("OPENAI_API_KEY"),
     )
@@ -44,6 +47,8 @@ def embed_content(content, model="text-embedding-3-small"):
 
 @template_filter()
 def similarity(a, b):
+    import numpy as np
+
     if a is None or b is None:
         return 0
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))

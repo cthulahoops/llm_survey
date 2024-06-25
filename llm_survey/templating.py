@@ -1,21 +1,30 @@
+from functools import cache
 from pathlib import Path
 
-import markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 TEMPLATE_DIR = Path("templates")
 
-environment = Environment(
-    loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape([])
-)
+
+@cache
+def get_environment():
+    environment = Environment(
+        loader=FileSystemLoader(TEMPLATE_DIR), autoescape=select_autoescape([])
+    )
+
+    return environment
 
 
-markdown = markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
+@cache
+def get_markdown():
+    import markdown
+
+    return markdown.Markdown(extensions=["markdown.extensions.fenced_code", "nl2br"])
 
 
 def template_filter(name=None):
     def decorator(f):
-        environment.filters[name or f.__name__] = f
+        get_environment().filters[name or f.__name__] = f
         return f
 
     return decorator
@@ -52,4 +61,4 @@ def model_link(model):
 
 @template_filter()
 def to_markdown(text):
-    return markdown.convert(text)
+    return get_markdown().convert(text)
