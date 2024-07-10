@@ -4,6 +4,16 @@ import os
 import sqlite3
 
 
+def log_request_details(f):
+    @functools.wraps(f)
+    def wrapper(db, *args, **kwargs):
+        result = f(*args, **kwargs)
+        request_id = db.log_request(__name__, (args, kwargs), result.to_dict())
+        return (request_id, result)
+
+    return wrapper
+
+
 def get_client():
     import openai
 
@@ -32,10 +42,12 @@ def sqlite_cache(db_file):
                 c.execute("SELECT result FROM cache WHERE args=?", (jsoned_args,))
                 result = c.fetchone()
                 if result is not None:
-                    return result[0]
+                    return json.loads(result[0])
 
                 result = func(*args, **kwargs)
-                c.execute("INSERT INTO cache VALUES (?, ?)", (jsoned_args, result))
+                c.execute(
+                    "INSERT INTO cache VALUES (?, ?)", (jsoned_args, result.to_json())
+                )
                 conn.commit()
                 return result
 
@@ -44,6 +56,7 @@ def sqlite_cache(db_file):
     return cache_decorator
 
 
+@log_request_details
 def get_completion(model, prompt):
     return get_client().chat.completions.create(
         model=model,
@@ -59,5 +72,27 @@ def get_model_response(model, prompt):
     return completion.choices[0].message.content
 
 
+@log_request_details
 def get_models():
-    return get_client().models.list().data
+    return get_client().models.list()
+
+
+@log_request_details
+# @sqlite_cache("embedding_cache.db")
+def create_embedding(model, content):
+    import openai
+
+    client = openai.Client(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+    )
+    return client.embeddings.create(
+        model=model,
+        input=content,
+    )
+
+
+def embed_content(db, content, model="text-embedding-3-small"):
+    import numpy as np
+
+    request_id, response = create_embedding(db, model, content)
+    return request_id, np.array(response.data[0].embedding)

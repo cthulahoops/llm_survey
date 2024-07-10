@@ -1,16 +1,15 @@
-import os
-
 import click
 from tqdm import tqdm
 
-from llm_survey.data import SurveyDb
-from llm_survey.query import sqlite_cache
+from llm_survey.data import Embedding, SurveyDb
+from llm_survey.query import embed_content
 from llm_survey.templating import template_filter
 
 
 @click.command()
 @click.option("--model", "-m", default="text-embedding-3-small")
-def embeddings(model):
+@click.option("--dry-run", "-n", is_flag=True)
+def embeddings(model, dry_run=False):
     import numpy as np
 
     survey = SurveyDb()
@@ -21,28 +20,25 @@ def embeddings(model):
         if output.embedding is not None:
             continue
         it.write(f"Generate embedding for: {output.id} {output.model}")
-        output.embedding = embed_content(output.content, model=model)
+
+        if dry_run:
+            continue
+
+        request_id, embedding = embed_content(survey, output.content, model=model)
+
+        it.write("Embedding: ", request_id)
 
         if isinstance(output.embedding, bytes):
-            output.embedding = np.frombuffer(output.embedding)
+            embedding = np.frombuffer(output.embedding)
 
-        survey.save_model_output(output)
-
-
-@sqlite_cache("embedding_cache.db")
-def embed_content(content, model="text-embedding-3-small"):
-    import numpy as np
-    import openai
-
-    client = openai.Client(
-        api_key=os.environ.get("OPENAI_API_KEY"),
-    )
-
-    response = client.embeddings.create(
-        model=model,
-        input=content,
-    )
-    return np.array(response.data[0].embedding)
+        survey.save_embedding(
+            Embedding(
+                output_id=output.id,
+                model=model,
+                embedding=embedding,
+                request_id=request_id,
+            )
+        )
 
 
 @template_filter()

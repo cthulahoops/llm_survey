@@ -37,6 +37,7 @@ class ModelOutput:
     embedding: np.array = None
     usage: Dict = None
     evaluation: str = None
+    request_id: int = None
 
     @property
     def score(self):
@@ -51,14 +52,15 @@ class ModelOutput:
         return cls(
             id=row["id"],
             content=row["content"],
-            embedding=np.frombuffer(row["embedding"]) if row["embedding"] else None,
+            embedding=(np.frombuffer(row["embedding"]) if row["embedding"] else None),
             model=row["model"],
             usage=json.loads(row["usage"]),
             evaluation=row["evaluation"],
+            request_id=row["request_id"],
         )
 
     @classmethod
-    def from_completion(cls, completion, model):
+    def from_completion(cls, completion, model, request_id):
         assert model.id == completion.model
 
         message = completion.choices[0].message
@@ -78,7 +80,16 @@ class ModelOutput:
                     + usage.completion_tokens * Decimal(pricing["completion"])
                 ),
             },
+            request_id=request_id,
         )
+
+
+@dataclass
+class Embedding:
+    output_id: int
+    embedding: np.array
+    model: str
+    request_id: int
 
 
 @dataclass
@@ -133,11 +144,33 @@ class SurveyDb:
             """CREATE TABLE IF NOT EXISTS model_outputs (
             id INTEGER PRIMARY KEY,
             content TEXT,
-            embedding BLOB,
             model TEXT,
             usage TEXT,
             evaluation TEXT
-        )"""
+            request_id INTEGER REFERENCES request_logs(id)
+            )"""
+        )
+
+        self.sqlite.execute(
+            """CREATE TABLE IF NOT EXISTS embeddings (
+                    id INTEGER PRIMARY KEY,
+                    output_id INTEGER REFERENCES model_outputs(id),
+                    embedding BLOB,
+                    model TEXT,
+                    request_id INTEGER REFERENCES request_logs(id),
+                    unique(model, output_id)
+                )
+                """
+        )
+
+        self.sqlite.execute(
+            """CREATE TABLE IF NOT EXISTS request_logs (
+                    id INTEGER PRIMARY KEY,
+                    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    resource TEXT,
+                    request BLOB,
+                    response BLOB
+            )"""
         )
 
         self.sqlite.commit()
@@ -217,7 +250,19 @@ class SurveyDb:
         return output_id
 
     def get_model_output(self, output_id):
-        cursor = self.query("SELECT * FROM model_outputs WHERE id=?", output_id)
+        cursor = self.query(
+            """SELECT
+                model_outputs.id,
+                model_outputs.content,
+                embeddings.embedding,
+                model_outputs.model,
+                model_outputs.usage,
+                model_outputs.evaluation,
+                model_outputs.request_id
+            FROM model_outputs
+            join embeddings on embeddings.output_id = model_outputs.id WHERE id=?""",
+            output_id,
+        )
         row = cursor.fetchone()
         if row is None:
             return None
@@ -245,12 +290,51 @@ class SurveyDb:
         return Prompt.from_row(row)
 
     def model_outputs(self):
-        for row in self.query("SELECT * FROM model_outputs"):
+        for row in self.query(
+            """
+                SELECT
+                    model_outputs.id,
+                    model_outputs.content,
+                    embeddings.embedding,
+                    model_outputs.model,
+                    model_outputs.usage,
+                    model_outputs.evaluation,
+                    model_outputs.request_id
+                FROM model_outputs
+                JOIN embeddings ON embeddings.output_id = model_outputs.id
+            """
+        ):
             yield ModelOutput.from_row(row)
 
     def prompts(self):
         for row in self.query("SELECT * FROM prompts"):
             yield Prompt.from_row(row)
+
+    def log_request(self, resource, request, response):
+        cursor = self.sqlite.execute(
+            """INSERT INTO request_logs (resource, request, response)
+            VALUES (?, ?, ?)
+            RETURNING id
+            """,
+            (resource, json.dumps(request), json.dumps(response)),
+        )
+        (output_id,) = cursor.fetchone()
+        self.sqlite.commit()
+        return output_id
+
+    def save_embedding(self, embedding):
+        self.sqlite.execute(
+            """INSERT INTO embeddings (output_id, embedding, model, request_id)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                embedding.output_id,
+                embedding.embedding,
+                embedding.model,
+                embedding.request_id,
+            ),
+        )
+        self.sqlite.commit()
 
 
 class NumpyArray(marshmallow.fields.Field):

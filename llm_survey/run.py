@@ -34,11 +34,18 @@ def run(dry_run=False, count=3):
         if dry_run:
             continue
 
-        completion = get_completion(model.id, prompt.prompt)
+        if "llava" in model.id:
+            continue
+
+        try:
+            request_id, completion = get_completion(survey, model.id, prompt.prompt)
+        except openai.NotFoundError as exc:
+            print(exc)
+            continue
 
         if hasattr(completion, "error"):
             print(completion.error)
             continue
 
-        model_output = ModelOutput.from_completion(completion, model)
+        model_output = ModelOutput.from_completion(completion, model, request_id)
         survey.save_model_output(model_output)

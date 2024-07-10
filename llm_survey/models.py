@@ -16,7 +16,9 @@ def models():
     survey = SurveyDb()
     survey.create_tables()
 
-    models = get_models()
+    request_id, response = get_models(survey)
+    models = response.data
+
     for model in sorted(models, key=lambda x: x.id):
         if model.id in IGNORED_MODELS:
             continue
