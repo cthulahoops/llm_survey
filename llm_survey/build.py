@@ -38,7 +38,8 @@ def build(pages):
 
     companies = groupby(models, key=model_company)
 
-    prompt = survey.get_prompt("marshmallow")
+    prompt_struct = survey.get_prompt("marshmallow")
+    prompt = prompt_struct.prompt
 
     rendered_html = index_template.render(
         models=models,

@@ -5,6 +5,7 @@ from llm_survey.query import get_models
 
 IGNORED_MODELS = [
     "openrouter/auto",  # Just a helper for calling other models
+    "openrouter/flavor-of-the-week"  # Get a random model.
     "liuhaotian/llava-13b",  # Requires an image.
     "meta-llama/llama-3-8b",  # Timeouts
 ]

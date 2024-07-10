@@ -10,6 +10,8 @@ from llm_survey.query import get_completion
 @click.option("--count", default=3)
 @click.option("--dry-run", "-n", is_flag=True)
 def run(dry_run=False, count=3):
+    import openai
+
     survey = SurveyDb()
 
     outputs = survey.model_outputs()

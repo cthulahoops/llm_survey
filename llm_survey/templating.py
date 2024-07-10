@@ -31,7 +31,7 @@ def template_filter(name=None):
 
 
 def render_to_file(template, output_file, **data):
-    template = environment.get_template(template)
+    template = get_environment().get_template(template)
     rendered_html = template.render(**data)
 
     with open(output_file, "w") as outfile:
