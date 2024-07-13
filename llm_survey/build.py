@@ -6,7 +6,7 @@ from pathlib import Path
 import click
 from tqdm import tqdm
 
-from llm_survey.data import SurveyDb, groupby, load_data
+from llm_survey.data import SurveyDb, groupby
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
 from llm_survey.templating import (
     get_environment,
@@ -76,23 +76,8 @@ def build(pages):
             with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
                 outfile.write(rendered_html)
 
-    solutions = list(load_data("solution.jsonl"))
-    reference_model = sum_each_model(groupby(solutions, key=lambda x: x.model))["human"]
-
-    render_to_file(
-        template,
-        "out/human.html",
-        items=solutions,
-        current_model="human",
-        model_info=None,
-        models=models,
-        prompt=prompt,
-        companies=companies,
-        consistency=consistency_grid(solutions),
-        GRID_SIZE=len(solutions),
-    )
-
     summed_models = sum_each_model(data)
+    reference_model = summed_models["human/human"]
     similarities = similarity_matrix(summed_models)
     consistencies = {model: consistency_measure(items) for model, items in data.items()}
 
@@ -137,7 +122,10 @@ def per_model_consistency(data):
 def average_costs(data):
     result = {}
     for model, items in data.items():
-        costs = [item.usage["total_cost"] for item in items]
+        costs = [item.usage["total_cost"] for item in items if item.usage]
+        if not costs:
+            result[model] = Decimal("0.00")
+            continue
         cost = sum(Decimal(str(cost)) for cost in costs) / len(costs)
         result[model] = cost
     return result
