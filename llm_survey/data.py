@@ -2,6 +2,7 @@ import json
 import re
 from collections import defaultdict
 from datetime import datetime
+from decimal import Decimal
 
 import numpy as np
 from sqlalchemy import (
@@ -14,8 +15,7 @@ from sqlalchemy import (
     String,
     create_engine,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import joinedload, relationship, sessionmaker
+from sqlalchemy.orm import declarative_base, joinedload, relationship, sessionmaker
 
 Base = declarative_base()
 
@@ -28,6 +28,16 @@ class Model(Base):
     description = Column(String)
     context_length = Column(Integer)
     pricing = Column(JSON)
+
+    @classmethod
+    def from_openai(cls, openai_model):
+        return Model(
+            id=openai_model.id,
+            name=openai_model.name,
+            description=openai_model.description,
+            context_length=openai_model.context_length,
+            pricing=openai_model.pricing,
+        )
 
 
 class Prompt(Base):
@@ -45,15 +55,21 @@ class ModelOutput(Base):
     content = Column(String)
     model = Column(String)
     usage = Column(JSON)
-    evaluation = Column(String)
     request_id = Column(Integer, ForeignKey("request_logs.id"))
 
     embeddings = relationship("Embedding", back_populates="model_output")
+    evaluations = relationship("Evaluation", back_populates="model_output")
 
     @property
     def embedding(self):
         if self.embeddings:
             return np.frombuffer(self.embeddings[0].embedding)
+        return None
+
+    @property
+    def evaluation(self):
+        if self.evaluations:
+            return self.evaluations[0].content
         return None
 
     @property
@@ -63,6 +79,30 @@ class ModelOutput(Base):
 
         if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
             return float(match.group(1))
+
+    @classmethod
+    def from_completion(cls, completion, model, request_id):
+        assert model.id == completion.model
+
+        message = completion.choices[0].message
+        usage = completion.usage
+        pricing = model.pricing
+
+        return cls(
+            id=None,
+            content=message.content,
+            model=completion.model,
+            usage={
+                "prompt_tokens": usage.prompt_tokens,
+                "completion_tokens": usage.completion_tokens,
+                "total_tokens": usage.completion_tokens,
+                "total_cost": str(
+                    usage.prompt_tokens * Decimal(pricing["prompt"])
+                    + usage.completion_tokens * Decimal(pricing["completion"])
+                ),
+            },
+            request_id=request_id,
+        )
 
 
 class Embedding(Base):
@@ -75,6 +115,43 @@ class Embedding(Base):
     request_id = Column(Integer, ForeignKey("request_logs.id"))
 
     model_output = relationship("ModelOutput", back_populates="embeddings")
+
+
+class Evaluation(Base):
+    __tablename__ = "evaluations"
+
+    id = Column(Integer, primary_key=True)
+    model_output_id = Column(Integer, ForeignKey("model_outputs.id"))
+    content = Column(String)
+    model = Column(String)
+    usage = Column(JSON)
+    request_id = Column(Integer, ForeignKey("request_logs.id"))
+
+    model_output = relationship("ModelOutput", back_populates="evaluations")
+
+    @classmethod
+    def from_completion(cls, completion, model, request_id):
+        assert model.id == completion.model
+
+        message = completion.choices[0].message
+        usage = completion.usage
+        pricing = model.pricing
+
+        return cls(
+            id=None,
+            content=message.content,
+            model=completion.model,
+            usage={
+                "prompt_tokens": usage.prompt_tokens,
+                "completion_tokens": usage.completion_tokens,
+                "total_tokens": usage.completion_tokens,
+                "total_cost": str(
+                    usage.prompt_tokens * Decimal(pricing["prompt"])
+                    + usage.completion_tokens * Decimal(pricing["completion"])
+                ),
+            },
+            request_id=request_id,
+        )
 
 
 class RequestLog(Base):
@@ -95,9 +172,9 @@ class SurveyDb:
     def create_tables(self):
         Base.metadata.create_all(self.engine)
 
-    def save_model(self, model):
+    def insert(self, obj):
         with self.Session() as session:
-            session.merge(model)
+            session.add(obj)
             session.commit()
 
     def save_prompt(self, prompt):
@@ -105,22 +182,16 @@ class SurveyDb:
             session.merge(Prompt(**prompt.__dict__))
             session.commit()
 
-    def save_model_output(self, model_output):
-        with self.Session() as session:
-            if model_output.id:
-                db_output = session.query(ModelOutput).get(model_output.id)
-                if db_output:
-                    for key, value in model_output.__dict__.items():
-                        setattr(db_output, key, value)
-            else:
-                db_output = ModelOutput(**model_output.__dict__)
-                session.add(db_output)
-            session.commit()
-            return db_output.id
-
     def get_model_output(self, output_id):
         with self.Session() as session:
-            return session.query(ModelOutput).get(output_id)
+            return session.get(
+                ModelOutput,
+                output_id,
+                options=[
+                    joinedload(ModelOutput.embeddings),
+                    joinedload(ModelOutput.evaluations),
+                ],
+            )
 
     def models(self):
         with self.Session() as session:
@@ -138,7 +209,6 @@ class SurveyDb:
         with self.Session() as session:
             return (
                 session.query(ModelOutput)
-                .join(Embedding)
                 .options(joinedload(ModelOutput.embeddings))
                 .all()
             )
@@ -157,12 +227,6 @@ class SurveyDb:
             session.add(log)
             session.commit()
             return log.id
-
-    def save_embedding(self, embedding):
-        with self.Session() as session:
-            db_embedding = Embedding(**embedding.__dict__)
-            session.add(db_embedding)
-            session.commit()
 
     # Additional utility methods
     def get_embeddings_for_output(self, output_id):

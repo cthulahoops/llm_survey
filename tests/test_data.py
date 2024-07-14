@@ -1,32 +1,71 @@
 import numpy as np
-from hypothesis import given
-from hypothesis import strategies as st
-from hypothesis.extra.numpy import arrays, from_dtype
-from llm_survey.data import ModelOutput, SurveyDb
+import pytest
+from llm_survey.data import Embedding, Evaluation, ModelOutput, SurveyDb
 
 
-@given(
-    output=st.builds(
-        ModelOutput,
-        id=st.none(),
-        model=st.text(),
-        content=st.text(),
-        embedding=arrays(
-            np.float64,
-            shape=(10,),
-            elements=from_dtype(
-                np.dtype("float64"), allow_nan=False, allow_infinity=False
-            ),
-        ),
-    )
-)
-def test_save_and_retrieve_output(output):
-    db = SurveyDb(":memory:")
+@pytest.fixture
+def db():
+    db = SurveyDb("sqlite://")
     db.create_tables()
+    yield db
 
-    output_id = db.save_model_output(output)
-    assert isinstance(output_id, int)
-    output.id = output_id
-    actual_output = db.get_model_output(output_id)
 
-    assert all(output.embedding == actual_output.embedding)
+@pytest.fixture
+def model_output(db):
+    output = ModelOutput(id=None, model="test", content="Hello, World")
+    with db.Session() as session:
+        session.add(output)
+        session.commit()
+        session.refresh(output)
+    return output
+
+
+@pytest.mark.parametrize(
+    "output", [ModelOutput(id=None, model="test", content="Hello, World")]
+)
+def test_save_and_retrieve_output(db, output):
+    content = output.content
+
+    db.insert(output)
+
+    outputs = db.model_outputs()
+
+    assert len(outputs) == 1
+    actual_output = outputs[0]
+
+    assert content == actual_output.content
+    assert actual_output.id == 1
+
+
+def test_add_evaluation(db, model_output):
+    completion = "Great greeting. 10/10."
+    evaluation = Evaluation(
+        content=completion,
+        model_output_id=model_output.id,
+        model="just-testing",
+    )
+    db.insert(evaluation)
+
+    model_output = db.get_model_output(model_output.id)
+
+    assert model_output.evaluation == completion
+
+
+def test_insert_embedding(db):
+    embedding = np.array(
+        [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], dtype=np.float64
+    )
+
+    output = ModelOutput(id=None, model="test", content="Hello, World")
+    db.insert(output)
+    [output] = db.model_outputs()
+
+    embedding_obj = Embedding(
+        output_id=output.id,
+        model="fake_and_random",
+        embedding=embedding,
+    )
+    db.insert(embedding_obj)
+
+    [output] = db.model_outputs()
+    assert all(output.embedding == embedding)

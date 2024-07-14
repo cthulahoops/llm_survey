@@ -2,7 +2,7 @@ import click
 from tqdm import tqdm
 
 from llm_survey.data import ModelOutput, SurveyDb, groupby
-from llm_survey.models import IGNORED_MODELS
+from llm_survey.models import is_ignored
 from llm_survey.query import get_completion
 
 
@@ -23,7 +23,7 @@ def run(dry_run=False, count=3):
         (model, n + 1)
         for model in survey.models()
         for n in range(count - len(grouped_outputs[model.id]))
-        if model.id not in IGNORED_MODELS
+        if not is_ignored(model.id)
     ]
 
     it = tqdm(models_needing_work, unit="models", postfix={"model": "", "n": ""})
@@ -32,9 +32,6 @@ def run(dry_run=False, count=3):
         it.write(f"{model.id} {n}")
 
         if dry_run:
-            continue
-
-        if "llava" in model.id:
             continue
 
         try:
@@ -48,4 +45,4 @@ def run(dry_run=False, count=3):
             continue
 
         model_output = ModelOutput.from_completion(completion, model, request_id)
-        survey.save_model_output(model_output)
+        survey.insert(model_output)

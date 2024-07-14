@@ -26,12 +26,10 @@ def embeddings(model, dry_run=False):
 
         request_id, embedding = embed_content(survey, output.content, model=model)
 
-        it.write("Embedding: ", request_id)
-
         if isinstance(output.embedding, bytes):
             embedding = np.frombuffer(output.embedding)
 
-        survey.save_embedding(
+        survey.insert(
             Embedding(
                 output_id=output.id,
                 model=model,
