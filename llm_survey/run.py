@@ -40,8 +40,7 @@ def run(dry_run=False, count=3):
             print(exc)
             continue
 
-        if hasattr(completion, "error"):
-            print(completion.error)
+        if hasattr(completion, "error") and completion.error:
             continue
 
         model_output = ModelOutput.from_completion(completion, model, request_id)

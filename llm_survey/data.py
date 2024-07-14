@@ -203,13 +203,18 @@ class SurveyDb:
 
     def get_prompt(self, prompt_id):
         with self.Session() as session:
-            return session.query(Prompt).get(prompt_id)
+            return session.get(Prompt, prompt_id)
 
     def model_outputs(self):
         with self.Session() as session:
             return (
                 session.query(ModelOutput)
-                .options(joinedload(ModelOutput.embeddings))
+                .options(
+                    [
+                        joinedload(ModelOutput.embeddings),
+                        joinedload(ModelOutput.evaluations),
+                    ]
+                )
                 .all()
             )
 
