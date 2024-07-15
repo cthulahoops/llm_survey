@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 from llm_survey.data import SurveyDb
@@ -20,8 +20,7 @@ def mock_db(in_memory_db):
 
 @pytest.fixture
 def mock_client():
-    with patch("llm_survey.query.get_client") as mock_get_client:
-        client = MagicMock()
+    with patch("openai.Client") as mock_get_client:
 
         def create_chat_completion(model, messages):
             response = "Response to: " + messages[0]["content"]
@@ -45,6 +44,15 @@ def mock_client():
             }
             return mock_completion
 
-        client.chat.completions.create = create_chat_completion
-        mock_get_client.return_value = client
-        yield client
+        def create_embedding(model, input):
+            mock_embedding = Mock()
+            mock_embedding.to_dict.return_value = {}
+            mock_embedding.data = [Mock(embedding=[0.2, 0.3])]
+
+            return mock_embedding
+
+        openai_client = MagicMock()
+        openai_client.chat.completions.create = create_chat_completion
+        openai_client.embeddings.create = Mock(side_effect=create_embedding)
+        mock_get_client.return_value = openai_client
+        yield mock_get_client

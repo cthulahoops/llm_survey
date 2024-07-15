@@ -68,7 +68,7 @@ def get_completion(model, prompt):
 
 @sqlite_cache("evaluation_cache.db")
 def get_model_response(model, prompt):
-    completion = get_completion(model, prompt)
+    request_id, completion = get_completion(model, prompt)
     return completion.choices[0].message.content
 
 

@@ -29,7 +29,7 @@ def test_run_with_model(mock_client, mock_db):
     mock_db.insert(prompt)
 
     runner = CliRunner()
-    result = runner.invoke(run, ["--count", "1"], catch_exceptions=False)
+    runner.invoke(run, ["--count", "1"], catch_exceptions=False)
 
     outputs = mock_db.model_outputs()
     assert len(outputs) == 1
