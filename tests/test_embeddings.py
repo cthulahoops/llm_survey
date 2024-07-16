@@ -4,7 +4,7 @@ from llm_survey.data import ModelOutput
 from llm_survey.embeddings import embeddings
 
 
-def test_run_empty_db(mock_client, mock_db):
+def test_run_one_embedding(mock_client, mock_db):
     output = ModelOutput(model="test-model", content="Evaluate this")
     mock_db.insert(output)
 

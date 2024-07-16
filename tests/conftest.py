@@ -52,7 +52,7 @@ def mock_client():
             return mock_embedding
 
         openai_client = MagicMock()
-        openai_client.chat.completions.create = create_chat_completion
+        openai_client.chat.completions.create = Mock(side_effect=create_chat_completion)
         openai_client.embeddings.create = Mock(side_effect=create_embedding)
         mock_get_client.return_value = openai_client
         yield mock_get_client

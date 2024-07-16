@@ -122,15 +122,16 @@ class Evaluation(Base):
     model_output = relationship("ModelOutput", back_populates="evaluations")
 
     @classmethod
-    def from_completion(cls, completion, model, request_id):
-        assert model.id == completion.model
+    def from_completion(cls, model_output, evaluation_model, completion, request_id):
+        assert evaluation_model.id == completion.model
 
         message = completion.choices[0].message
         usage = completion.usage
-        pricing = model.pricing
+        pricing = evaluation_model.pricing
 
         return cls(
             id=None,
+            model_output_id=model_output.id,
             content=message.content,
             model=completion.model,
             usage={
