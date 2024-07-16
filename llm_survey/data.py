@@ -5,16 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 
 import numpy as np
-from sqlalchemy import (
-    BLOB,
-    JSON,
-    Column,
-    DateTime,
-    ForeignKey,
-    Integer,
-    String,
-    create_engine,
-)
+import sqlalchemy
+from sqlalchemy import BLOB, JSON, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import declarative_base, joinedload, relationship, sessionmaker
 
 Base = declarative_base()
@@ -166,7 +158,7 @@ class RequestLog(Base):
 
 class SurveyDb:
     def __init__(self, db_url="sqlite:///survey.db"):
-        self.engine = create_engine(db_url)
+        self.engine = sqlalchemy.create_engine(db_url)
         self.Session = sessionmaker(bind=self.engine)
 
     def create_tables(self):

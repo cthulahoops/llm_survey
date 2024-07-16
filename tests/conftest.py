@@ -13,7 +13,7 @@ def in_memory_db():
 
 @pytest.fixture
 def mock_db(in_memory_db):
-    with patch("llm_survey.data.create_engine") as mock_survey_db:
+    with patch("sqlalchemy.create_engine") as mock_survey_db:
         mock_survey_db.return_value = in_memory_db.engine
         yield in_memory_db
 
