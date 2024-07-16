@@ -14,7 +14,7 @@ def log_request_details(f):
     return wrapper
 
 
-def get_client():
+def get_openrouter_client():
     import openai
 
     return openai.Client(
@@ -32,6 +32,8 @@ def sqlite_cache(db_file):
                 c.execute(
                     """CREATE TABLE IF NOT EXISTS cache (args TEXT PRIMARY KEY, result TEXT)"""
                 )
+def get_openai_client():
+    import openai
 
                 jsoned_args = json.dumps(
                     {
@@ -54,11 +56,14 @@ def sqlite_cache(db_file):
         return wrapper
 
     return cache_decorator
+    return openai.Client(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+    )
 
 
 @log_request_details
 def get_completion(model, prompt):
-    return get_client().chat.completions.create(
+    return get_openrouter_client().chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt},
@@ -74,18 +79,13 @@ def get_model_response(model, prompt):
 
 @log_request_details
 def get_models():
-    return get_client().models.list()
+    return get_openrouter_client().models.list()
 
 
 @log_request_details
 # @sqlite_cache("embedding_cache.db")
 def create_embedding(model, content):
-    import openai
-
-    client = openai.Client(
-        api_key=os.environ.get("OPENAI_API_KEY"),
-    )
-    return client.embeddings.create(
+    return get_openai_client().embeddings.create(
         model=model,
         input=content,
     )
