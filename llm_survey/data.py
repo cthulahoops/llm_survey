@@ -192,7 +192,7 @@ class SurveyDb:
 
     def get_model(self, model_id):
         with self.Session() as session:
-            return session.query(Model).get(model_id)
+            return session.get(Model, model_id)
 
     def get_prompt(self, prompt_id):
         with self.Session() as session:
