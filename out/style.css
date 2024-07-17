@@ -6,16 +6,17 @@
 
 body {
     font-family: system-ui, sans-serif;
+    min-width: 500px;
+    max-width: 800px;
+    margin: auto;
 }
 
 * {
     box-sizing: border-box;
 }
 
-
-th {
-    white-space: nowrap;
-    text-align: left;
+h1 {
+    margin: 1em auto;
 }
 
 table {
@@ -32,20 +33,58 @@ td {
         calc(var(--start-lightness) + pow(var(--data-value), 3) * (var(--end-lightness) - var(--start-lightness))));
 }
 
-tr.header-row,
-thead tr {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background: var(--background-color);
+
+table {
+    overflow-y: scroll;
+    margin: 3em auto;
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: .5em;
+    white-space: nowrap;
 }
 
-th:first-child {
-    background: var(--background-color);
-    position: sticky;
-    left: 0;
-    z-index: 2;
+table td, table th {
+    text-align: left;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
+
+table thead {
+    position: sticky;
+    top: 0;
+}
+
+table th {
+    color: black;
+    background-color: #bbbbbb;
+    border-bottom: 1px #222 solid;
+    white-space: nowrap;
+    text-align: left;
+}
+
+table td, table th {
+    border-right: 1px #888 solid;
+}
+
+table tr {
+    height: 2em;
+}
+
+table tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+table tbody tr:hover {
+    background-color: #9999cc;
+}
+
+footer {
+    margin: auto;
+}
+
+/*** --- ***/
 
 .column-header {
     height: 15rem;
@@ -129,7 +168,6 @@ code {
 }
 
 main {
-    overflow-y: scroll;
 }
 
 main footer {

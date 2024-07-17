@@ -6,63 +6,42 @@
     </head>
     <body>
         {% include "primary_nav.html.j2" %}
+<h1>LLM Survey</h1>
+
         <main>
+
+<p>I prompted {{ data|length }} LLM models with {{ prompts|length }} different prompts, and evaluated the results with GPT-4.  Here's how they did:
+</p>
             <table>
+                <thead>
                 <tr>
-                    <th>Company</th>
                     <th>Model</th>
-                    <th>Human-like</th>
                     <th>Cost</th>
-                    <th>Consistency</th>
-                    <th>Score 1</th>
-                    <th>Score 2</th>
-                    <th>Score 3</th>
-                    <th>Total</th>
+                    <th>Avg Score</th>
+                    <th>Company</th>
                 </tr>
+                </thead>
                 {% for model in models %}
                     <tr>
                         <td>
-                            {{ model | model_company }}
-                        </td>
-                        <td>
                             {{ model | model_link }}
                         </td>
-                        {% with similarity = summed_models[model] | similarity(reference_model) %}
-                            <td style="--data-value: {{ similarity }}">
-                                {{ "%.2f"|format(similarity) }}
-                            </td>
-                        {% endwith %}
                         <td>
-                            ${{ "%.4f"|format(costs[model]) }}
+                            {% set cost = costs[model]*100 %}
+                            {{ "%.2f"|format(cost) }}
                         </td>
-                        {% with consistency = consistencies[model] %}
-                            <td style="--data-value: {{ consistency }}">
-                                {{ "%.2f"|format(consistency) }}
-                            </td>
-                        {% endwith %}
-                        {% for item in data[model] %}
-                        {% with score = item.score %}
-                        {% if score is not none %}
-                            <td style="--data-value: {{ score / 10 }}">
-                                {{ "%.1f"|format(score) }}
-                            </td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        {% endwith %}
-                        {% endfor %}
-                        {% with score = scores[model] %}
-                        {% if score is not none %}
-                            <td style="--data-value: {{ score / 30 }}">
-                                {{ "%.1f"|format(score) }}
-                            </td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        {% endwith %}
+                        <td>
+                            {% set total_score = data[model] | map(attribute='score') | select('ne', None) | sum %}
+                            {% set nitems = data[model] | length %}
+                            <a href="/{{model}}" title="N={{ data[model]|length }}">{{ "%.2f"|format(total_score/nitems) }}</a>
+                        </td>
+                        <td>
+                        {{ model | model_company }}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
         </main>
+        <footer>(c) 2024 cthulahoops</footer>
     </body>
 </html>
