@@ -18,3 +18,22 @@ def test_run_one_embedding(mock_client, mock_db):
     [model_output] = mock_db.model_outputs()
 
     assert all(model_output.embedding == np.array([0.2, 0.3]))
+
+
+def test_run_two_identical_embeddings(mock_client, mock_db):
+    for _ in range(2):
+        output = ModelOutput(model="test-model", content="Evaluate this")
+        mock_db.insert(output)
+
+    runner = CliRunner()
+    runner.invoke(embeddings, catch_exceptions=False)
+
+    mock_client.return_value.embeddings.create.assert_called_once_with(
+        model="text-embedding-3-small", input="Evaluate this"
+    )
+
+    [model_output_1, model_output_2] = mock_db.model_outputs()
+
+    assert model_output_1.request_id == model_output_2.request_id
+    assert all(model_output_1.embedding == np.array([0.2, 0.3]))
+    assert all(model_output_2.embedding == np.array([0.2, 0.3]))

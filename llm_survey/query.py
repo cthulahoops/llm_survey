@@ -61,6 +61,7 @@ def get_models():
     return get_openrouter_client().models.list()
 
 
+@reuse_request_if_possible
 @log_request_details
 def create_embedding(model, content):
     return (
