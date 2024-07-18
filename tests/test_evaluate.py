@@ -1,11 +1,17 @@
 import pytest
 from click.testing import CliRunner
-from llm_survey.data import Model, ModelOutput
+from llm_survey.data import Model, ModelOutput, Prompt
 from llm_survey.evaluate import DEFAULT_EVALUATION_MODEL, evaluate
 
 
 @pytest.fixture(autouse=True)
-def evaluation_model(mock_db):
+def evaluation_db(mock_db):
+    prompt = Prompt(
+        id="marshmallow",
+        prompt="How many marshmallows are there?",
+        marking_scheme="Award one mark for every marshmallow",
+    )
+    mock_db.insert(prompt)
     model = Model(
         id=DEFAULT_EVALUATION_MODEL,
         pricing={

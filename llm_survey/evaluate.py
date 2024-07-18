@@ -14,9 +14,11 @@ get_or_reuse_completion = reuse_request_if_possible(get_completion)
 
 @click.command()
 def evaluate():
-    prompt = open("evaluation.md").read()
+    prompt_template = open("evaluation_prompt_template.md").read()
 
     survey = SurveyDb()
+
+    prompt = survey.get_prompt("marshmallow")
 
     model_outputs = [
         output for output in survey.model_outputs() if output.evaluation is None
@@ -28,10 +30,15 @@ def evaluate():
     for model_output in work:
         work.set_description(f"{model_output.model:30}")
 
+        evaluation_prompt = prompt_template.format(
+            problem=prompt.prompt,
+            marking_scheme=prompt.marking_scheme,
+            solution=model_output.content,
+        )
         request_id, completion = get_or_reuse_completion(
             survey,
             DEFAULT_EVALUATION_MODEL,
-            prompt + model_output.content,
+            evaluation_prompt,
         )
         evaluation = Evaluation.from_completion(
             model_output,

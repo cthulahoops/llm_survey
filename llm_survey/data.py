@@ -37,7 +37,7 @@ class Prompt(Base):
 
     id = Column(String, primary_key=True)
     prompt = Column(String)
-    marking_prompt = Column(String)
+    marking_scheme = Column(String)
 
 
 class ModelOutput(Base):
