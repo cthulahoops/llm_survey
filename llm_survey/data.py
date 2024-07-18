@@ -240,19 +240,6 @@ class SurveyDb:
                 .first()
             )
 
-    # Additional utility methods
-    def get_embeddings_for_output(self, output_id):
-        with self.Session() as session:
-            return session.query(Embedding).filter_by(output_id=output_id).all()
-
-    def get_request_log(self, log_id):
-        with self.Session() as session:
-            return session.query(RequestLog).get(log_id)
-
-    def get_model_outputs_by_model(self, model_id):
-        with self.Session() as session:
-            return session.query(ModelOutput).filter_by(model=model_id).all()
-
 
 def groupby(data, key):
     result = defaultdict(list)
