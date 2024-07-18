@@ -33,7 +33,7 @@ def test_evaluate_one(mock_client, mock_db):
 
     mock_client.return_value.chat.completions.create.assert_called_once()
 
-    assert len(mock_db.model_outputs()) == 1
+    mock_db.model_outputs()[0].embedding is not None
 
 
 def test_evaluate_two_identical(mock_client, mock_db):
@@ -46,6 +46,6 @@ def test_evaluate_two_identical(mock_client, mock_db):
     result = runner.invoke(evaluate, catch_exceptions=False)
     mock_client.return_value.chat.completions.create.assert_called_once()
 
-    outputs = mock_db.model_outputs()
-    assert len(outputs) == 2
-    assert outputs[0].request_id == outputs[1].request_id
+    output1, output2 = mock_db.model_outputs()
+    output1.evaluations[0].request_id == output2.evaluations[0].request_id
+    output1.evaluation == output2.evaluation

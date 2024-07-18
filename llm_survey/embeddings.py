@@ -24,16 +24,15 @@ def embeddings(model, dry_run=False):
         if dry_run:
             continue
 
-        request_id, embedding = embed_content(survey, output.content, model=model)
-
-        if isinstance(output.embedding, bytes):
-            embedding = np.frombuffer(output.embedding)
+        request_id, embedding_vector = embed_content(
+            survey, output.content, model=model
+        )
 
         survey.insert(
             Embedding(
                 output_id=output.id,
                 model=model,
-                embedding=embedding,
+                embedding=embedding_vector,
                 request_id=request_id,
             )
         )

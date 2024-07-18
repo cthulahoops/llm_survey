@@ -32,8 +32,8 @@ def test_run_two_identical_embeddings(mock_client, mock_db):
         model="text-embedding-3-small", input="Evaluate this"
     )
 
-    [model_output_1, model_output_2] = mock_db.model_outputs()
+    [output1, output2] = mock_db.model_outputs()
 
-    assert model_output_1.request_id == model_output_2.request_id
-    assert all(model_output_1.embedding == np.array([0.2, 0.3]))
-    assert all(model_output_2.embedding == np.array([0.2, 0.3]))
+    assert output1.embeddings[0].request_id == output2.embeddings[0].request_id
+    assert all(output1.embedding == np.array([0.2, 0.3]))
+    assert all(output2.embedding == np.array([0.2, 0.3]))
