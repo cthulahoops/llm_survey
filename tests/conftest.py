@@ -71,7 +71,14 @@ def mock_client():
                         "description": "This is an expected model for testing.",
                         "context_length": 1000,
                         "pricing": {},
-                    }
+                    },
+                    {
+                        "id": "openrouter/auto",
+                        "name": "Annoying auto model.",
+                        "description": "This is an unexpected model for testing.",
+                        "context_length": 1000,
+                        "pricing": {},
+                    },
                 ]
             }
             return result

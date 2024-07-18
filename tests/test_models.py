@@ -9,3 +9,7 @@ def test_fetch_models(mock_client, mock_db):
     models_in_db = mock_db.models()
 
     assert len(models_in_db) > 0
+
+    model_ids = {model.id for model in models_in_db}
+
+    assert "openrouter/auto" not in model_ids
