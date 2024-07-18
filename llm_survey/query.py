@@ -31,11 +31,15 @@ def get_openai_client():
 
 @log_request_details
 def get_completion(model, prompt):
-    return get_openrouter_client().chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "user", "content": prompt},
-        ],
+    return (
+        get_openrouter_client()
+        .chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "user", "content": prompt},
+            ],
+        )
+        .to_dict()
     )
 
 
@@ -45,11 +49,14 @@ def get_models():
 
 
 @log_request_details
-# @sqlite_cache("embedding_cache.db")
 def create_embedding(model, content):
-    return get_openai_client().embeddings.create(
-        model=model,
-        input=content,
+    return (
+        get_openai_client()
+        .embeddings.create(
+            model=model,
+            input=content,
+        )
+        .to_dict()
     )
 
 
@@ -57,4 +64,4 @@ def embed_content(db, content, model="text-embedding-3-small"):
     import numpy as np
 
     request_id, response = create_embedding(db, model, content)
-    return request_id, np.array(response.data[0].embedding)
+    return request_id, np.array(response["data"][0]["embedding"])

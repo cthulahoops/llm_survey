@@ -69,3 +69,13 @@ def test_insert_embedding(db):
 
     [output] = db.model_outputs()
     assert all(output.embedding == embedding)
+
+
+def test_log_and_retrieve_request(in_memory_db):
+    in_memory_db.log_request(
+        "get_completion", (("something-gpt", "prompt"), {"extra": 8}), "c"
+    )
+    response = in_memory_db.get_logged_request(
+        "get_completion", [["something-gpt", "prompt"], {"extra": 8}]
+    )
+    assert response.response == "c"

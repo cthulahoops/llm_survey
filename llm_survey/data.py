@@ -74,23 +74,26 @@ class ModelOutput(Base):
 
     @classmethod
     def from_completion(cls, completion, model, request_id):
-        assert model.id == completion.model
+        assert model.id == completion["model"]
 
-        message = completion.choices[0].message
-        usage = completion.usage
+        message = completion["choices"][0]["message"]
+        usage = completion["usage"]
         pricing = model.pricing
+
+        prompt_tokens = usage["prompt_tokens"]
+        completion_tokens = usage["completion_tokens"]
 
         return cls(
             id=None,
-            content=message.content,
-            model=completion.model,
+            content=message["content"],
+            model=completion["model"],
             usage={
-                "prompt_tokens": usage.prompt_tokens,
-                "completion_tokens": usage.completion_tokens,
-                "total_tokens": usage.completion_tokens,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": prompt_tokens + completion_tokens,
                 "total_cost": str(
-                    usage.prompt_tokens * Decimal(pricing["prompt"])
-                    + usage.completion_tokens * Decimal(pricing["completion"])
+                    prompt_tokens * Decimal(pricing["prompt"])
+                    + completion_tokens * Decimal(pricing["completion"])
                 ),
             },
             request_id=request_id,
@@ -123,24 +126,27 @@ class Evaluation(Base):
 
     @classmethod
     def from_completion(cls, model_output, evaluation_model, completion, request_id):
-        assert evaluation_model.id == completion.model
+        assert evaluation_model.id == completion["model"]
 
-        message = completion.choices[0].message
-        usage = completion.usage
+        message = completion["choices"][0]["message"]
+        usage = completion["usage"]
         pricing = evaluation_model.pricing
+
+        prompt_tokens = usage["prompt_tokens"]
+        completion_tokens = usage["completion_tokens"]
 
         return cls(
             id=None,
             model_output_id=model_output.id,
-            content=message.content,
-            model=completion.model,
+            content=message["content"],
+            model=completion["model"],
             usage={
-                "prompt_tokens": usage.prompt_tokens,
-                "completion_tokens": usage.completion_tokens,
-                "total_tokens": usage.completion_tokens,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": prompt_tokens + completion_tokens,
                 "total_cost": str(
-                    usage.prompt_tokens * Decimal(pricing["prompt"])
-                    + usage.completion_tokens * Decimal(pricing["completion"])
+                    prompt_tokens * Decimal(pricing["prompt"])
+                    + completion_tokens * Decimal(pricing["completion"])
                 ),
             },
             request_id=request_id,

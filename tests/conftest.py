@@ -24,18 +24,10 @@ def mock_client():
 
         def create_chat_completion(model, messages):
             response = "Response to: " + messages[0]["content"]
-            mock_completion = MagicMock()
-            mock_completion.model = model
-            mock_completion.choices = [MagicMock(message=MagicMock(content=response))]
-            mock_completion.error = None
-            mock_completion.usage = MagicMock(
-                prompt_tokens=2,
-                completion_tokens=5,
-                total_tokens=7,
-            )
+            mock_completion = Mock()
             mock_completion.to_dict.return_value = {
-                "model": mock_completion.model,
-                "choices": [{"message": {"content": "Test completion"}}],
+                "model": model,
+                "choices": [{"message": {"content": response}}],
                 "usage": {
                     "prompt_tokens": 2,
                     "completion_tokens": 5,
@@ -48,6 +40,13 @@ def mock_client():
             mock_embedding = Mock()
             mock_embedding.to_dict.return_value = {}
             mock_embedding.data = [Mock(embedding=[0.2, 0.3])]
+            mock_embedding.to_dict.return_value = {
+                "data": [
+                    {
+                        "embedding": [0.2, 0.3],
+                    }
+                ]
+            }
 
             return mock_embedding
 
