@@ -22,7 +22,7 @@ def models():
     models = [Model.from_openai(model) for model in models]
 
     for model in sorted(models, key=lambda x: x.id):
-        if model.id in IGNORED_MODELS:
+        if is_ignored(model.id):
             continue
         survey.insert(model)
 
