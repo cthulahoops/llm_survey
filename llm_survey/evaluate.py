@@ -2,12 +2,14 @@ import click
 from tqdm import tqdm
 
 from llm_survey.data import Evaluation, SurveyDb
-from llm_survey.query import get_completion
+from llm_survey.query import get_completion, reuse_request_if_possible
 
 # I think this is the model I did the original marking with.
 # I originally used "openai/gpt-4-turbo-preview" but that's unstable and has been
 # updated to a worse model.
 DEFAULT_EVALUATION_MODEL = "openai/gpt-4-0125-preview"
+
+get_or_reuse_completion = reuse_request_if_possible(get_completion)
 
 
 @click.command()
@@ -26,7 +28,7 @@ def evaluate():
     for model_output in work:
         work.set_description(f"{model_output.model:30}")
 
-        request_id, completion = get_completion(
+        request_id, completion = get_or_reuse_completion(
             survey,
             DEFAULT_EVALUATION_MODEL,
             prompt + model_output.content,

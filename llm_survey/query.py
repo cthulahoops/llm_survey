@@ -6,8 +6,21 @@ def log_request_details(f):
     @functools.wraps(f)
     def wrapper(db, *args, **kwargs):
         result = f(*args, **kwargs)
-        request_id = db.log_request(__name__, (args, kwargs), result.to_dict())
+        request_id = db.log_request(f.__name__, (args, kwargs), result)
         return (request_id, result)
+
+    return wrapper
+
+
+def reuse_request_if_possible(f):
+    @functools.wraps(f)
+    def wrapper(db, *args, **kwargs):
+        import openai
+
+        request = db.get_logged_request(f.__name__, (args, kwargs))
+        if request:
+            return request.id, request.response
+        return f(db, *args, **kwargs)
 
     return wrapper
 

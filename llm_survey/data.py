@@ -225,12 +225,20 @@ class SurveyDb:
         with self.Session() as session:
             log = RequestLog(
                 resource=resource,
-                request=json.dumps(request),
-                response=json.dumps(response),
+                request=request,
+                response=response,
             )
             session.add(log)
             session.commit()
             return log.id
+
+    def get_logged_request(self, resource, request):
+        with self.Session() as session:
+            return (
+                session.query(RequestLog)
+                .filter_by(resource=resource, request=json.dumps(request))
+                .first()
+            )
 
     # Additional utility methods
     def get_embeddings_for_output(self, output_id):

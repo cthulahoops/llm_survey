@@ -4,6 +4,17 @@ import pytest
 from llm_survey.data import SurveyDb
 
 
+@pytest.fixture(autouse=True)
+def fake_empty_environment():
+    environ = {}
+    with patch("os.environ") as environ:
+        environ.get.side_effect = lambda key: None
+        environ.__getitem__.side_effect = lambda key: environ[key]
+        environ.__setitem__.side_effect = lambda key, value: environ.__setitem__(
+            key, value
+        )
+
+
 @pytest.fixture
 def in_memory_db():
     db = SurveyDb("sqlite://")

@@ -34,3 +34,18 @@ def test_evaluate_one(mock_client, mock_db):
     mock_client.return_value.chat.completions.create.assert_called_once()
 
     assert len(mock_db.model_outputs()) == 1
+
+
+def test_evaluate_two_identical(mock_client, mock_db):
+    runner = CliRunner()
+
+    for i in range(2):
+        output = ModelOutput(model="test-model", content="Evaluate this")
+        mock_db.insert(output)
+
+    result = runner.invoke(evaluate, catch_exceptions=False)
+    mock_client.return_value.chat.completions.create.assert_called_once()
+
+    outputs = mock_db.model_outputs()
+    assert len(outputs) == 2
+    assert outputs[0].request_id == outputs[1].request_id
