@@ -15,8 +15,6 @@ def log_request_details(f):
 def reuse_request_if_possible(f):
     @functools.wraps(f)
     def wrapper(db, *args, **kwargs):
-        import openai
-
         request = db.get_logged_request(f.__name__, (args, kwargs))
         if request:
             return request.id, request.response
@@ -58,7 +56,7 @@ def get_completion(model, prompt):
 
 @log_request_details
 def get_models():
-    return get_openrouter_client().models.list()
+    return get_openrouter_client().models.list().to_dict()
 
 
 @reuse_request_if_possible

@@ -17,12 +17,14 @@ def models():
     survey.create_tables()
 
     request_id, response = get_models(survey)
-    models = response.data
+    models = response["data"]
+
+    models = [Model.from_openai(model) for model in models]
 
     for model in sorted(models, key=lambda x: x.id):
         if model.id in IGNORED_MODELS:
             continue
-        survey.insert(Model.from_openai(model))
+        survey.insert(model)
 
 
 def is_ignored(model_id):

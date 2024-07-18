@@ -24,11 +24,11 @@ class Model(Base):
     @classmethod
     def from_openai(cls, openai_model):
         return Model(
-            id=openai_model.id,
-            name=openai_model.name,
-            description=openai_model.description,
-            context_length=openai_model.context_length,
-            pricing=openai_model.pricing,
+            id=openai_model["id"],
+            name=openai_model["name"],
+            description=openai_model["description"],
+            context_length=openai_model["context_length"],
+            pricing=openai_model["pricing"],
         )
 
 

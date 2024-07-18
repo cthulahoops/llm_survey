@@ -61,8 +61,24 @@ def mock_client():
 
             return mock_embedding
 
+        def list_models():
+            result = Mock()
+            result.to_dict.return_value = {
+                "data": [
+                    {
+                        "id": "test/test-model",
+                        "name": "This is a test model",
+                        "description": "This is an expected model for testing.",
+                        "context_length": 1000,
+                        "pricing": {},
+                    }
+                ]
+            }
+            return result
+
         openai_client = MagicMock()
         openai_client.chat.completions.create = Mock(side_effect=create_chat_completion)
         openai_client.embeddings.create = Mock(side_effect=create_embedding)
+        openai_client.models.list = Mock(side_effect=list_models)
         mock_get_client.return_value = openai_client
         yield mock_get_client
