@@ -39,6 +39,13 @@ class Prompt(Base):
     prompt = Column(String)
     marking_scheme = Column(String)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "prompt": self.prompt,
+            "marking_scheme": self.marking_scheme,
+        }
+
 
 class ModelOutput(Base):
     __tablename__ = "model_outputs"

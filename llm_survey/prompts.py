@@ -1,3 +1,4 @@
+import json
 import sys
 
 import click
@@ -8,6 +9,15 @@ from llm_survey.data import Prompt, SurveyDb
 @click.group
 def prompts():
     pass
+
+
+@prompts.command()
+@click.argument("name")
+def export(name):
+    survey = SurveyDb()
+    prompt = survey.get_prompt(name)
+
+    click.echo(json.dumps(prompt.to_dict()))
 
 
 @prompts.command()
