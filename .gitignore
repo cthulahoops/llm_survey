@@ -5,3 +5,5 @@ workspace.sh
 **/__pycache__
 .pyflyby
 .chatcli.*
+.coverage
+.hypothesis
