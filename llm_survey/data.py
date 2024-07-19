@@ -185,6 +185,16 @@ class SurveyDb:
             session.add(obj)
             session.commit()
 
+    def save_prompt(self, prompt):
+        with self.Session() as session:
+            old_prompt = session.get(Prompt, prompt["id"])
+            if old_prompt is None:
+                session.add(Prompt(**prompt))
+            else:
+                for key, value in prompt.items():
+                    setattr(old_prompt, key, value)
+            session.commit()
+
     def get_model_output(self, output_id):
         with self.Session() as session:
             return session.get(
