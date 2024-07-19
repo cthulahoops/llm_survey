@@ -37,12 +37,14 @@ class Prompt(Base):
 
     id = Column(String, primary_key=True)
     prompt = Column(String)
+    evaluation_model = Column(String)
     marking_scheme = Column(String)
 
     def to_dict(self):
         return {
             "id": self.id,
-            "prompt": self.prompt,
+            "prompt": self.prompt.strip(),
+            "evaluation_model": self.evaluation_model,
             "marking_scheme": self.marking_scheme,
         }
 
@@ -181,11 +183,6 @@ class SurveyDb:
     def insert(self, obj):
         with self.Session() as session:
             session.add(obj)
-            session.commit()
-
-    def save_prompt(self, prompt):
-        with self.Session() as session:
-            session.merge(Prompt(**prompt.__dict__))
             session.commit()
 
     def get_model_output(self, output_id):
