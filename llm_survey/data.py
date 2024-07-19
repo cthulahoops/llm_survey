@@ -43,7 +43,7 @@ class Prompt(Base):
     def to_dict(self):
         return {
             "id": self.id,
-            "prompt": self.prompt.strip(),
+            "prompt": self.prompt,
             "evaluation_model": self.evaluation_model,
             "marking_scheme": self.marking_scheme,
         }
@@ -193,6 +193,12 @@ class SurveyDb:
             else:
                 for key, value in prompt.items():
                     setattr(old_prompt, key, value)
+            session.commit()
+
+    def delete_prompt(self, prompt_id):
+        with self.Session() as session:
+            prompt = session.get(Prompt, prompt_id)
+            session.delete(prompt)
             session.commit()
 
     def get_model_output(self, output_id):

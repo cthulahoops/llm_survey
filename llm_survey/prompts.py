@@ -6,6 +6,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import LiteralScalarString
 
 from llm_survey.data import Prompt, SurveyDb
+from llm_survey.evaluate import DEFAULT_EVALUATION_MODEL
 
 
 def LS(s):
@@ -15,6 +16,15 @@ def LS(s):
 @click.group
 def prompts():
     pass
+
+
+@prompts.command()
+@click.argument("name")
+def new(name):
+    survey = SurveyDb()
+    survey.create_tables()
+
+    survey.insert(Prompt(id=name, evaluation_model=DEFAULT_EVALUATION_MODEL))
 
 
 @prompts.command()
@@ -31,7 +41,7 @@ def export(name, format):
         output["marking_scheme"] = LS(output["marking_scheme"])
         click.echo(yaml.dump(output, sys.stdout))
     else:
-        click.echo(json.dumps(prompt.to_dict()))
+        click.echo(json.dumps(prompt.to_dict(), indent=2))
 
 
 @prompts.command(name="import")
@@ -46,40 +56,15 @@ def import_prompt(format):
     else:
         prompt = json.load(sys.stdin)
 
-    survey.insert(Prompt(**prompt))
-
-
-@prompts.command()
-@click.argument("name")
-@click.option("--marking-prompt/--prompt", default=False)
-def add(name, marking_prompt):
-    survey = SurveyDb()
-    survey.create_tables()
-
-    prompt = survey.get_prompt(name) or Prompt(id=name)
-
-    prompt_content = sys.stdin.read()
-
-    if marking_prompt:
-        prompt.marking_prompt = prompt_content
-    else:
-        prompt.prompt = prompt_content
-
     survey.save_prompt(prompt)
 
 
 @prompts.command()
 @click.argument("name")
-@click.option("--marking-prompt/--prompt", default=False)
-def get(name, marking_prompt=False):
-    click.echo(f"Getting prompt {name} {marking_prompt}")
+def delete(name):
     survey = SurveyDb()
-    prompt = survey.get_prompt(name)
 
-    if marking_prompt:
-        click.echo(prompt.marking_prompt)
-    else:
-        click.echo(prompt.prompt)
+    survey.delete_prompt(name)
 
 
 @prompts.command()

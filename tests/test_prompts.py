@@ -19,6 +19,29 @@ def prompt_db(mock_db):
     mock_db.insert(prompt)
 
 
+def test_new_prompt(mock_db):
+    runner = CliRunner()
+    result = runner.invoke(
+        prompts,
+        ["new", "new-prompt"],
+        input="What is the answer to the ultimate question?",
+    )
+    assert result.exit_code == 0
+
+    prompt = mock_db.get_prompt("new-prompt")
+    assert prompt.id == "new-prompt"
+    assert prompt.prompt is None
+
+
+def test_delete_prompt(mock_db):
+    runner = CliRunner()
+    result = runner.invoke(prompts, ["delete", "marshmallow"], catch_exceptions=False)
+    assert result.exit_code == 0
+
+    prompt = mock_db.get_prompt("marshmallow")
+    assert prompt is None
+
+
 @pytest.mark.parametrize(
     "format_flag,loader",
     [
