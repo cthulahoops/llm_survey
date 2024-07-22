@@ -11,8 +11,13 @@ IGNORED_MODELS = [
 ]
 
 
-@click.command
+@click.group
 def models():
+    pass
+
+
+@models.command
+def fetch():
     survey = SurveyDb()
     survey.create_tables()
 

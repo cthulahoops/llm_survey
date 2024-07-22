@@ -1,10 +1,10 @@
 from click.testing import CliRunner
-from llm_survey.models import models
+from llm_survey.cli import cli
 
 
 def test_fetch_models(mock_client, mock_db):
     runner = CliRunner()
-    runner.invoke(models, catch_exceptions=False)
+    runner.invoke(cli, ["models", "fetch"], catch_exceptions=False)
 
     models_in_db = mock_db.models()
 
