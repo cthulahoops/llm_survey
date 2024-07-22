@@ -232,7 +232,13 @@ class SurveyDb:
             return session.get(
                 Prompt,
                 prompt_id,
-                options=[joinedload(Prompt.model_outputs)],
+                options=[
+                    joinedload(Prompt.model_outputs),
+                    joinedload(Prompt.model_outputs).joinedload(ModelOutput.embeddings),
+                    joinedload(Prompt.model_outputs).joinedload(
+                        ModelOutput.evaluations
+                    ),
+                ],
             )
 
     def model_outputs(self):
