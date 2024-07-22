@@ -13,3 +13,14 @@ def test_fetch_models(mock_client, mock_db):
     model_ids = {model.id for model in models_in_db}
 
     assert "openrouter/auto" not in model_ids
+
+
+def test_fetch_models_twice(mock_client, mock_db):
+    runner = CliRunner()
+    runner.invoke(cli, ["models", "fetch"], catch_exceptions=False)
+
+    model_count = len(mock_db.models())
+
+    runner.invoke(cli, ["models", "fetch"], catch_exceptions=False)
+
+    assert model_count == len(mock_db.models())
