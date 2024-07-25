@@ -4,11 +4,8 @@
     --spacing: 0.25rem;
 }
 
-body {
+html {
     font-family: system-ui, sans-serif;
-    min-width: 500px;
-    max-width: 800px;
-    margin: auto;
 }
 
 * {
@@ -167,7 +164,9 @@ code {
     white-space: pre-wrap;
 }
 
-main {
+.contained {
+    max-width: 80ch;
+    margin: auto;
 }
 
 main footer {
