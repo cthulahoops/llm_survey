@@ -28,10 +28,20 @@ def build():
 
     prompt = survey.get_prompt("marshmallow")
 
+    scores = score_each_model(data)
+    costs = average_costs(data)
+
     rendered_html = index_template.render(
-        models=models,
+        models=sorted(
+            data.keys(),
+            key=lambda x: scores[x] or 0,
+            reverse=True,
+        ),
         prompt=prompt,
         companies=companies,
+        scores=scores,
+        costs=costs,
+        data=data,
     )
 
     with open("out/index.html", "w") as outfile:
@@ -50,7 +60,6 @@ def build():
         )
 
         with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
-
             outfile.write(rendered_html)
 
     solutions = list(load_data("solution.jsonl"))
@@ -88,8 +97,6 @@ def build():
         GRID_SIZE=3,
     )
 
-    scores = score_each_model(data)
-
     render_to_file(
         "rankings.html.j2",
         "out/rankings.html",
@@ -102,7 +109,7 @@ def build():
         reference_model=reference_model,
         summed_models=summed_models,
         scores=score_each_model(data),
-        costs=average_costs(data),
+        costs=costs,
         consistencies=consistencies,
         data=data,
     )
