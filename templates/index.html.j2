@@ -3,24 +3,54 @@
     <head>
         <title>LLM Survey</title>
         <link rel="stylesheet" type="text/css" href="style.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
-        {% include "nav.html.j2" %}
-        <main>
-            <p>
-                I asked every<a href="#footnote-1">[1]</a>
-                <a href="https://openrouter.ai/models">model on openrouter</a> this question:
-            </p>
 
-            <div class="markdown-body">
-{{ prompt }}
-            </div>
+        <h1>LLM Survey</h1>
 
-            <footer>
-                <p id="footnote-1">
-                    [1] There are still some bugs so I don't have responses from all the models yet.
-                </p>
-            </footer>
+        <main class=contained>
+
+<p>I prompted {{ data|length }} LLM models with {{ prompts|length }} different prompts, and evaluated the results with GPT-4.  Here's how they did:
+</p>
+
+<p>View full <a href="rankings.html">Detailed Rankings</a>.
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Cost (¢)</th>
+                    <th>Avg Score</th>
+                    <th>Company</th>
+                </tr>
+                </thead>
+                {% for model in models %}
+                    <tr>
+                        <td>
+                            {{ model | model_link }}
+                        </td>
+                        {% if costs[model] %}
+                        <td style="--data-value: {{ 1 - costs[model]|float * (100 / 8) }}">
+                        {% else %}
+                        <td>
+                        {% endif %}
+                            {% set cost = costs[model]*100 %}
+                            {{ "%.2f"|format(cost) }}
+                        </td>
+                        {% set total_score = data[model] | map(attribute='score') | select('ne', None) | sum %}
+                        {% set nitems = data[model] | length %}
+                        {% set avg_score = (total_score/nitems) %}
+                        <td title="N={{ data[model]|length }}" style="--data-value: {{ avg_score / 10 }}">
+                            {{ "%.1f"|format(avg_score )}}
+                        </td>
+                        <td>
+                        {{ model | model_company }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         </main>
     </body>
 </html>
