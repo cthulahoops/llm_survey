@@ -42,10 +42,7 @@ table {
 
 table td, table th {
     text-align: left;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 0.5rem 1rem;
 }
 
 table thead {
@@ -64,10 +61,6 @@ table th {
 
 table td, table th {
     border-right: 1px #888 solid;
-}
-
-table tr {
-    height: 2em;
 }
 
 table tr:nth-child(even) {
