@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{current_model}}</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-
+        <title>{{ model_info.name }}</title>
+        {% include "head.html.j2" %}
     </head>
     <body>
         {% include "nav.html.j2" %}
