@@ -38,12 +38,18 @@
                             {% set cost = costs[model]*100 %}
                             {{ "%.2f"|format(cost) }}
                         </td>
-                        {% set total_score = data[model] | map(attribute='score') | select('ne', None) | sum %}
-                        {% set nitems = data[model] | length %}
+                        {% set scores = data[model] | map(attribute='score') | select('ne', None) | list %}
+                        {% set total_score = scores | sum %}
+                        {% set nitems = scores | length %}
+                        {% if nitems %}
                         {% set avg_score = (total_score/nitems) %}
                         <td title="N={{ data[model]|length }}" style="--data-value: {{ avg_score / 10 }}">
                             {{ "%.1f"|format(avg_score )}}
                         </td>
+                        {% else %}
+                        <td>
+                        </td>
+                        {% endif %}
                         <td>
                         {{ model | model_company }}
                         </td>
