@@ -31,6 +31,33 @@
             </ul>
             {% endif %}
 
+
+            <h2>Most Similar</h2>
+
+            <ul class=model-list>
+
+            {% for model in outputs.by_similarity(current_model)[:5] %}
+                <li>
+                    <a href="{{model | model_file}}">
+                        {{ model | model_name }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <h2>Least Similar</h2>
+
+            <ul class=model-list>
+
+            {% for model in outputs.by_similarity(current_model)[-5:] %}
+                <li>
+                    <a href="{{model | model_file}}">
+                        {{ model | model_name }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+
             <h2>Model Consistency</h2>
 
             <table>

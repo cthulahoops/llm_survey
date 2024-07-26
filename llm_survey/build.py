@@ -1,7 +1,4 @@
-import json
-from collections import defaultdict
 from decimal import Decimal
-from pathlib import Path
 
 import click
 from tqdm import tqdm
@@ -10,7 +7,24 @@ from llm_survey.data import SurveyDb, groupby
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
 from llm_survey.templating import model_company, model_file, render_to_file
 
-OUTPUT_DIR = Path("out")
+
+class ModelOutputs:
+    def __init__(self, data):
+        self.data = data
+        self.summed_models = sum_each_model(data)
+
+    def by_similarity(self, model_id):
+        return sorted(
+            (
+                other_model
+                for other_model in self.summed_models
+                if other_model != model_id
+            ),
+            key=lambda other: similarity(
+                self.summed_models[model_id], self.summed_models[other]
+            ),
+            reverse=True,
+        )
 
 
 @click.command()
@@ -39,9 +53,10 @@ def build(prompt_id, pages):
     scores = score_each_model(data)
     costs = average_costs(data)
 
-    summed_models = sum_each_model(data)
+    outputs = ModelOutputs(data)
+
+    summed_models = outputs.summed_models
     reference_model = summed_models.get("human/human")
-    similarities = similarity_matrix(summed_models)
     consistencies = {model: consistency_measure(items) for model, items in data.items()}
 
     render_to_file(
@@ -57,6 +72,7 @@ def build(prompt_id, pages):
         scores=scores,
         costs=costs,
         data=data,
+        outputs=outputs,
     )
 
     if "models" in pages:
@@ -72,6 +88,7 @@ def build(prompt_id, pages):
                 companies=companies,
                 consistency=consistency_grid(items),
                 GRID_SIZE=len(items),
+                outputs=outputs,
             )
 
     render_to_file(
@@ -97,7 +114,6 @@ def build(prompt_id, pages):
             key=lambda x: scores[x] or 0,
             reverse=True,
         ),
-        similarities=similarities,
         reference_model=reference_model,
         summed_models=summed_models,
         scores=score_each_model(data),
@@ -139,31 +155,3 @@ def score_each_model(grouped):
         )
         for model, group in grouped.items()
     }
-
-
-def similarity_matrix(embeddings):
-    return {
-        (model1, model2): similarity(embedding1, embedding2)
-        for model1, embedding1 in embeddings.items()
-        for model2, embedding2 in embeddings.items()
-    }
-
-
-def read_model_data():
-    result = defaultdict(list)
-    with open("llm_log.jsonl") as f:
-        for line in f:
-            data = json.loads(line)
-
-            if "messages" not in data:
-                continue
-
-            last_message = data["messages"][-1]
-
-            if last_message["role"] != "assistant":
-                continue
-
-            item = {"model": data["model"], "content": last_message["content"]}
-            if len(result[data["model"]]) < 3:
-                result[data["model"]].append(item)
-    return result
