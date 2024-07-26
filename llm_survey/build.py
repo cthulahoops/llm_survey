@@ -8,12 +8,7 @@ from tqdm import tqdm
 
 from llm_survey.data import SurveyDb, groupby
 from llm_survey.embeddings import consistency_grid, consistency_measure, similarity
-from llm_survey.templating import (
-    get_environment,
-    model_company,
-    model_file,
-    render_to_file,
-)
+from llm_survey.templating import model_company, model_file, render_to_file
 
 OUTPUT_DIR = Path("out")
 
@@ -28,9 +23,6 @@ OUTPUT_DIR = Path("out")
 @click.argument("prompt_id", default="marshmallow")
 def build(prompt_id, pages):
     survey = SurveyDb()
-    environment = get_environment()
-    index_template = environment.get_template("index.html.j2")
-    template = environment.get_template("model.html.j2")
 
     prompt_struct = survey.get_prompt_outputs(prompt_id)
     if not prompt_struct:
@@ -47,7 +39,14 @@ def build(prompt_id, pages):
     scores = score_each_model(data)
     costs = average_costs(data)
 
-    rendered_html = index_template.render(
+    summed_models = sum_each_model(data)
+    reference_model = summed_models.get("human/human")
+    similarities = similarity_matrix(summed_models)
+    consistencies = {model: consistency_measure(items) for model, items in data.items()}
+
+    render_to_file(
+        "index.html.j2",
+        "index.html",
         models=sorted(
             data.keys(),
             key=lambda x: scores[x] or 0,
@@ -60,12 +59,11 @@ def build(prompt_id, pages):
         data=data,
     )
 
-    with open("out/index.html", "w") as outfile:
-        outfile.write(rendered_html)
-
     if "models" in pages:
         for model, items in tqdm(list(data.items())):
-            rendered_html = template.render(
+            render_to_file(
+                "model.html.j2",
+                model_file(model),
                 items=items,
                 current_model=model,
                 model_info=survey.get_model(model),
@@ -76,24 +74,16 @@ def build(prompt_id, pages):
                 GRID_SIZE=len(items),
             )
 
-            with (OUTPUT_DIR / model_file(model)).open("w") as outfile:
-                outfile.write(rendered_html)
-
-    summed_models = sum_each_model(data)
-    reference_model = summed_models.get("human/human")
-    similarities = similarity_matrix(summed_models)
-    consistencies = {model: consistency_measure(items) for model, items in data.items()}
-
     render_to_file(
         "similarity.html.j2",
-        "out/similarity.html",
+        "similarity.html",
         models=models,
         summed_models=summed_models,
     )
 
     render_to_file(
         "consistency.html.j2",
-        "out/consistency.html",
+        "consistency.html",
         data=per_model_consistency(data),
         outputs=data,
         GRID_SIZE=3,
@@ -101,7 +91,7 @@ def build(prompt_id, pages):
 
     render_to_file(
         "rankings.html.j2",
-        "out/rankings.html",
+        "rankings.html",
         models=sorted(
             data.keys(),
             key=lambda x: scores[x] or 0,

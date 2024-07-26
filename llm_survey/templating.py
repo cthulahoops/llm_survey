@@ -30,11 +30,14 @@ def template_filter(name=None):
     return decorator
 
 
+OUTPUT_DIR = Path("out")
+
+
 def render_to_file(template, output_file, **data):
     template = get_environment().get_template(template)
     rendered_html = template.render(**data)
 
-    with open(output_file, "w") as outfile:
+    with open(OUTPUT_DIR / output_file, "w") as outfile:
         outfile.write(rendered_html)
 
 

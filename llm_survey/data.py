@@ -21,6 +21,10 @@ class Model(Base):
     context_length = Column(Integer)
     pricing = Column(JSON)
 
+    @property
+    def company(self):
+        return self.id.split("/")[0]
+
     @classmethod
     def from_openai(cls, openai_model):
         return Model(
