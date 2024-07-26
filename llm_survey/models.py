@@ -21,13 +21,15 @@ def fetch():
     survey = SurveyDb()
     survey.create_tables()
 
+    existing_models = {model.id for model in survey.models()}
+
     request_id, response = get_models(survey)
     models = response["data"]
 
-    models = [Model.from_openai(model) for model in models]
+    models_to_add = [Model.from_openai(model) for model in models]
 
-    for model in sorted(models, key=lambda x: x.id):
-        if is_ignored(model.id):
+    for model in sorted(models_to_add, key=lambda x: x.id):
+        if model.id in existing_models or is_ignored(model.id):
             continue
         survey.insert(model)
 

@@ -25,21 +25,24 @@ OUTPUT_DIR = Path("out")
     multiple=True,
     default=["index", "models", "human", "similarity", "consistency", "rankings"],
 )
-def build(pages):
+@click.argument("prompt_id")
+def build(prompt_id, pages):
     survey = SurveyDb()
     environment = get_environment()
     index_template = environment.get_template("index.html.j2")
     template = environment.get_template("model.html.j2")
 
-    data = survey.model_outputs()
+    prompt_struct = survey.get_prompt_outputs(prompt_id)
+    if not prompt_struct:
+        raise ValueError(f"Prompt {prompt_id!r} does not exist")
+
+    prompt = prompt_struct.prompt
+
+    data = prompt_struct.model_outputs
     data = groupby(data, key=lambda x: x.model)
 
     models = sorted(data.keys())
-
     companies = groupby(models, key=model_company)
-
-    prompt_struct = survey.get_prompt("marshmallow")
-    prompt = prompt_struct.prompt
 
     scores = score_each_model(data)
     costs = average_costs(data)
@@ -77,7 +80,7 @@ def build(pages):
                 outfile.write(rendered_html)
 
     summed_models = sum_each_model(data)
-    reference_model = summed_models["human/human"]
+    reference_model = summed_models.get("human/human")
     similarities = similarity_matrix(summed_models)
     consistencies = {model: consistency_measure(items) for model, items in data.items()}
 

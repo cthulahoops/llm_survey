@@ -39,6 +39,7 @@ class Prompt(Base):
     prompt = Column(String)
     evaluation_model = Column(String)
     marking_scheme = Column(String)
+    model_outputs = relationship("ModelOutput", back_populates="prompt")
 
     def to_dict(self):
         return {
@@ -57,7 +58,9 @@ class ModelOutput(Base):
     model = Column(String)
     usage = Column(JSON)
     request_id = Column(Integer, ForeignKey("request_logs.id"))
+    prompt_id = Column(String, ForeignKey("prompts.id"))
 
+    prompt = relationship("Prompt", back_populates="model_outputs")
     embeddings = relationship("Embedding", back_populates="model_output")
     evaluations = relationship("Evaluation", back_populates="model_output")
 
@@ -223,6 +226,14 @@ class SurveyDb:
     def get_prompt(self, prompt_id):
         with self.Session() as session:
             return session.get(Prompt, prompt_id)
+
+    def get_prompt_outputs(self, prompt_id):
+        with self.Session() as session:
+            return session.get(
+                Prompt,
+                prompt_id,
+                options=[joinedload(Prompt.model_outputs)],
+            )
 
     def model_outputs(self):
         with self.Session() as session:
