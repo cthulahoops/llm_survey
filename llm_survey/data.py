@@ -81,14 +81,14 @@ class ModelOutput(Base):
         if not self.evaluation:
             return None
 
-        if match := re.search(r'"score":\s*([0-9.]+)', self.evaluation):
+        if match := re.search(r'"(?:total_)?score":\s*([0-9.]+)', self.evaluation):
             return float(match.group(1))
 
     @classmethod
     def from_completion(cls, completion, model, request_id):
         assert model.id == completion["model"]
 
-        message = completion["choices"][0]["message"]
+        content = completion["choices"][0]["message"]["content"]
         usage = completion["usage"]
         pricing = model.pricing
 
@@ -97,7 +97,7 @@ class ModelOutput(Base):
 
         return cls(
             id=None,
-            content=message["content"],
+            content=content,
             model=completion["model"],
             usage={
                 "prompt_tokens": prompt_tokens,
@@ -140,7 +140,7 @@ class Evaluation(Base):
     def from_completion(cls, model_output, evaluation_model, completion, request_id):
         assert evaluation_model.id == completion["model"]
 
-        message = completion["choices"][0]["message"]
+        content = completion["choices"][0]["message"]["content"]
         usage = completion["usage"]
         pricing = evaluation_model.pricing
 
@@ -150,7 +150,7 @@ class Evaluation(Base):
         return cls(
             id=None,
             model_output_id=model_output.id,
-            content=message["content"],
+            content=content,
             model=completion["model"],
             usage={
                 "prompt_tokens": prompt_tokens,
@@ -163,6 +163,9 @@ class Evaluation(Base):
             },
             request_id=request_id,
         )
+
+    def __repr__(self):
+        return f"<Evaluation: {self.id!r} model_output={self.model_output_id}>"
 
 
 class RequestLog(Base):

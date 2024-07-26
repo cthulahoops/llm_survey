@@ -25,7 +25,7 @@ OUTPUT_DIR = Path("out")
     multiple=True,
     default=["index", "models", "human", "similarity", "consistency", "rankings"],
 )
-@click.argument("prompt_id")
+@click.argument("prompt_id", default="marshmallow")
 def build(prompt_id, pages):
     survey = SurveyDb()
     environment = get_environment()
