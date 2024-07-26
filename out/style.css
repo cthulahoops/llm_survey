@@ -1,6 +1,7 @@
 :root {
-    --primary-color: #06447d;
+    --primary-color: hsl(208.74, 50.84%, 30%) ;
     --background-color: #fff;
+    --neutral-color: #fcf0ee;
     --spacing: 0.25rem;
 }
 
@@ -151,9 +152,10 @@ nav a#current {
     white-space: wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    background-color: #fcf0ee;
+    background-color: var(--neutral-color);
     padding: 1rem;
-    margin: 1rem;
+    margin: 1rem 0rem;
+    border: 1px solid #ccc;
 }
 
 code {
@@ -225,3 +227,39 @@ nav[aria-label="sidebar"] {
         grid-column: 1 / -1;
     }
 }
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tab {
+    display: none;
+    border: 2px solid black;
+    padding: 0rem 1rem;
+}
+
+.tabs input[type=radio] {
+    display: none;
+}
+
+.tabs label {
+    padding: 1rem;
+    order: 1;
+    border: 2px solid #ccc;
+    border-bottom: none;
+}
+
+.tabs [type=radio]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: black;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.tabs [type=radio]:checked + label + .tab {
+    display: block;
+    order: 9;
+}
+
