@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{current_model}}</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-
+        <title>{{ model_info.name }}</title>
+        {% include "head.html.j2" %}
     </head>
     <body>
         {% include "nav.html.j2" %}
         <main>
-            <p>Model Name: {{ model_info.name }}</p>
+            <h1>{{ model_info.name }}</h1>
 
             {% if model_info %}
-            <p>Description</p>
+            <h2>Description</h2>
             
             <div class="markdown-body">
                 {{ model_info.description | to_markdown | safe }}
@@ -19,7 +18,7 @@
 
             {% endif %}
 
-            <p>Model Consistency</p>
+            <h2>Model Consistency</h2>
 
             <table>
                 {% for i in range(GRID_SIZE) %}
@@ -31,21 +30,31 @@
                 {% endfor %}
             </table>
 
+            <!--
             <p>Prompt</p>
             <div class="markdown-body prompt">{{ prompt | to_markdown |safe }}</div>
-            {% for item in items %}
-                <p id="response-{{loop.index}}">Response {{ loop.index }}.</p>
-                <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
+            -->
 
-                <p>Score: {{ item.score }}</p>
+            <div class="tabs">
+                {% for item in items %}
+                <input type="radio" name="tabs" id="tab-{{loop.index}}" checked />
+                <label for="tab-{{loop.index}}">Response {{ loop.index }} ({{item.score}})</label>
 
-                {% if item.evaluation %}
-                    <p>GPT-4-Turbo says:</p>
-                    <div class="markdown-body evaluation">
-                        {{ item.evaluation | to_markdown | safe }}
-                    </div>
-                {% endif %}
-            {% endfor %}
+                <div class="tab">
+                    <p>Score: {{ item.score }}</p>
+
+                    <!-- <p id="response-{{loop.index}}">Response {{ loop.index }}.</p> -->
+                    <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
+
+                    {% if item.evaluation %}
+                        <p>GPT-4-Turbo says:</p>
+                        <div class="markdown-body evaluation">
+                            {{ item.evaluation | to_markdown | safe }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
         </main>
     </body>
 </html>

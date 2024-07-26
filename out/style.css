@@ -1,14 +1,12 @@
 :root {
-    --primary-color: #06447d;
+    --primary-color: hsl(208.74, 50.84%, 30%) ;
     --background-color: #fff;
+    --neutral-color: #fcf0ee;
     --spacing: 0.25rem;
 }
 
-body {
+html {
     font-family: system-ui, sans-serif;
-    min-width: 500px;
-    max-width: 800px;
-    margin: auto;
 }
 
 * {
@@ -45,15 +43,13 @@ table {
 
 table td, table th {
     text-align: left;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 0.5rem 1rem;
 }
 
 table thead {
     position: sticky;
     top: 0;
+    z-index: 2;
 }
 
 table th {
@@ -68,16 +64,15 @@ table td, table th {
     border-right: 1px #888 solid;
 }
 
-table tr {
-    height: 2em;
-}
-
 table tr:nth-child(even) {
     background-color: #dddddd;
 }
 
-table tbody tr:hover {
-    background-color: #9999cc;
+table.highlight-hover tbody tr:hover td {
+    position: relative;
+    z-index: 1;
+    --shadow-color: black;
+    box-shadow: 0px -2px 0px 0px var(--shadow-color), 0px 2px 0px 0px var(--shadow-color);
 }
 
 footer {
@@ -157,9 +152,10 @@ nav a#current {
     white-space: wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    background-color: #fcf0ee;
+    background-color: var(--neutral-color);
     padding: 1rem;
-    margin: 1rem;
+    margin: 1rem 0rem;
+    border: 1px solid #ccc;
 }
 
 code {
@@ -167,7 +163,9 @@ code {
     white-space: pre-wrap;
 }
 
-main {
+.contained {
+    max-width: 80ch;
+    margin: auto;
 }
 
 main footer {
@@ -229,3 +227,39 @@ nav[aria-label="sidebar"] {
         grid-column: 1 / -1;
     }
 }
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tab {
+    display: none;
+    border: 2px solid black;
+    padding: 0rem 1rem;
+}
+
+.tabs input[type=radio] {
+    display: none;
+}
+
+.tabs label {
+    padding: 1rem;
+    order: 1;
+    border: 2px solid #ccc;
+    border-bottom: none;
+}
+
+.tabs [type=radio]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: black;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.tabs [type=radio]:checked + label + .tab {
+    display: block;
+    order: 9;
+}
+
