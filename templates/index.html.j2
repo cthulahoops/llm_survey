@@ -21,7 +21,9 @@
                 <tr>
                     <th>Model</th>
                     <th>Cost (¢)</th>
-                    <th>Avg Score</th>
+                    {% for ev in evaluation_models %}
+                    <th>{{ ev | model_name }}</th>
+                    {% endfor %}
                     <th>Company</th>
                 </tr>
                 </thead>
@@ -38,7 +40,8 @@
                             {% set cost = costs[model]*100 %}
                             {{ "%.2f"|format(cost) }}
                         </td>
-                        {% set scores = data[model] | map(attribute='score') | select('ne', None) | list %}
+                        {% for ev in evaluation_models %}
+                        {% set scores = outputs.model_scores(model, ev) %}
                         {% set total_score = scores | sum %}
                         {% set nitems = scores | length %}
                         {% if nitems %}
@@ -50,6 +53,7 @@
                         <td>
                         </td>
                         {% endif %}
+                        {% endfor %}
                         <td>
                         {{ model | model_company }}
                         </td>

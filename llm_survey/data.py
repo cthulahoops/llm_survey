@@ -74,19 +74,26 @@ class ModelOutput(Base):
             return np.frombuffer(self.embeddings[0].embedding)
         return None
 
-    @property
-    def evaluation(self):
-        if self.evaluations:
-            return self.evaluations[0].content
-        return None
+    def evaluation(self, model):
+        return next(
+            (
+                evaluation
+                for evaluation in self.evaluations
+                if evaluation.model == model
+            ),
+            None,
+        )
 
-    @property
-    def score(self):
-        if not self.evaluation:
+    def has_evaluation(self, evaluator):
+        return any(evaluation.model == evaluator for evaluation in self.evaluations)
+
+    def score(self, model):
+        evaluation = self.evaluation(model)
+
+        if not evaluation:
             return None
 
-        if match := re.search(r'"(?:total_)?score":\s*([0-9.]+)', self.evaluation):
-            return float(match.group(1))
+        return evaluation.score
 
     @classmethod
     def from_completion(cls, completion, model, request_id):
@@ -139,6 +146,18 @@ class Evaluation(Base):
     request_id = Column(Integer, ForeignKey("request_logs.id"))
 
     model_output = relationship("ModelOutput", back_populates="evaluations")
+
+    @property
+    def score(self):
+        if match := re.search(r'"(?:total_)?score":\s*([0-9.]+)', self.content):
+            return float(match.group(1))
+
+    @property
+    def cost(self):
+        try:
+            return self.usage["total_cost"]
+        except TypeError:
+            return None
 
     @classmethod
     def from_completion(cls, model_output, evaluation_model, completion, request_id):
@@ -283,6 +302,15 @@ class SurveyDb:
                 .filter_by(resource=resource, request=json.dumps(request))
                 .first()
             )
+
+    def evaluation_models(self):
+        with self.Session() as session:
+            return {
+                evaluation.model
+                for evaluation in session.query(Evaluation)
+                .distinct(Evaluation.model)
+                .all()
+            }
 
 
 def groupby(data, key):

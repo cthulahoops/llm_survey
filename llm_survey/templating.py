@@ -1,3 +1,4 @@
+from decimal import Decimal
 from functools import cache
 from pathlib import Path
 
@@ -65,3 +66,10 @@ def model_link(model):
 @template_filter()
 def to_markdown(text):
     return get_markdown().convert(text)
+
+
+@template_filter()
+def cents(text):
+    if text is None:
+        return ""
+    return "{:.2f}¢".format(Decimal(text) * 100)

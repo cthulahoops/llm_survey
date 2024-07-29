@@ -45,19 +45,6 @@
             {% endfor %}
             </ul>
 
-            <h2>Least Similar</h2>
-
-            <ul class=model-list>
-
-            {% for model in outputs.by_similarity(current_model)[-5:] %}
-                <li>
-                    <a href="{{model | model_file}}">
-                        {{ model | model_name }}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-
             <h2>Model Consistency</h2>
 
             <table>
@@ -78,7 +65,7 @@
             <div class="tabs">
                 {% for item in items %}
                 <input type="radio" name="tabs" id="tab-{{loop.index}}" checked />
-                <label for="tab-{{loop.index}}">Response {{ loop.index }} ({{item.score}})</label>
+                <label for="tab-{{loop.index}}">Response {{ loop.index }} ({{item.score("anthropic/claude-3.5-sonnet")}})</label>
 
                 <div class="tab">
                     <p>Score: {{ item.score }}</p>
@@ -86,12 +73,12 @@
                     <!-- <p id="response-{{loop.index}}">Response {{ loop.index }}.</p> -->
                     <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
 
-                    {% if item.evaluation %}
-                        <p>GPT-4-Turbo says:</p>
+                    {% for evaluation in item.evaluations %}
+                    <p>{{ evaluation.model}} says: ({{ evaluation.score }}) ({{evaluation.cost|cents}})</p>
                         <div class="markdown-body evaluation">
-                            {{ item.evaluation | to_markdown | safe }}
+                            {{ evaluation.content | to_markdown | safe }}
                         </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
                 {% endfor %}
             </div>

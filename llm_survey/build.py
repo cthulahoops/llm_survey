@@ -10,8 +10,8 @@ from llm_survey.templating import model_company, model_file, render_to_file
 
 class ModelOutputs:
     def __init__(self, data):
-        self.data = data
-        self.summed_models = sum_each_model(data)
+        self.data = dict(data)
+        self.summed_models = sum_each_model(self.data)
 
     def by_similarity(self, model_id):
         return sorted(
@@ -25,6 +25,10 @@ class ModelOutputs:
             ),
             reverse=True,
         )
+
+    def model_scores(self, model_id, evaluation_model_id="gpt-4-0125-preview"):
+        scores = [output.score(evaluation_model_id) for output in self.data[model_id]]
+        return [score for score in scores if score is not None]
 
 
 @click.command()
@@ -50,7 +54,6 @@ def build(prompt_id, pages):
     models = sorted(data.keys())
     companies = groupby(models, key=model_company)
 
-    scores = score_each_model(data)
     costs = average_costs(data)
 
     outputs = ModelOutputs(data)
@@ -59,20 +62,25 @@ def build(prompt_id, pages):
     reference_model = summed_models.get("human/human")
     consistencies = {model: consistency_measure(items) for model, items in data.items()}
 
+    evaluation_models = sorted(survey.evaluation_models())
+
     render_to_file(
         "index.html.j2",
         "index.html",
         models=sorted(
             data.keys(),
-            key=lambda x: scores[x] or 0,
+            key=lambda x: (
+                sum(outputs.model_scores(x, "anthropic/claude-3.5-sonnet")),
+                sum(outputs.model_scores(x, "openai/gpt-4-0125-preview")),
+            ),
             reverse=True,
         ),
         prompt=prompt,
         companies=companies,
-        scores=scores,
         costs=costs,
         data=data,
         outputs=outputs,
+        evaluation_models=evaluation_models,
     )
 
     if "models" in pages:
@@ -143,15 +151,4 @@ def average_costs(data):
 def sum_each_model(grouped):
     return {
         model: sum(item.embedding for item in group) for model, group in grouped.items()
-    }
-
-
-def score_each_model(grouped):
-    return {
-        model: (
-            sum(item.score for item in group if item.score)
-            if any(item.score for item in group)
-            else None
-        )
-        for model, group in grouped.items()
     }

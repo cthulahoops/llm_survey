@@ -29,7 +29,7 @@ def new(name):
 
 @prompts.command()
 @click.argument("name")
-@click.option("--format", default="json", type=click.Choice(["json", "yaml"]))
+@click.option("--format", "-f", default="json", type=click.Choice(["json", "yaml"]))
 def export(name, format):
     survey = SurveyDb()
 
@@ -45,7 +45,7 @@ def export(name, format):
 
 
 @prompts.command(name="import")
-@click.option("--format", default="json", type=click.Choice(["json", "yaml"]))
+@click.option("--format", "-f", default="json", type=click.Choice(["json", "yaml"]))
 def import_prompt(format):
     survey = SurveyDb()
     survey.create_tables()

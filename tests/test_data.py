@@ -48,7 +48,7 @@ def test_add_evaluation(db, model_output):
 
     model_output = db.get_model_output(model_output.id)
 
-    assert model_output.evaluation == completion
+    assert model_output.evaluation(model="just-testing").content == completion
 
 
 def test_insert_embedding(db):

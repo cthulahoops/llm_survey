@@ -15,32 +15,38 @@ get_or_reuse_completion = reuse_request_if_possible(get_completion)
 @click.command()
 @click.option("--dry-run", "-n", is_flag=True)
 @click.option("--limit", "-l", type=int)
-@click.option("--match", "-m")
+@click.option("--model", "-m", multiple=True)
 @click.option("--evaluation-model", "-e")
 @click.argument("prompt_id")
-def evaluate(prompt_id, dry_run=False, limit=None, match=None, evaluation_model=None):
+def evaluate(prompt_id, dry_run=False, limit=None, model=(), evaluation_model=None):
     prompt_template = open("evaluation_prompt_template.md").read()
 
     survey = SurveyDb()
 
     prompt = survey.get_prompt_outputs(prompt_id)
 
+    evaluation_model_id = evaluation_model or prompt.evaluation_model
+    assert evaluation_model_id is not None, "No evaluation model configured."
+    evaluation_model = survey.get_model(evaluation_model_id)
+    assert (
+        evaluation_model is not None
+    ), f"{evaluation_model_id} is not in the database."
+
     model_outputs_needing_evaluation = [
-        output for output in prompt.model_outputs if output.evaluation is None
+        output
+        for output in prompt.model_outputs
+        if not output.has_evaluation(evaluation_model_id)
     ]
 
-    if match:
+    if model:
         model_outputs_needing_evaluation = [
             output
             for output in model_outputs_needing_evaluation
-            if match in output.model
+            if any(m in output.model for m in model)
         ]
 
     if limit:
         model_outputs_needing_evaluation = model_outputs_needing_evaluation[:limit]
-
-    evaluation_model = survey.get_model(evaluation_model or prompt.evaluation_model)
-    assert evaluation_model is not None, "No evaluation model configured."
 
     work = tqdm(model_outputs_needing_evaluation)
     for model_output in work:
