@@ -1,7 +1,7 @@
 import pytest
-from click.testing import CliRunner
 from llm_survey.data import Model, ModelOutput, Prompt
-from llm_survey.evaluate import DEFAULT_EVALUATION_MODEL, evaluate
+
+from conftest import invoke
 
 
 @pytest.fixture(autouse=True)
@@ -10,10 +10,11 @@ def evaluation_db(mock_db):
         id="marshmallow",
         prompt="How many marshmallows are there?",
         marking_scheme="Award one mark for every marshmallow",
+        evaluation_model="test-evaluator",
     )
     mock_db.insert(prompt)
     model = Model(
-        id=DEFAULT_EVALUATION_MODEL,
+        id="test-evaluator",
         pricing={
             "prompt": "0.01",
             "completion": "1.00",
@@ -23,19 +24,20 @@ def evaluation_db(mock_db):
 
 
 def test_evaluate_empty_db(mock_client, mock_db):
-    runner = CliRunner()
-    runner.invoke(evaluate, catch_exceptions=False)
+    invoke("evaluate", "marshmallow")
 
     mock_client.assert_not_called()
 
 
 def test_evaluate_one(mock_client, mock_db):
-    runner = CliRunner()
-
-    output = ModelOutput(model="test-model", content="Evaluate this")
+    output = ModelOutput(
+        prompt_id="marshmallow",
+        model="test-model",
+        content="Evaluate this",
+    )
     mock_db.insert(output)
 
-    runner.invoke(evaluate, catch_exceptions=False)
+    invoke("evaluate", "marshmallow")
 
     mock_client.return_value.chat.completions.create.assert_called_once()
 
@@ -43,13 +45,15 @@ def test_evaluate_one(mock_client, mock_db):
 
 
 def test_evaluate_two_identical(mock_client, mock_db):
-    runner = CliRunner()
-
     for i in range(2):
-        output = ModelOutput(model="test-model", content="Evaluate this")
+        output = ModelOutput(
+            prompt_id="marshmallow",
+            model="test-model",
+            content="Evaluate this",
+        )
         mock_db.insert(output)
 
-    result = runner.invoke(evaluate, catch_exceptions=False)
+    invoke("evaluate", "marshmallow")
     mock_client.return_value.chat.completions.create.assert_called_once()
 
     output1, output2 = mock_db.model_outputs()

@@ -40,7 +40,7 @@ def evaluate(prompt_id, dry_run=False, limit=None, match=None, evaluation_model=
         model_outputs_needing_evaluation = model_outputs_needing_evaluation[:limit]
 
     evaluation_model = survey.get_model(evaluation_model or prompt.evaluation_model)
-    assert evaluation_model is not None
+    assert evaluation_model is not None, "No evaluation model configured."
 
     work = tqdm(model_outputs_needing_evaluation)
     for model_output in work:

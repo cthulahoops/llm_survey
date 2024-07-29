@@ -1,7 +1,19 @@
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
+from click.testing import CliRunner
+from llm_survey.cli import cli
 from llm_survey.data import SurveyDb
+
+
+def invoke(*args):
+    runner = CliRunner()
+    result = runner.invoke(cli, args, catch_exceptions=False)
+    assert result.exit_code == 0
+    print("OUTPUT: ")
+    print(result.output)
+    print("----")
+    return result
 
 
 @pytest.fixture(autouse=True)
