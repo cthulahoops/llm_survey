@@ -21,7 +21,9 @@
                 <tr>
                     <th>Model</th>
                     <th>Cost (¢)</th>
-                    <th>Score</th>
+                    {% for ev in evaluation_models %}
+                    <th>{{ ev | model_name }}</th>
+                    {% endfor %}
                 </tr>
                 </thead>
                 {% for model in models %}
@@ -37,7 +39,8 @@
                             {% set cost = costs[model]*100 %}
                             {{ "%.2f"|format(cost) }}
                         </td>
-                        {% with scores = outputs.model_scores(model, prompt.evaluation_model) %}
+                        {% for ev in evaluation_models %}
+                        {% with scores = outputs.model_scores(model, ev) %}
                         {% if scores %}
                         <td title="N={{ scores|length }}" style="--data-value: {{ (scores | average) / 10 }}">
                             {{ "%.1f"|format( scores | average )}}
@@ -46,6 +49,7 @@
                         <td></td>
                         {% endif %}
                         {% endwith %}
+                        {% endfor %}
                     </tr>
                 {% endfor %}
             </table>

@@ -51,12 +51,17 @@ def build(prompt_id, pages):
     data = prompt_struct.model_outputs
     data = groupby(data, key=lambda x: x.model)
 
+    outputs = ModelOutputs(data)
+
     models = sorted(data.keys())
     companies = groupby(models, key=model_company)
+    models = sorted(
+        data.keys(),
+        key=lambda x: sum(outputs.model_scores(x, prompt_struct.evaluation_model)),
+        reverse=True,
+    )
 
     costs = average_costs(data)
-
-    outputs = ModelOutputs(data)
 
     summed_models = outputs.summed_models
     reference_model = summed_models.get("human/human")
@@ -67,14 +72,18 @@ def build(prompt_id, pages):
     render_to_file(
         "index.html.j2",
         "index.html",
-        models=sorted(
-            data.keys(),
-            key=lambda x: (
-                sum(outputs.model_scores(x, "anthropic/claude-3.5-sonnet")),
-                sum(outputs.model_scores(x, "openai/gpt-4-0125-preview")),
-            ),
-            reverse=True,
-        ),
+        models=models,
+        prompt=prompt_struct,
+        companies=companies,
+        costs=costs,
+        data=data,
+        outputs=outputs,
+    )
+
+    render_to_file(
+        "evaluations.html.j2",
+        "evaluations.html",
+        models=models,
         prompt=prompt,
         companies=companies,
         costs=costs,
@@ -117,11 +126,7 @@ def build(prompt_id, pages):
     render_to_file(
         "rankings.html.j2",
         "rankings.html",
-        models=sorted(
-            data.keys(),
-            key=lambda x: sum(outputs.model_scores(x, "anthropic/claude-3.5-sonnet")),
-            reverse=True,
-        ),
+        models=models,
         prompt=prompt_struct,
         reference_model=reference_model,
         summed_models=summed_models,
