@@ -24,7 +24,6 @@
                     {% for ev in evaluation_models %}
                     <th>{{ ev | model_name }}</th>
                     {% endfor %}
-                    <th>Company</th>
                 </tr>
                 </thead>
                 {% for model in models %}
@@ -54,9 +53,6 @@
                         </td>
                         {% endif %}
                         {% endfor %}
-                        <td>
-                        {{ model | model_company }}
-                        </td>
                     </tr>
                 {% endfor %}
             </table>
