@@ -1,3 +1,4 @@
+import math
 from decimal import Decimal
 from functools import cache
 from pathlib import Path
@@ -40,7 +41,6 @@ def render_to_file(template, output_file, **data):
 
     with open(OUTPUT_DIR / output_file, "w") as outfile:
         outfile.write(rendered_html)
-    print(output_file)
 
 
 @template_filter()
@@ -83,4 +83,9 @@ def average(items):
 
 @template_filter()
 def cost_color_scale(cost):
-    return 1 - float(cost) * 100 / 8
+    if float(cost) <= 0.0:
+        return None
+
+    mag = -math.log(float(cost), 10) - 1
+
+    return 1 - (4 - mag) / 4
