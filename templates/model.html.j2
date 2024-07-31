@@ -3,6 +3,8 @@
     <head>
         <title>{{ model_info.name }}</title>
         {% include "head.html.j2" %}
+
+        <script src="script.js"></script>
     </head>
     <body>
         {% include "nav.html.j2" %}
@@ -64,8 +66,8 @@
 
             <div class="tabs">
                 {% for item in items %}
-                <input type="radio" name="tabs" id="tab-{{loop.index}}" checked />
-                <label for="tab-{{loop.index}}">Response {{ loop.index }} ({{item.score("anthropic/claude-3.5-sonnet")}})</label>
+                <input type="radio" name="tabs" id="response-{{loop.index}}" />
+                <label for="response-{{loop.index}}">Response {{ loop.index }} ({{item.score("anthropic/claude-3.5-sonnet")}})</label>
 
                 <div class="tab">
                     <p>Score: {{ item.score }}</p>
