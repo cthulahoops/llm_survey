@@ -119,15 +119,16 @@ def build(prompt_id, pages):
         "rankings.html",
         models=sorted(
             data.keys(),
-            key=lambda x: scores[x] or 0,
+            key=lambda x: sum(outputs.model_scores(x, "anthropic/claude-3.5-sonnet")),
             reverse=True,
         ),
+        prompt=prompt_struct,
         reference_model=reference_model,
         summed_models=summed_models,
-        scores=score_each_model(data),
         costs=costs,
         consistencies=consistencies,
         data=data,
+        outputs=outputs,
     )
 
 

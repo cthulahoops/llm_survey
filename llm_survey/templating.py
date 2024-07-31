@@ -40,6 +40,7 @@ def render_to_file(template, output_file, **data):
 
     with open(OUTPUT_DIR / output_file, "w") as outfile:
         outfile.write(rendered_html)
+    print(output_file)
 
 
 @template_filter()
@@ -73,3 +74,8 @@ def cents(text):
     if text is None:
         return ""
     return "{:.2f}¢".format(Decimal(text) * 100)
+
+
+@template_filter()
+def average(items):
+    return sum(items) / len(items)

@@ -40,18 +40,15 @@
                             {{ "%.2f"|format(cost) }}
                         </td>
                         {% for ev in evaluation_models %}
-                        {% set scores = outputs.model_scores(model, ev) %}
-                        {% set total_score = scores | sum %}
-                        {% set nitems = scores | length %}
-                        {% if nitems %}
-                        {% set avg_score = (total_score/nitems) %}
-                        <td title="N={{ data[model]|length }}" style="--data-value: {{ avg_score / 10 }}">
-                            {{ "%.1f"|format(avg_score )}}
+                        {% with scores = outputs.model_scores(model, ev) %}
+                        {% if scores %}
+                        <td title="N={{ scores|length }}" style="--data-value: {{ (scores | average) / 10 }}">
+                            {{ "%.1f"|format( scores | average )}}
                         </td>
                         {% else %}
-                        <td>
-                        </td>
+                        <td></td>
                         {% endif %}
+                        {% endwith %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
