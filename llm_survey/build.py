@@ -81,10 +81,10 @@ def build(prompt_id, pages):
     )
 
     render_to_file(
-        "evaluations.html.j2",
-        "evaluations.html",
+        "evaluators.html.j2",
+        "evaluators.html",
         models=models,
-        prompt=prompt,
+        prompt=prompt_struct,
         companies=companies,
         costs=costs,
         data=data,

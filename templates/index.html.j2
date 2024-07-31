@@ -11,10 +11,9 @@
         {% include "github-banner.html.j2" %}
         <main class=contained>
 
-<p>I prompted {{ data|length }} LLM models with {{ prompts|length }} different prompts, and evaluated the results with GPT-4.  Here's how they did:
+            <p>I gave {{ data|length }} LLM models the same prompt, and evaluated the results with {{ prompt.evaluation_model | model_name }}.  Here's how they did:
 </p>
 
-<p>View full <a href="rankings.html">Detailed Rankings</a>.
 
             <table class="highlight-hover">
                 <thead>
@@ -49,6 +48,9 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            <p>View full <a href="rankings.html">Detailed Rankings</a>.</p>
+            <p>Compare <a href="evaluators.html">different evaluators</a>.</p>
         </main>
     </body>
 </html>
