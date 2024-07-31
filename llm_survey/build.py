@@ -75,7 +75,10 @@ def build(prompt_id, pages):
     companies = groupby(models, key=model_company)
     models = sorted(
         data.keys(),
-        key=lambda x: avg(outputs.model_scores(x, prompt_struct.evaluation_model)) or 0,
+        key=lambda x: (
+            avg(outputs.model_scores(x, prompt_struct.evaluation_model)) or 0,
+            -sum(outputs.model_costs(x)),
+        ),
         reverse=True,
     )
 
