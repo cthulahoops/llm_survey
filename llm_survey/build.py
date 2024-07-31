@@ -75,7 +75,7 @@ def build(prompt_id, pages):
     companies = groupby(models, key=model_company)
     models = sorted(
         data.keys(),
-        key=lambda x: sum(outputs.model_scores(x, prompt_struct.evaluation_model)),
+        key=lambda x: avg(outputs.model_scores(x, prompt_struct.evaluation_model)) or 0,
         reverse=True,
     )
 
@@ -176,3 +176,10 @@ def sum_each_model(grouped):
     return {
         model: sum(item.embedding for item in group) for model, group in grouped.items()
     }
+
+
+def avg(items):
+    if not items:
+        return None
+
+    return sum(items) / len(items)
