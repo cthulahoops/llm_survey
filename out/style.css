@@ -255,7 +255,6 @@ nav[aria-label="sidebar"] {
     color: white;
     border-color: black;
     font-weight: bold;
-    z-index: 2;
 }
 
 .tabs [type=radio]:checked + label + .tab {
