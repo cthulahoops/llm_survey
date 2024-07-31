@@ -1,5 +1,6 @@
 import json
 import re
+import textwrap
 from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
@@ -161,6 +162,27 @@ class Evaluation(Base):
 
     @classmethod
     def from_completion(cls, model_output, evaluation_model, completion, request_id):
+        if "error" in completion:
+            return cls(
+                id=None,
+                model_output_id=model_output.id,
+                content=textwrap.dedent(
+                    f"""
+                {completion["error"]["message"]}
+
+                {completion["error"]["metadata"]}
+                """
+                ),
+                model=evaluation_model.id,
+                usage={
+                    "prompt_tokens": 0,
+                    "completion_tokens": 0,
+                    "total_tokens": 0,
+                    "total_cost": "0.00",
+                },
+                request_id=request_id,
+            )
+
         assert evaluation_model.id == completion["model"]
 
         content = completion["choices"][0]["message"]["content"]
