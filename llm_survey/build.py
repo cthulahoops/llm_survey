@@ -26,9 +26,27 @@ class ModelOutputs:
             reverse=True,
         )
 
-    def model_scores(self, model_id, evaluation_model_id="gpt-4-0125-preview"):
+    def model_scores(self, model_id, evaluation_model_id):
         scores = [output.score(evaluation_model_id) for output in self.data[model_id]]
         return [score for score in scores if score is not None]
+
+    def model_costs(self, model_id):
+        return [
+            Decimal(item.usage["total_cost"])
+            for item in self.data[model_id]
+            if item.usage
+        ]
+
+    def model_evaluation_costs(self, model_id, evaluation_model_id):
+        evaluations = [
+            output.evaluation(evaluation_model_id) for output in self.data[model_id]
+        ]
+
+        return [
+            Decimal(evaluation.cost)
+            for evaluation in evaluations
+            if evaluation and evaluation.cost
+        ]
 
 
 @click.command()

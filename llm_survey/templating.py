@@ -79,3 +79,8 @@ def cents(text):
 @template_filter()
 def average(items):
     return sum(items) / len(items)
+
+
+@template_filter()
+def cost_color_scale(cost):
+    return 1 - float(cost) * 100 / 8

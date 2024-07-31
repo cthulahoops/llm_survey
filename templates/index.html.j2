@@ -9,17 +9,18 @@
         <h1>LLM Survey</h1>
 
         {% include "github-banner.html.j2" %}
-        <main class=contained>
-
-            <p>I gave {{ data|length }} LLM models the same prompt, and evaluated the results with {{ prompt.evaluation_model | model_name }}.  Here's how they did:
-</p>
+        <main>
+            <p class=contained>
+                I gave {{ data|length }} LLM models the same prompt, and evaluated the results
+                with {{ prompt.evaluation_model | model_name }}.  Here's how they did:
+            </p>
 
 
             <table class="highlight-hover">
                 <thead>
                 <tr>
                     <th>Model</th>
-                    <th>Cost (¢)</th>
+                    <th>Cost</th>
                     <th>Score</th>
                 </tr>
                 </thead>
@@ -28,14 +29,17 @@
                         <td>
                             {{ model | model_link }}
                         </td>
-                        {% if costs[model] %}
-                        <td style="--data-value: {{ 1 - costs[model]|float * (100 / 8) }}">
-                        {% else %}
-                        <td>
-                        {% endif %}
-                            {% set cost = costs[model]*100 %}
-                            {{ "%.2f"|format(cost) }}
+
+                        {% with costs = outputs.model_costs(model) %}
+                        {% if costs %}
+                        <td style="--data-value: {{ costs | average | cost_color_scale }}">
+                            {{ costs | average | cents }}
                         </td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% endwith %}
+
                         {% with scores = outputs.model_scores(model, prompt.evaluation_model) %}
                         {% if scores %}
                         <td title="N={{ scores|length }}" style="--data-value: {{ (scores | average) / 10 }}">
@@ -49,8 +53,10 @@
                 {% endfor %}
             </table>
 
-            <p>View full <a href="rankings.html">Detailed Rankings</a>.</p>
-            <p>Compare <a href="evaluators.html">different evaluators</a>.</p>
+            <section class="contained">
+                <p>View full <a href="rankings.html">Detailed Rankings</a>.</p>
+                <p>Compare <a href="evaluators.html">different evaluators</a>.</p>
+            </section>
         </main>
     </body>
 </html>

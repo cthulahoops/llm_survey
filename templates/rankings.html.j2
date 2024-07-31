@@ -32,13 +32,17 @@
                                 {{ "%.2f"|format(similarity) }}
                             </td>
                         {% endwith %}
-                        {% if costs[model] %}
-                        <td style="--data-value: {{ 1 - costs[model]|float * (100 / 8) }}">
-                        {% else %}
-                        <td>
-                        {% endif %}
-                            {{ "%.2f"|format(costs[model] * 100) }}¢
+
+                        {% with costs = outputs.model_costs(model) %}
+                        {% if costs %}
+                        <td style="--data-value: {{ costs | average | cost_color_scale }}">
+                            {{ costs | average | cents }}
                         </td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        {% endwith %}
+
                         {% with consistency = consistencies[model] %}
                             <td style="--data-value: {{ consistency }}">
                                 {{ "%.2f"|format(consistency) }}

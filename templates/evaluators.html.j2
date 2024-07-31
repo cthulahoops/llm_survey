@@ -9,20 +9,27 @@
         <h1>LLM Survey</h1>
 
         {% include "github-banner.html.j2" %}
-        <main class=contained>
+        <main>
 
-<p>One challenge is to choose an evaluator to mark the LLM outputs. The evaluator needs to fairly
+    <p class=contained>One challenge is to choose an evaluator to mark the LLM outputs. The evaluator needs to fairly
 consistent over time, produce good results and not cost too much. I've chosen {{ prompt.evaluation_model }}
 but here's some scores with different models.</p>
 
             <table class="highlight-hover">
                 <thead>
-                <tr>
-                    <th class="column-header">Model</th>
-                    {% for ev in evaluation_models %}
-                    <th class="column-header"><div>{{ ev | model_name }}</div></th>
-                    {% endfor %}
-                </tr>
+                    <tr>
+                        <th class="column-header">Model</th>
+                        {% for ev in evaluation_models %}
+                        <th class="column-header" colspan=2><div>{{ ev | model_name }}</div></th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th></th>
+                        {% for ev in evaluation_models %}
+                        <th>Cost</th>
+                        <th>Score</th>
+                        {% endfor %}
+                    </tr>
                 </thead>
                 {% for model in models %}
                     <tr>
@@ -31,7 +38,16 @@ but here's some scores with different models.</p>
                         </td>
 
                         {% for ev in evaluation_models %}
-                        {% with scores = outputs.model_scores(model, ev) %}
+                        {% with scores = outputs.model_scores(model, ev), costs = outputs.model_evaluation_costs(model, ev) %}
+
+                        {% if costs %}
+                        <td style="--data-value: {{ costs | average | cost_color_scale }}">
+                            {{ costs | average | cents }}
+                        </td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+
                         {% if scores %}
                         <td title="N={{ scores|length }}" style="--data-value: {{ (scores | average) / 10 }}">
                             {{ "%.1f"|format( scores | average )}}
