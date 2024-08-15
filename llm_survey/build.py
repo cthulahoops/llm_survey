@@ -127,6 +127,7 @@ def build(prompt_id, pages):
             consistency=consistency_grid(items),
             GRID_SIZE=len(items),
             outputs=outputs,
+            evaluation_models=evaluation_models,
         )
 
     render_to_file(

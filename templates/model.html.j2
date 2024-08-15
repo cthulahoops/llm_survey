@@ -37,7 +37,6 @@
                 <label for="response-{{loop.index}}">Response {{ loop.index }} ({{item.score("anthropic/claude-3.5-sonnet")}})</label>
 
                 <div class="tab">
-                    <p>Score: {{ item.score }}</p>
 
                     <!-- <p id="response-{{loop.index}}">Response {{ loop.index }}.</p> -->
                     <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
@@ -98,12 +97,19 @@
             <h2>Model Evaluations</h2>
 
             <table>
-                {% for item in items %}
+                {% for model in evaluation_models %}
                     <tr>
-                        {% for evaluation in item.evaluations %}
-                            {% if evaluation.score %}
-                                <td style="--data-value: {{ evaluation.score / 10 }}">{{ "%.2f"|format(evaluation.score) }}</td>
-                            {% endif %}
+                        <td>
+                            {{ model }}
+                        </td>
+                        {% for item in items %}
+                        {% if item.score(model) %} 
+                        <td style="--data-value: {{item.score(model) / 10}}">
+                            {{item.score(model)}}
+                        </td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
