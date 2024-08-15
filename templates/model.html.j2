@@ -7,50 +7,6 @@
         <script src="script.js"></script>
     </head>
     <body>
-
-        <div class="sidebar">
-            <h2>Most Similar</h2>
-
-            <ul class=model-list>
-
-                {% for model in outputs.by_similarity(current_model)[:5] %}
-                <li>
-                    <a href="{{model | model_file}}">
-                        {{ model | model_name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-
-            {% if model_info %}
-            <h2>Also by {{ model_info.company }}</h2>
-
-            <ul class=model-list>
-                {% for model in companies[model_info.company] %}
-                <li>
-                    <a href="{{model | model_file}}">
-                        {{ model | model_name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-
-        <div class="sidebar">
-            <h2>Model Consistency</h2>
-
-            <table>
-                {% for i in range(GRID_SIZE) %}
-                    <tr>
-                        {% for j in range(GRID_SIZE) %}
-                        <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-
         <main class="contained">
             <h1>{{ model_info.name }}</h1>
 
@@ -96,5 +52,63 @@
                 {% endfor %}
             </div>
         </main>
+
+        <div class="sidebar">
+            <h2>Most Similar</h2>
+
+            <ul class=model-list>
+
+                {% for model in outputs.by_similarity(current_model)[:5] %}
+                <li>
+                    <a href="{{model | model_file}}">
+                        {{ model | model_name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if model_info %}
+            <h2>Also by {{ model_info.company }}</h2>
+
+            <ul class=model-list>
+                {% for model in companies[model_info.company] %}
+                <li>
+                    <a href="{{model | model_file}}">
+                        {{ model | model_name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class="sidebar">
+            <h2>Model Consistency</h2>
+
+            <table>
+                {% for i in range(GRID_SIZE) %}
+                    <tr>
+                        {% for j in range(GRID_SIZE) %}
+                        <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h2>Model Evaluations</h2>
+
+            <table>
+                {% for item in items %}
+                    <tr>
+                        {% for evaluation in item.evaluations %}
+                            {% if evaluation.score %}
+                                <td style="--data-value: {{ evaluation.score / 10 }}">{{ "%.2f"|format(evaluation.score) }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
     </body>
 </html>
