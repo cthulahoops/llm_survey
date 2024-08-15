@@ -7,45 +7,37 @@
         <script src="script.js"></script>
     </head>
     <body>
-        <main class="contained">
-            <h1>{{ model_info.name }}</h1>
 
-            {% if model_info %}
-            <h2>Description</h2>
-
-            <div class="markdown-body">
-                {{ model_info.description | to_markdown | safe }}
-            </div>
-
-            <h2>Company</h2>
-            {{ model_info.company }}
-
-
-            <ul class=model-list>
-            {% for model in companies[model_info.company] %}
-                <li>
-                    <a href="{{model | model_file}}">
-                        {{ model | model_name }}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-            {% endif %}
-
-
+        <div class="sidebar">
             <h2>Most Similar</h2>
 
             <ul class=model-list>
 
-            {% for model in outputs.by_similarity(current_model)[:5] %}
+                {% for model in outputs.by_similarity(current_model)[:5] %}
                 <li>
                     <a href="{{model | model_file}}">
                         {{ model | model_name }}
                     </a>
                 </li>
-            {% endfor %}
+                {% endfor %}
             </ul>
 
+            {% if model_info %}
+            <h2>Also by {{ model_info.company }}</h2>
+
+            <ul class=model-list>
+                {% for model in companies[model_info.company] %}
+                <li>
+                    <a href="{{model | model_file}}">
+                        {{ model | model_name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class="sidebar">
             <h2>Model Consistency</h2>
 
             <table>
@@ -57,11 +49,31 @@
                     </tr>
                 {% endfor %}
             </table>
+        </div>
+
+        <main class="contained">
+            <h1>{{ model_info.name }}</h1>
+
+            {% if model_info %}
+            <h2>Description</h2>
+
+            <div class="markdown-body">
+                {{ model_info.description | to_markdown | safe }}
+            </div>
+            {% endif %}
 
             <!--
             <p>Prompt</p>
             <div class="markdown-body prompt">{{ prompt | to_markdown |safe }}</div>
             -->
+
+            <details>
+                <summary>Prompt</summary>
+                <div class="concealed markdown-body">
+                    {{ prompt | to_markdown | safe }}
+
+                </div>
+            </details>
 
             <div class="tabs">
                 {% for item in items %}

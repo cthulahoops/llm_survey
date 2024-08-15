@@ -50,13 +50,8 @@ class ModelOutputs:
 
 
 @click.command()
-@click.option(
-    "--pages",
-    "-p",
-    multiple=True,
-    default=["index", "models", "human", "similarity", "consistency", "rankings"],
-)
-@click.argument("prompt_id", default="marshmallow")
+@click.argument("prompt_id")
+@click.argument("pages", nargs=-1)
 def build(prompt_id, pages):
     survey = SurveyDb()
 
@@ -113,21 +108,26 @@ def build(prompt_id, pages):
         evaluation_models=evaluation_models,
     )
 
-    if "models" in pages:
-        for model, items in tqdm(list(data.items())):
-            render_to_file(
-                "model.html.j2",
-                model_file(model),
-                items=items,
-                current_model=model,
-                model_info=survey.get_model(model),
-                models=models,
-                prompt=prompt,
-                companies=companies,
-                consistency=consistency_grid(items),
-                GRID_SIZE=len(items),
-                outputs=outputs,
-            )
+    for model, items in tqdm(
+        [
+            (model, items)
+            for (model, items) in data.items()
+            if not pages or model_file(model) in pages
+        ]
+    ):
+        render_to_file(
+            "model.html.j2",
+            model_file(model),
+            items=items,
+            current_model=model,
+            model_info=survey.get_model(model),
+            models=models,
+            prompt=prompt,
+            companies=companies,
+            consistency=consistency_grid(items),
+            GRID_SIZE=len(items),
+            outputs=outputs,
+        )
 
     render_to_file(
         "similarity.html.j2",

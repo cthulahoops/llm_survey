@@ -48,6 +48,10 @@ def evaluate(prompt_id, dry_run=False, limit=None, model=(), evaluation_model=No
     if limit:
         model_outputs_needing_evaluation = model_outputs_needing_evaluation[:limit]
 
+    print(
+        f"Running {len(model_outputs_needing_evaluation)} evaluations with {evaluation_model.id}"
+    )
+
     work = tqdm(model_outputs_needing_evaluation)
     for model_output in work:
         work.set_description(f"{model_output.model:30}")
