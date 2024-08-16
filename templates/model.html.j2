@@ -3,13 +3,12 @@
     <head>
         <title>{{ model_info.name }}</title>
         {% include "head.html.j2" %}
-
         <script src="script.js"></script>
     </head>
     <body>
-        <main class="contained">
-            <h1>{{ model_info.name }}</h1>
+        <h1>{{ model_info.name }}</h1>
 
+        <main class="contained">
             {% if model_info %}
             <h2>Description</h2>
 
@@ -53,10 +52,11 @@
         </main>
 
         <div class="sidebar">
+            <a href="/">LLM Survey</a>
+
             <h2>Most Similar</h2>
 
             <ul class=model-list>
-
                 {% for model in outputs.by_similarity(current_model)[:5] %}
                 <li>
                     <a href="{{model | model_file}}">
@@ -82,38 +82,45 @@
         </div>
 
         <div class="sidebar">
-            <h2>Model Consistency</h2>
+            <section>
+                <h2>Model Consistency</h2>
 
-            <table>
-                {% for i in range(GRID_SIZE) %}
-                    <tr>
-                        {% for j in range(GRID_SIZE) %}
-                        <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
+                <table>
+                    {% for i in range(GRID_SIZE) %}
+                        <tr>
+                            {% for j in range(GRID_SIZE) %}
+                            <td style="--data-value: {{ consistency[(i, j)] }}">{{ "%.2f"|format(consistency[(i, j)]) }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
 
-            <h2>Model Evaluations</h2>
+                <a href="/consistency.html">View All</a>
+            </section>
 
-            <table>
-                {% for model in evaluation_models %}
-                    <tr>
-                        <td>
-                            {{ model }}
-                        </td>
-                        {% for item in items %}
-                        {% if item.score(model) %} 
-                        <td style="--data-value: {{item.score(model) / 10}}">
-                            {{item.score(model)}}
-                        </td>
-                        {% else %}
-                        <td></td>
-                        {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
+            <section>
+                <h2>Model Evaluations</h2>
+
+                <table>
+                    {% for model in evaluation_models %}
+                        <tr>
+                            <td>
+                                {{ model | model_name }}
+                            </td>
+                            {% for item in items %}
+                            {% if item.score(model) %} 
+                            <td style="--data-value: {{item.score(model) / 10}}">
+                                {{item.score(model)}}
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                <a href="/evaluators.html">View All</a>
+            </section>
         </div>
 
     </body>

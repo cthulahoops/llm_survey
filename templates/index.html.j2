@@ -8,14 +8,13 @@
 
 
         {% include "github-banner.html.j2" %}
-        <main>
-            <h1>LLM Survey</h1>
+        <h1>LLM Survey</h1>
 
+        <main>
             <p class=contained>
                 I gave {{ data|length }} LLM models the same prompt, and evaluated the results
                 with {{ prompt.evaluation_model | model_name }}.  Here's how they did:
             </p>
-
 
             <table class="highlight-hover">
                 <thead>
