@@ -115,7 +115,7 @@
                                 {{ model | model_name }}
                             </td>
                             {% for item in items %}
-                            {% if item.score(model) %} 
+                            {% if item.score(model) is not none %} 
                             <td style="--data-value: {{item.score(model) / 10}}">
                                 {{item.score(model)}}
                             </td>
