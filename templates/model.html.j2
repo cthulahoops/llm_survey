@@ -12,7 +12,7 @@
             {% if model_info %}
             <h2>Description</h2>
 
-            <div class="markdown-body">
+            <div>
                 {{ model_info.description | escape_titles | to_markdown | safe }}
             </div>
             {% endif %}
@@ -39,6 +39,13 @@
 
                     <!-- <p id="response-{{loop.index}}">Response {{ loop.index }}.</p> -->
                     <div class="markdown-body response">{{ item.content | to_markdown | safe }}</div>
+
+                    <details>
+                        <summary>Marking Scheme</summary>
+                        <div class="markdown-body">
+                        {{ marking_scheme | to_markdown | safe }}
+                        </div>
+                    </details>
 
                     {% for evaluation in item.evaluations %}
                     <p>{{ evaluation.model}} says: ({{ evaluation.score }}) ({{evaluation.cost|cents}})</p>

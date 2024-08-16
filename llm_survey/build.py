@@ -123,6 +123,7 @@ def build(prompt_id, pages):
             model_info=survey.get_model(model),
             models=models,
             prompt=prompt,
+            marking_scheme=prompt_struct.marking_scheme,
             companies=companies,
             consistency=consistency_grid(items),
             GRID_SIZE=len(items),
