@@ -129,6 +129,10 @@ body > * {
     justify-self: center;
 }
 
+.no-grid {
+    display: block;
+}
+
 ul.model-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20ch, 1fr));
@@ -178,8 +182,12 @@ main footer {
 
 .columns-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20ch, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(25ch, 1fr));
     gap: 1rem;
+}
+
+.columns-grid table {
+    margin: 1rem auto;
 }
 
 @media (min-width: calc(20ch / 0.3)) {
@@ -230,3 +238,6 @@ details {
     order: 9;
 }
 
+.centered {
+    text-align: center;
+}

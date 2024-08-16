@@ -5,14 +5,14 @@
         <link rel="stylesheet" type="text/css" href="style.css">
         {% include "head.html.j2" %}
     </head>
-    <body>
+    <body class="no-grid">
         {% include "primary_nav.html.j2" %}
         <main>
         <div class="columns-grid">
             {% for model, consistency in data %}
                 {% with grid_size = outputs[model]|length %}
                 <div>
-                    <p>{{model | model_link }}</p>
+                    <p class="centered">{{model | model_link }}</p>
 
                 <table>
                     {% for i in range(grid_size) %}
