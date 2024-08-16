@@ -1,4 +1,5 @@
 import math
+import re
 from decimal import Decimal
 from functools import cache
 from pathlib import Path
@@ -62,6 +63,11 @@ def model_file(model):
 @template_filter()
 def model_link(model):
     return f"<a href='{model_file(model)}'>{model_name(model)}</a>"
+
+
+@template_filter()
+def escape_titles(text):
+    return re.sub(r"^#", r"\\#", text, flags=re.MULTILINE)
 
 
 @template_filter()

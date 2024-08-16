@@ -13,7 +13,7 @@
             <h2>Description</h2>
 
             <div class="markdown-body">
-                {{ model_info.description | to_markdown | safe }}
+                {{ model_info.description | escape_titles | to_markdown | safe }}
             </div>
             {% endif %}
 
